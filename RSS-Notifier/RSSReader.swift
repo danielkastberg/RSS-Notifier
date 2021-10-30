@@ -8,6 +8,15 @@
 import Foundation
 
 
-let url = URLRequest("https://m.sweclockers.com/feeds/forum/trad/999559": URL)
+let url = URL(string: "https://m.sweclockers.com/feeds/forum/trad/999559")!
 
-print(url)
+
+
+func searchRss(_url:String) {
+    let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+        guard let data = data else { return }
+        print(String(data: data, encoding: .utf8)!)
+    }
+
+    task.resume()
+}

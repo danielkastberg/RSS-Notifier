@@ -14,4 +14,5 @@ struct RSS_NotifierApp: App {
             ContentView()
         }
     }
+    
 }

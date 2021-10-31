@@ -21,5 +21,13 @@ class ParserBase : NSObject, XMLParserDelegate  {
     func parser(_ parser: XMLParser, foundCharacters string: String) {
         self.foundCharacters += string
     }
+    
+    func parser(_ parser: XMLParser, foundCDATA CDATABlock: Data) {
+        guard let string = String(data: CDATABlock, encoding: .utf8) else {
+            print("CDATA contains non-textual data, ignored")
+            return
+        }
+        self.foundCharacters += string
+    }
 
 }

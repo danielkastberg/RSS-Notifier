@@ -9,7 +9,7 @@ import Foundation
 import AppKit
 
 
-class ChannelParser: ParserBase {
+class Channel: ParserBase {
     
     var count = 0
     var items = [Item]()
@@ -29,7 +29,9 @@ class ChannelParser: ParserBase {
         // to parsing to a new instance of Marker
 
         if elementName == "item" {
-            let item = ItemParser()
+            let item = Item()
+            items.append(item)
+            
             
 
             // push responsibility

@@ -10,8 +10,13 @@ import SwiftUI
 struct ContentView: View {
     let rss = RSSReader()
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        VStack {
+            Text("Hello, world!")
+                .padding()
+            Button(action: {rss.startRss()} ) {
+                         Text("reset timer!")
+                     }
+        }
     }
 }
 

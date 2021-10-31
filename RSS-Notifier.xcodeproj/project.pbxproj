@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6592F4EF272D75BA007907C8 /* RSSReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6592F4EE272D75BA007907C8 /* RSSReader.swift */; };
-		6592F4F1272D77EA007907C8 /* RssStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6592F4F0272D77EA007907C8 /* RssStruct.swift */; };
+		6592F4EF272D75BA007907C8 /* ChannelParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6592F4EE272D75BA007907C8 /* ChannelParser.swift */; };
+		6592F4F1272D77EA007907C8 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6592F4F0272D77EA007907C8 /* Item.swift */; };
+		6592F4F5272EE02C007907C8 /* ItemParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6592F4F4272EE02C007907C8 /* ItemParser.swift */; };
+		6592F4F7272EE0E3007907C8 /* ParserBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6592F4F6272EE0E3007907C8 /* ParserBase.swift */; };
+		6592F4F9272EF2B5007907C8 /* RSSReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6592F4F8272EF2B5007907C8 /* RSSReader.swift */; };
 		65FF4A9D272B3A8900BF82FD /* RSS_NotifierApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FF4A9C272B3A8900BF82FD /* RSS_NotifierApp.swift */; };
 		65FF4A9F272B3A8900BF82FD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FF4A9E272B3A8900BF82FD /* ContentView.swift */; };
 		65FF4AA1272B3A8B00BF82FD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65FF4AA0272B3A8B00BF82FD /* Assets.xcassets */; };
@@ -16,8 +19,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6592F4EE272D75BA007907C8 /* RSSReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSReader.swift; sourceTree = "<group>"; };
-		6592F4F0272D77EA007907C8 /* RssStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RssStruct.swift; sourceTree = "<group>"; };
+		6592F4EE272D75BA007907C8 /* ChannelParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelParser.swift; sourceTree = "<group>"; };
+		6592F4F0272D77EA007907C8 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		6592F4F4272EE02C007907C8 /* ItemParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemParser.swift; sourceTree = "<group>"; };
+		6592F4F6272EE0E3007907C8 /* ParserBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserBase.swift; sourceTree = "<group>"; };
+		6592F4F8272EF2B5007907C8 /* RSSReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSReader.swift; sourceTree = "<group>"; };
 		65FF4A99272B3A8900BF82FD /* RSS-Notifier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RSS-Notifier.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		65FF4A9C272B3A8900BF82FD /* RSS_NotifierApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSS_NotifierApp.swift; sourceTree = "<group>"; };
 		65FF4A9E272B3A8900BF82FD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -61,8 +67,11 @@
 				65FF4AA0272B3A8B00BF82FD /* Assets.xcassets */,
 				65FF4AA5272B3A8B00BF82FD /* RSS_Notifier.entitlements */,
 				65FF4AA2272B3A8B00BF82FD /* Preview Content */,
-				6592F4EE272D75BA007907C8 /* RSSReader.swift */,
-				6592F4F0272D77EA007907C8 /* RssStruct.swift */,
+				6592F4EE272D75BA007907C8 /* ChannelParser.swift */,
+				6592F4F0272D77EA007907C8 /* Item.swift */,
+				6592F4F4272EE02C007907C8 /* ItemParser.swift */,
+				6592F4F6272EE0E3007907C8 /* ParserBase.swift */,
+				6592F4F8272EF2B5007907C8 /* RSSReader.swift */,
 			);
 			path = "RSS-Notifier";
 			sourceTree = "<group>";
@@ -145,10 +154,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6592F4F5272EE02C007907C8 /* ItemParser.swift in Sources */,
+				6592F4F9272EF2B5007907C8 /* RSSReader.swift in Sources */,
 				65FF4A9F272B3A8900BF82FD /* ContentView.swift in Sources */,
 				65FF4A9D272B3A8900BF82FD /* RSS_NotifierApp.swift in Sources */,
-				6592F4EF272D75BA007907C8 /* RSSReader.swift in Sources */,
-				6592F4F1272D77EA007907C8 /* RssStruct.swift in Sources */,
+				6592F4EF272D75BA007907C8 /* ChannelParser.swift in Sources */,
+				6592F4F1272D77EA007907C8 /* Item.swift in Sources */,
+				6592F4F7272EE0E3007907C8 /* ParserBase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

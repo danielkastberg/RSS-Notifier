@@ -18,8 +18,6 @@ class Item : ParserBase {
 
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
 
-        print("processing <\(elementName)> tag from Item")
-
         // if we finished an item tag, the ParserBase parent
         // would have accumulated the found characters
         // so just assign that to our item variable

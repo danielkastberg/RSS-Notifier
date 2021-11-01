@@ -6,17 +6,15 @@
 //
 
 import Foundation
-import AppKit
 
 
 class Channel: ParserBase {
     
     var count = 0
     var items = [Item]()
+    var item = Item()
 
     override func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
-
-        print("processing <\(elementName)> tag from channel")
 
         if elementName == "channel" {
 
@@ -29,7 +27,7 @@ class Channel: ParserBase {
         // to parsing to a new instance of Marker
 
         if elementName == "item" {
-            let item = Item()
+            item = Item()
             items.append(item)
             
             

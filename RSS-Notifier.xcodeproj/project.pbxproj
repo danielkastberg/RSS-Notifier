@@ -7,33 +7,33 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		652C1B34272F482D00535B61 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652C1B2F272F482D00535B61 /* Item.swift */; };
-		652C1B35272F482D00535B61 /* RSSReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652C1B30272F482D00535B61 /* RSSReader.swift */; };
-		652C1B36272F482D00535B61 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652C1B31272F482D00535B61 /* Channel.swift */; };
-		652C1B37272F482D00535B61 /* ParserBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652C1B32272F482D00535B61 /* ParserBase.swift */; };
-		6584FE97272F470B00203ED5 /* RSS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6584FE96272F470B00203ED5 /* RSS.swift */; };
-		65FF4A9D272B3A8900BF82FD /* RSS_NotifierApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FF4A9C272B3A8900BF82FD /* RSS_NotifierApp.swift */; };
-		65FF4A9F272B3A8900BF82FD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FF4A9E272B3A8900BF82FD /* ContentView.swift */; };
-		65FF4AA1272B3A8B00BF82FD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65FF4AA0272B3A8B00BF82FD /* Assets.xcassets */; };
-		65FF4AA4272B3A8B00BF82FD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65FF4AA3272B3A8B00BF82FD /* Preview Assets.xcassets */; };
+		658103B827304E2F00974AAF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103B727304E2F00974AAF /* AppDelegate.swift */; };
+		658103BA27304E2F00974AAF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103B927304E2F00974AAF /* ViewController.swift */; };
+		658103BC27304E3100974AAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 658103BB27304E3100974AAF /* Assets.xcassets */; };
+		658103CA27304E8800974AAF /* ParserBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103C627304E8700974AAF /* ParserBase.swift */; };
+		658103CB27304E8800974AAF /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103C727304E8800974AAF /* Channel.swift */; };
+		658103CC27304E8800974AAF /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103C827304E8800974AAF /* Item.swift */; };
+		658103CD27304E8800974AAF /* RSSReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103C927304E8800974AAF /* RSSReader.swift */; };
+		658103F72730546900974AAF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 658103F52730546900974AAF /* Main.storyboard */; };
+		658104142730641700974AAF /* StatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658104132730641700974AAF /* StatusBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		652C1B2F272F482D00535B61 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
-		652C1B30272F482D00535B61 /* RSSReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSSReader.swift; sourceTree = "<group>"; };
-		652C1B31272F482D00535B61 /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
-		652C1B32272F482D00535B61 /* ParserBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserBase.swift; sourceTree = "<group>"; };
-		6584FE96272F470B00203ED5 /* RSS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSS.swift; sourceTree = "<group>"; };
-		65FF4A99272B3A8900BF82FD /* RSS-Notifier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RSS-Notifier.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		65FF4A9C272B3A8900BF82FD /* RSS_NotifierApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSS_NotifierApp.swift; sourceTree = "<group>"; };
-		65FF4A9E272B3A8900BF82FD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		65FF4AA0272B3A8B00BF82FD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		65FF4AA3272B3A8B00BF82FD /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		65FF4AA5272B3A8B00BF82FD /* RSS_Notifier.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RSS_Notifier.entitlements; sourceTree = "<group>"; };
+		658103B427304E2F00974AAF /* RSS-Notifier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RSS-Notifier.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		658103B727304E2F00974AAF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		658103B927304E2F00974AAF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		658103BB27304E3100974AAF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		658103C027304E3100974AAF /* RSS_Notifier.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RSS_Notifier.entitlements; sourceTree = "<group>"; };
+		658103C627304E8700974AAF /* ParserBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserBase.swift; sourceTree = "<group>"; };
+		658103C727304E8800974AAF /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
+		658103C827304E8800974AAF /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		658103C927304E8800974AAF /* RSSReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSSReader.swift; sourceTree = "<group>"; };
+		658103F62730546900974AAF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		658104132730641700974AAF /* StatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		65FF4A96272B3A8900BF82FD /* Frameworks */ = {
+		658103B127304E2F00974AAF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -43,57 +43,49 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		65FF4A90272B3A8900BF82FD = {
+		658103AB27304E2F00974AAF = {
 			isa = PBXGroup;
 			children = (
-				65FF4A9B272B3A8900BF82FD /* RSS-Notifier */,
-				65FF4A9A272B3A8900BF82FD /* Products */,
+				658103B627304E2F00974AAF /* RSS-Notifier */,
+				658103B527304E2F00974AAF /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		65FF4A9A272B3A8900BF82FD /* Products */ = {
+		658103B527304E2F00974AAF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				65FF4A99272B3A8900BF82FD /* RSS-Notifier.app */,
+				658103B427304E2F00974AAF /* RSS-Notifier.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		65FF4A9B272B3A8900BF82FD /* RSS-Notifier */ = {
+		658103B627304E2F00974AAF /* RSS-Notifier */ = {
 			isa = PBXGroup;
 			children = (
-				65FF4A9C272B3A8900BF82FD /* RSS_NotifierApp.swift */,
-				652C1B31272F482D00535B61 /* Channel.swift */,
-				652C1B2F272F482D00535B61 /* Item.swift */,
-				652C1B32272F482D00535B61 /* ParserBase.swift */,
-				652C1B30272F482D00535B61 /* RSSReader.swift */,
-				65FF4A9E272B3A8900BF82FD /* ContentView.swift */,
-				65FF4AA0272B3A8B00BF82FD /* Assets.xcassets */,
-				65FF4AA5272B3A8B00BF82FD /* RSS_Notifier.entitlements */,
-				65FF4AA2272B3A8B00BF82FD /* Preview Content */,
-				6584FE96272F470B00203ED5 /* RSS.swift */,
+				658103B727304E2F00974AAF /* AppDelegate.swift */,
+				658103B927304E2F00974AAF /* ViewController.swift */,
+				658103C727304E8800974AAF /* Channel.swift */,
+				658103C827304E8800974AAF /* Item.swift */,
+				658103C627304E8700974AAF /* ParserBase.swift */,
+				658103C927304E8800974AAF /* RSSReader.swift */,
+				658103BB27304E3100974AAF /* Assets.xcassets */,
+				658103C027304E3100974AAF /* RSS_Notifier.entitlements */,
+				658103F52730546900974AAF /* Main.storyboard */,
+				658104132730641700974AAF /* StatusBar.swift */,
 			);
 			path = "RSS-Notifier";
-			sourceTree = "<group>";
-		};
-		65FF4AA2272B3A8B00BF82FD /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				65FF4AA3272B3A8B00BF82FD /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		65FF4A98272B3A8900BF82FD /* RSS-Notifier */ = {
+		658103B327304E2F00974AAF /* RSS-Notifier */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 65FF4AA8272B3A8B00BF82FD /* Build configuration list for PBXNativeTarget "RSS-Notifier" */;
+			buildConfigurationList = 658103C327304E3100974AAF /* Build configuration list for PBXNativeTarget "RSS-Notifier" */;
 			buildPhases = (
-				65FF4A95272B3A8900BF82FD /* Sources */,
-				65FF4A96272B3A8900BF82FD /* Frameworks */,
-				65FF4A97272B3A8900BF82FD /* Resources */,
+				658103B027304E2F00974AAF /* Sources */,
+				658103B127304E2F00974AAF /* Frameworks */,
+				658103B227304E2F00974AAF /* Resources */,
 			);
 			buildRules = (
 			);
@@ -101,25 +93,25 @@
 			);
 			name = "RSS-Notifier";
 			productName = "RSS-Notifier";
-			productReference = 65FF4A99272B3A8900BF82FD /* RSS-Notifier.app */;
+			productReference = 658103B427304E2F00974AAF /* RSS-Notifier.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		65FF4A91272B3A8900BF82FD /* Project object */ = {
+		658103AC27304E2F00974AAF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1310;
 				LastUpgradeCheck = 1310;
 				TargetAttributes = {
-					65FF4A98272B3A8900BF82FD = {
+					658103B327304E2F00974AAF = {
 						CreatedOnToolsVersion = 13.1;
 					};
 				};
 			};
-			buildConfigurationList = 65FF4A94272B3A8900BF82FD /* Build configuration list for PBXProject "RSS-Notifier" */;
+			buildConfigurationList = 658103AF27304E2F00974AAF /* Build configuration list for PBXProject "RSS-Notifier" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -127,47 +119,58 @@
 				en,
 				Base,
 			);
-			mainGroup = 65FF4A90272B3A8900BF82FD;
-			productRefGroup = 65FF4A9A272B3A8900BF82FD /* Products */;
+			mainGroup = 658103AB27304E2F00974AAF;
+			productRefGroup = 658103B527304E2F00974AAF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				65FF4A98272B3A8900BF82FD /* RSS-Notifier */,
+				658103B327304E2F00974AAF /* RSS-Notifier */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		65FF4A97272B3A8900BF82FD /* Resources */ = {
+		658103B227304E2F00974AAF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				65FF4AA4272B3A8B00BF82FD /* Preview Assets.xcassets in Resources */,
-				65FF4AA1272B3A8B00BF82FD /* Assets.xcassets in Resources */,
+				658103BC27304E3100974AAF /* Assets.xcassets in Resources */,
+				658103F72730546900974AAF /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		65FF4A95272B3A8900BF82FD /* Sources */ = {
+		658103B027304E2F00974AAF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				652C1B35272F482D00535B61 /* RSSReader.swift in Sources */,
-				65FF4A9F272B3A8900BF82FD /* ContentView.swift in Sources */,
-				652C1B36272F482D00535B61 /* Channel.swift in Sources */,
-				652C1B34272F482D00535B61 /* Item.swift in Sources */,
-				65FF4A9D272B3A8900BF82FD /* RSS_NotifierApp.swift in Sources */,
-				6584FE97272F470B00203ED5 /* RSS.swift in Sources */,
-				652C1B37272F482D00535B61 /* ParserBase.swift in Sources */,
+				658104142730641700974AAF /* StatusBar.swift in Sources */,
+				658103CC27304E8800974AAF /* Item.swift in Sources */,
+				658103BA27304E2F00974AAF /* ViewController.swift in Sources */,
+				658103CB27304E8800974AAF /* Channel.swift in Sources */,
+				658103B827304E2F00974AAF /* AppDelegate.swift in Sources */,
+				658103CA27304E8800974AAF /* ParserBase.swift in Sources */,
+				658103CD27304E8800974AAF /* RSSReader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		658103F52730546900974AAF /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				658103F62730546900974AAF /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
-		65FF4AA6272B3A8B00BF82FD /* Debug */ = {
+		658103C127304E3100974AAF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -218,9 +221,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_FILE[sdk=macosx*]" = "";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.news";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -231,7 +231,7 @@
 			};
 			name = Debug;
 		};
-		65FF4AA7272B3A8B00BF82FD /* Release */ = {
+		658103C227304E3100974AAF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -276,10 +276,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_FILE[sdk=macosx*]" = "";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.news";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -289,7 +285,7 @@
 			};
 			name = Release;
 		};
-		65FF4AA9272B3A8B00BF82FD /* Debug */ = {
+		658103C427304E3100974AAF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -298,11 +294,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"RSS-Notifier/Preview Content\"";
-				ENABLE_PREVIEWS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_FILE[sdk=macosx*]" = "";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -315,7 +310,7 @@
 			};
 			name = Debug;
 		};
-		65FF4AAA272B3A8B00BF82FD /* Release */ = {
+		658103C527304E3100974AAF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -324,11 +319,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"RSS-Notifier/Preview Content\"";
-				ENABLE_PREVIEWS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_FILE[sdk=macosx*]" = "";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -344,25 +338,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		65FF4A94272B3A8900BF82FD /* Build configuration list for PBXProject "RSS-Notifier" */ = {
+		658103AF27304E2F00974AAF /* Build configuration list for PBXProject "RSS-Notifier" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				65FF4AA6272B3A8B00BF82FD /* Debug */,
-				65FF4AA7272B3A8B00BF82FD /* Release */,
+				658103C127304E3100974AAF /* Debug */,
+				658103C227304E3100974AAF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		65FF4AA8272B3A8B00BF82FD /* Build configuration list for PBXNativeTarget "RSS-Notifier" */ = {
+		658103C327304E3100974AAF /* Build configuration list for PBXNativeTarget "RSS-Notifier" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				65FF4AA9272B3A8B00BF82FD /* Debug */,
-				65FF4AAA272B3A8B00BF82FD /* Release */,
+				658103C427304E3100974AAF /* Debug */,
+				658103C527304E3100974AAF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 65FF4A91272B3A8900BF82FD /* Project object */;
+	rootObject = 658103AC27304E2F00974AAF /* Project object */;
 }

@@ -12,7 +12,6 @@ class Channel: ParserBase {
     
     var count = 0
     var items = [Item]()
-    var item = Item()
 
     override func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
 
@@ -27,7 +26,7 @@ class Channel: ParserBase {
         // to parsing to a new instance of Marker
 
         if elementName == "item" {
-            item = Item()
+            let item = Item()
             items.append(item)
             
             

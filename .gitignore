@@ -58,6 +58,7 @@ playground.xcworkspace
 # Pods/
 # Add this line if you want to avoid checking in source code from the Xcode workspace
 # *.xcworkspace
+AlamoFire*
 
 # Carthage
 # Add this line if you want to avoid checking in source code from Carthage dependencies.
@@ -90,7 +91,8 @@ iOSInjectionProject/
 # Xcode
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
-
+#Mac file
+DS_Store
 
 
 ## Gcc Patch

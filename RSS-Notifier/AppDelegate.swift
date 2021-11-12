@@ -26,6 +26,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     let refreshItem = NSMenuItem()
     let categoryItem = NSMenuItem()
+    
 
     
     
@@ -34,8 +35,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
      
+        //let bar = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        //bar.button?.action = #selector(printShit)
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        
         statusItem?.button?.title = "RSS Notifier"
+        
+        //if let button = statusItem?.button {
+         // button.image = NSImage(named:NSImage.Name("rss-icon"))
+            //button.action = #selector(printQuote(_:))
+          //  button.title = "fuck"
+        //}
+        
+        
+        //statusItem?.button?.action = #selector(printShit)
         
         
        // let statusBarMenu = NSMenu(title: "Cap Status Bar Menu")
@@ -45,15 +58,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // let refreshItem = NSMenuItem()
         // let categoryItem = NSMenuItem()
-        
-        for element in items {
-            print("kommer jag in")
-            let article = NSMenuItem()
-            article.title = element.title!
-            print(article.title)
-            subMenu.addItem(article)
-            
-        }
         
         
         refreshItem.title = "Refresh"
@@ -72,7 +76,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem?.menu = statusBarMenu
 
 
-
+    }
+    
+    @objc func printQuote(_ sender: Any?) {
+      let quoteText = "Never put off until tomorrow what you can do the day after tomorrow."
+      let quoteAuthor = "Mark Twain"
+      
+      print("\(quoteText) — \(quoteAuthor)")
+    }
+    
+    
+    @objc func printShit() {
+        print("FUCK YOU WHORE")
     }
     
     @objc func refreshRss() {
@@ -124,10 +139,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func formatDate(item: RSSItem) -> String {
         let dateFormatter: DateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM/dd, hh:mm"
+        dateFormatter.dateFormat = "MM/dd, HH:mm"
+        let timeSincePub = Date().timeIntervalSince(item.pubDate!)
+        let timeSincePubInMin = Int(timeSincePub) / 60
+        let time = calculateTime(minutesSincePub: timeSincePubInMin)
+        
         let dateStr = dateFormatter.string(from: item.pubDate!)
-        let title = item.title! + "\t" + dateStr
+        // let title = item.title! + "\t" + dateStr
+        let title = item.title! + "\t" + String(time)
         return title
+    }
+    
+    func calculateTime(minutesSincePub: Int) -> String {
+        var time = String(minutesSincePub) + "m"
+        if (minutesSincePub > 60) {
+            let hours = minutesSincePub / 60
+            let minutes = minutesSincePub % 60
+            time = String(hours) + "h " + String(minutes) + "m"
+        }
+        
+        return time
     }
  
     
@@ -148,6 +179,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
         return true
+    }
+    
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        NSApp.setActivationPolicy(.accessory)
+        return false
     }
 
 

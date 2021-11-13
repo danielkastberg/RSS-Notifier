@@ -39,7 +39,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         //bar.button?.action = #selector(printShit)
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         
-        statusItem?.button?.title = "RSS Notifier"
+
+        
+        // Checks if there is an image to use as icon.
+        // If not loads a title instead
+        if let image = NSImage(named: "AppIcon") {
+            image.isTemplate = true
+            image.size = CGSize(width: 19, height: 19)
+            statusItem?.button?.image = image
+        }
+        else {
+            statusItem?.button?.title = "RSS Notifier"
+        }
+        
+ 
+        
+  
         
         //if let button = statusItem?.button {
          // button.image = NSImage(named:NSImage.Name("rss-icon"))
@@ -60,6 +75,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // let categoryItem = NSMenuItem()
         
         
+        
+        // Creates a item to Quit the program
+        let quitItem = NSMenuItem(title: "Quit", action: #selector(quit), keyEquivalent: "Q")
+        
+
+        // Creates a NSMenuItem to handle the RSS refresh
         refreshItem.title = "Refresh"
         refreshItem.action = #selector(rssRead)
         refreshItem.target = self
@@ -70,8 +91,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         categoryItem.submenu = subMenu
         
         
+        // Adds all the items to the menu that pops down when clicking the icon
         statusBarMenu.addItem(refreshItem)
         statusBarMenu.addItem(categoryItem)
+        statusBarMenu.addItem(quitItem)
         
         statusItem?.menu = statusBarMenu
 
@@ -86,22 +109,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     
-    @objc func printShit() {
+    @objc func quit () {
         print("FUCK YOU WHORE")
     }
     
-    @objc func refreshRss() {
-        rss.startRss{ (output) -> Void in
-            self.items
-            print(self.items.count)
-            print(self.items)
-        }
 
-        for item in items {
-            print(item.title)
-        }
-    
-    }
     
     @objc func rssRead() {
         self.subMenu = NSMenu()

@@ -77,7 +77,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         
         // Creates a item to Quit the program
-        let quitItem = NSMenuItem(title: "Quit", action: #selector(quit), keyEquivalent: "Q")
+        let quitItem = NSMenuItem(title: "Quit", action: #selector(quit), keyEquivalent: "q")
         
 
         // Creates a NSMenuItem to handle the RSS refresh

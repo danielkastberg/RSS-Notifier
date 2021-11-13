@@ -19,7 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let rss = RSSReader()
     
     
-    let statusBarMenu = NSMenu(title: "Cap Status Bar Menu")
+    let statusBarMenu = NSMenu()
     var subMenu = NSMenu()
     
     
@@ -92,9 +92,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         
         // Adds all the items to the menu that pops down when clicking the icon
+        statusBarMenu.addItem(quitItem)
         statusBarMenu.addItem(refreshItem)
         statusBarMenu.addItem(categoryItem)
-        statusBarMenu.addItem(quitItem)
+
         
         statusItem?.menu = statusBarMenu
 
@@ -110,7 +111,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     
     @objc func quit () {
-        print("FUCK YOU WHORE")
+        print("Quit to be implemented")
     }
     
 

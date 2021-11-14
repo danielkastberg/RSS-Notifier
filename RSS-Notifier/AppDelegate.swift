@@ -11,12 +11,10 @@ import Alamofire
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
-    var channels: Array<Channel> = []
-    var channel: Channel = Channel()
     var items: Array<RSSItem> = []
     
     var statusItem: NSStatusItem?
-    let rss = RSSReader()
+
     
     
     let statusBarMenu = NSMenu()
@@ -111,7 +109,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     
     @objc func quit () {
-        print("Quit to be implemented")
+        exit(0)
     }
     
 

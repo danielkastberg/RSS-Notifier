@@ -5,7 +5,7 @@
         <category title="Sport">
             <outline htmlUrl="https://www.reddit.com/r/reddevils/" title="/r/RedDevils: The Reddit home for Manchester United" xmlUrl="https://www.reddit.com/r/reddevils/.rss" type="rss" text="/r/RedDevils: The Reddit home for Manchester United"/>
             <outline htmlUrl="https://www.reddit.com/r/soccer/" title="The back page of the internet" xmlUrl="https://www.reddit.com/r/soccer/.rss" type="rss" text="The back page of the internet"/>
-            <outline htmlUrl="https://www.aftonbladet.se/sportbladet/" title="(No Title)" xmlUrl="https://www.aftonbladet.se/sportbladet/rss.xml" type="rss" text="(No Title)"/>
+            <outline htmlUrl="https://www.aftonbladet.se/sportbladet/" title="Sportbladet" xmlUrl="https://rss.aftonbladet.se/rss2/small/pages/sections/senastenytt/sport/" type="rss" text="(No Title)"/>
         </category>
         <category title="Ekonomi">
             <outline htmlUrl="https://www.digital.di.se/rss" title="Di Digital - Senaste nytt" xmlUrl="https://digital.di.se/rss" type="rss" text="Di Digital - Senaste nytt"/>
@@ -17,7 +17,7 @@
             <outline htmlUrl="https://www.dn.se/" title="Nyheter" xmlUrl="https://www.dn.se/rss/senaste-nytt" type="rss" text="Nyheter"/>
             <outline htmlUrl="https://www.svd.se/" title="SvD - Startsidan" xmlUrl="https://www.svd.se/?service=rss&amp;type=senastenytt" type="rss" text="SvD - Startsidan"/>
             <outline htmlUrl="https://sverigesradio.se/sida/default.aspx?programid=83" title="Nyheter (Ekot)" xmlUrl="https://api.sr.se/api/rssfeed/rssfeed.aspx?rssfeed=83" type="rss" text="Nyheter (Ekot)"/>
-            <outline htmlUrl="https://www.aftonbladet.se/" title="Aftonbladet: Sveriges nyhetskälla och mötesplats" xmlUrl="https://www.aftonbladet.se/rss.xml" type="rss" text="Aftonbladet: Sveriges nyhetskälla och mötesplats"/>
+            <outline htmlUrl="https://www.aftonbladet.se/" title="Aftonbladet: Sveriges nyhetskälla och mötesplats" xmlUrl="https://rss.aftonbladet.se/rss2/small/pages/sections/senastenytt/" type="rss" text="Aftonbladet: Sveriges nyhetskälla och mötesplats"/>
         </category>
         <category title="Deals">
             <outline htmlUrl="https://www.sweclockers.com" title="Övriga fynd | SweClockers.com" xmlUrl="https://www.sweclockers.com/feeds/forum/trad/1465406" type="rss" text="Övriga fynd | SweClockers.com"/>

@@ -16,10 +16,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var statusItem: NSStatusItem?
 
     
-    
     let statusBarMenu = NSMenu()
     var subMenu = NSMenu()
-    
     
     
     let refreshItem = NSMenuItem()
@@ -32,9 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   
     override func awakeFromNib() {
         super.awakeFromNib()
-     
-        //let bar = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        //bar.button?.action = #selector(printShit)
+        
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         
 
@@ -50,28 +46,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             statusItem?.button?.title = "RSS Notifier"
         }
         
+        
+        let oplmR = OPMLReader()
+        oplmR.readOPML()
  
-        
-  
-        
-        //if let button = statusItem?.button {
-         // button.image = NSImage(named:NSImage.Name("rss-icon"))
-            //button.action = #selector(printQuote(_:))
-          //  button.title = "fuck"
-        //}
-        
-        
-        //statusItem?.button?.action = #selector(printShit)
-        
-        
-       // let statusBarMenu = NSMenu(title: "Cap Status Bar Menu")
-        // let subMenu = NSMenu()
-        
-        
-        
-        // let refreshItem = NSMenuItem()
-        // let categoryItem = NSMenuItem()
-        
         
         
         // Creates a item to Quit the program

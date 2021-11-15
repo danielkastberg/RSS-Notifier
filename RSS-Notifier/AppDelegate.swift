@@ -30,13 +30,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     var statusItem: NSStatusItem?
 
-    let statusBarMenu = NSMenu()
+    var statusBarMenu = NSMenu()
     var subMenu = NSMenu()
     
     let refreshItem = NSMenuItem()
     let categoryItem = NSMenuItem()
     
     var listOfCategories = [NSMenuItem]()
+    
+    var category = Category()
+    
     
     // How old news that should be displayed in minutes.
     var timeIntervalNews = 1440
@@ -53,7 +56,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         
         let oplmR = OPMLReader()
-        let category = oplmR.readOPML()
+        category = oplmR.readOPML()
         
         let categories = category.getCategories()
         
@@ -98,6 +101,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         for c in categories {
             var categoryItem = NSMenuItem()
             categoryItem.title = c.title
+            listOfCategories.append(categoryItem)
             for outline in c.items {
                 urls.append(outline.xmlUrl)
                 categoryItem = update(urlString: outline.xmlUrl, CategoryItem: categoryItem)
@@ -145,72 +149,101 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        let urlString = urls.representedObject
 //        let url = URL(string: urlString as! String)!
         self.subMenu = NSMenu()
+ 
+    
+        statusBarMenu = NSMenu()
+//
+        let quitItem = NSMenuItem(title: "Quit", action: #selector(quit), keyEquivalent: "q")
+        
+        let refreshItem = NSMenuItem()
+//
+//
+        // Creates a NSMenuItem to handle the RSS refresh
+        refreshItem.title = "Refresh"
+        refreshItem.action = #selector(rssRead)
+        refreshItem.target = self
+
+        statusBarMenu.addItem(quitItem)
+        statusBarMenu.addItem(refreshItem)
+        
+        let categories = category.getCategories()
+        for c in categories {
+            var categoryItem = NSMenuItem()
+            categoryItem.title = c.title
+            for outline in c.items {
+                urls.append(outline.xmlUrl)
+                categoryItem = update(urlString: outline.xmlUrl, CategoryItem: categoryItem)
+                print(categoryItem.title)
+            }
+            categoryItem.target = self
+            statusBarMenu.addItem(categoryItem)
+        }
         
 
         
         
-        var i = 0
-        //        let url: URL = URL(string: "https://m.sweclockers.com/feeds/forum/trad/999559")!
-        
-       for urlString in urls {
-//           let url = URL(string: urlString)
-//            let url = URL(string: urlString as! String)!
-           
-//           guard let url = URL(string: urlString) else {
-//               print("CANNOT OPEN URL")
-//               return
-//           }
+//        var i = 0
+//        //        let url: URL = URL(string: "https://m.sweclockers.com/feeds/forum/trad/999559")!
 //
-//           print(url)
-//            AF.request(url).responseRSS() { (response) -> Void in
-//                if let feed: RSSFeed = response.value {
-//                    /// Do something with your new RSSFeed object!
-//                    for item in feed.items {
-//                        let article = NSMenuItem()
-//                        let title = self.formatDate(item: item)
+//       for urlString in urls {
+////           let url = URL(string: urlString)
+////            let url = URL(string: urlString as! String)!
 //
-//                        //let article = NSMenuItem(title: title, action: #selector(self.openBrowser(urlSender:)), keyEquivalent: String(i))
-//                        let someObj: NSString = item.link! as NSString
-//                        article.representedObject = someObj
-//                        article.action = #selector(self.openBrowser(urlSender:))
-//                        article.title = title
-//                        i+=1
+////           guard let url = URL(string: urlString) else {
+////               print("CANNOT OPEN URL")
+////               return
+////           }
+////
+////           print(url)
+////            AF.request(url).responseRSS() { (response) -> Void in
+////                if let feed: RSSFeed = response.value {
+////                    /// Do something with your new RSSFeed object!
+////                    for item in feed.items {
+////                        let article = NSMenuItem()
+////                        let title = self.formatDate(item: item)
+////
+////                        //let article = NSMenuItem(title: title, action: #selector(self.openBrowser(urlSender:)), keyEquivalent: String(i))
+////                        let someObj: NSString = item.link! as NSString
+////                        article.representedObject = someObj
+////                        article.action = #selector(self.openBrowser(urlSender:))
+////                        article.title = title
+////                        i+=1
+////
+////                        print(article.title)
+////                        self.subMenu.addItem(article)
+////                    }
+////                }
+////            }
 //
-//                        print(article.title)
-//                        self.subMenu.addItem(article)
+//           if let url = URL(string: urlString) {
+//                AF.request(url).responseRSS() { (response) -> Void in
+//                    if let feed: RSSFeed = response.value {
+//                        /// Do something with your new RSSFeed object!
+//                        for item in feed.items {
+//                            print(item.title)
+//                            let article = NSMenuItem()
+//                            let title = self.formatDate(item: item)
+//
+//                            //let article = NSMenuItem(title: title, action: #selector(self.openBrowser(urlSender:)), keyEquivalent: String(i))
+//                            let someObj: NSString = item.link! as NSString
+//                            article.representedObject = someObj
+//                            article.action = #selector(self.openBrowser(urlSender:))
+//                            article.title = title
+//                            i+=1
+//
+//                            print(article.title)
+//                            self.subMenu.addItem(article)
+//                        }
 //                    }
 //                }
-//            }
-           
-           if let url = URL(string: urlString) {
-               print(url)
-                AF.request(url).responseRSS() { (response) -> Void in
-                    if let feed: RSSFeed = response.value {
-                        /// Do something with your new RSSFeed object!
-                        for item in feed.items {
-                            let article = NSMenuItem()
-                            let title = self.formatDate(item: item)
-
-                            //let article = NSMenuItem(title: title, action: #selector(self.openBrowser(urlSender:)), keyEquivalent: String(i))
-                            let someObj: NSString = item.link! as NSString
-                            article.representedObject = someObj
-                            article.action = #selector(self.openBrowser(urlSender:))
-                            article.title = title
-                            i+=1
-
-                            print(article.title)
-                            self.subMenu.addItem(article)
-                        }
-                    }
-                }
-           }
-           else {
-               print("CANNOT OPEN URL")
-           }
-        }
-
-        
-        categoryItem.submenu = self.subMenu
+//           }
+//           else {
+//               print("CANNOT OPEN URL")
+//           }
+//        }
+//
+//
+//        categoryItem.submenu = self.subMenu
     }
     
     

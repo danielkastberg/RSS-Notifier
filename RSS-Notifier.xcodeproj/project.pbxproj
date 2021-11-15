@@ -7,13 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		65621BBC2743070C00DE62C3 /* Subscriptions.xml in Resources */ = {isa = PBXBuildFile; fileRef = 65621BB92743070C00DE62C3 /* Subscriptions.xml */; };
+		65621BBD2743070C00DE62C3 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65621BBA2743070C00DE62C3 /* Category.swift */; };
+		65621BBE2743070C00DE62C3 /* OPMLReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65621BBB2743070C00DE62C3 /* OPMLReader.swift */; };
 		658103B827304E2F00974AAF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103B727304E2F00974AAF /* AppDelegate.swift */; };
 		658103BA27304E2F00974AAF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103B927304E2F00974AAF /* ViewController.swift */; };
 		658103BC27304E3100974AAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 658103BB27304E3100974AAF /* Assets.xcassets */; };
 		658103CA27304E8800974AAF /* ParserBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103C627304E8700974AAF /* ParserBase.swift */; };
-		658103CB27304E8800974AAF /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103C727304E8800974AAF /* Channel.swift */; };
 		658103CC27304E8800974AAF /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103C827304E8800974AAF /* Item.swift */; };
-		658103CD27304E8800974AAF /* RSSReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103C927304E8800974AAF /* RSSReader.swift */; };
 		658103F72730546900974AAF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 658103F52730546900974AAF /* Main.storyboard */; };
 		658104142730641700974AAF /* StatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658104132730641700974AAF /* StatusBar.swift */; };
 		65DD272327333DD10057E47F /* RSSFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DD270027333B540057E47F /* RSSFeed.swift */; };
@@ -97,15 +98,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		65621BB92743070C00DE62C3 /* Subscriptions.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Subscriptions.xml; sourceTree = "<group>"; };
+		65621BBA2743070C00DE62C3 /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		65621BBB2743070C00DE62C3 /* OPMLReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPMLReader.swift; sourceTree = "<group>"; };
 		658103B427304E2F00974AAF /* RSS-Notifier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RSS-Notifier.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		658103B727304E2F00974AAF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		658103B927304E2F00974AAF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		658103BB27304E3100974AAF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		658103C027304E3100974AAF /* RSS_Notifier.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RSS_Notifier.entitlements; sourceTree = "<group>"; };
 		658103C627304E8700974AAF /* ParserBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserBase.swift; sourceTree = "<group>"; };
-		658103C727304E8800974AAF /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		658103C827304E8800974AAF /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
-		658103C927304E8800974AAF /* RSSReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSSReader.swift; sourceTree = "<group>"; };
 		658103F62730546900974AAF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		658104132730641700974AAF /* StatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBar.swift; sourceTree = "<group>"; };
 		65DD26D1273339DE0057E47F /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = "RSS-Notifier/Alamofire/Alamofire.xcodeproj"; sourceTree = "<group>"; };
@@ -148,16 +150,17 @@
 		658103B627304E2F00974AAF /* RSS-Notifier */ = {
 			isa = PBXGroup;
 			children = (
+				65621BBA2743070C00DE62C3 /* Category.swift */,
+				65621BBB2743070C00DE62C3 /* OPMLReader.swift */,
+				65621BB92743070C00DE62C3 /* Subscriptions.xml */,
 				65DD270027333B540057E47F /* RSSFeed.swift */,
 				65DD270127333B540057E47F /* RSSItem.swift */,
 				658103B727304E2F00974AAF /* AppDelegate.swift */,
 				65FE3B82273B56FA00F8FF74 /* AlamofireRSSParser.h */,
 				65FE3B81273B56FA00F8FF74 /* AlamofireRSSParser.swift */,
 				658103B927304E2F00974AAF /* ViewController.swift */,
-				658103C727304E8800974AAF /* Channel.swift */,
 				658103C827304E8800974AAF /* Item.swift */,
 				658103C627304E8700974AAF /* ParserBase.swift */,
-				658103C927304E8800974AAF /* RSSReader.swift */,
 				658103BB27304E3100974AAF /* Assets.xcassets */,
 				658103C027304E3100974AAF /* RSS_Notifier.entitlements */,
 				658103F52730546900974AAF /* Main.storyboard */,
@@ -313,6 +316,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				658103BC27304E3100974AAF /* Assets.xcassets in Resources */,
+				65621BBC2743070C00DE62C3 /* Subscriptions.xml in Resources */,
 				658103F72730546900974AAF /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -329,11 +333,11 @@
 				65FE3B83273B56FA00F8FF74 /* AlamofireRSSParser.swift in Sources */,
 				658103CC27304E8800974AAF /* Item.swift in Sources */,
 				658103BA27304E2F00974AAF /* ViewController.swift in Sources */,
-				658103CB27304E8800974AAF /* Channel.swift in Sources */,
+				65621BBD2743070C00DE62C3 /* Category.swift in Sources */,
+				65621BBE2743070C00DE62C3 /* OPMLReader.swift in Sources */,
 				65DD272327333DD10057E47F /* RSSFeed.swift in Sources */,
 				658103B827304E2F00974AAF /* AppDelegate.swift in Sources */,
 				658103CA27304E8800974AAF /* ParserBase.swift in Sources */,
-				658103CD27304E8800974AAF /* RSSReader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

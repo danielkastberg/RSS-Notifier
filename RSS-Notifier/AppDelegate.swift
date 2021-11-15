@@ -19,24 +19,27 @@ import Alamofire
  Maybe add read notification to be saved between instances
  Add icon for each source to be loaded for each article in the menu
  Add some window for a quick read of the rss description
+ Add a setting window, that the user can choose the time interval in which the news should be displayed.
+ Change the font and size on the text displayed.
+ Fix text formatting
  */
 
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
-    var items: Array<RSSItem> = []
     
     var statusItem: NSStatusItem?
 
-    
     let statusBarMenu = NSMenu()
     var subMenu = NSMenu()
-    
     
     let refreshItem = NSMenuItem()
     let categoryItem = NSMenuItem()
     
     var listOfCategories = [NSMenuItem]()
+    
+    // How old news that should be displayed in minutes.
+    var timeIntervalNews = 1440
     
     var urls = [""]
     
@@ -220,15 +223,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 for item in feed.items {
                     let article = NSMenuItem()
                     let title = self.formatDate(item: item)
+                    if title != "" {
+                        let someObj: NSString = item.link! as NSString
+                        article.representedObject = someObj
+                        article.action = #selector(self.openBrowser(urlSender:))
+                        article.title = title
+                        i+=1
+
+                        subMenu.addItem(article)
+                    }
                     
                     //let article = NSMenuItem(title: title, action: #selector(self.openBrowser(urlSender:)), keyEquivalent: String(i))
-                    let someObj: NSString = item.link! as NSString
-                    article.representedObject = someObj
-                    article.action = #selector(self.openBrowser(urlSender:))
-                    article.title = title
-                    i+=1
 
-                    subMenu.addItem(article)
                 }
             }
         }
@@ -247,12 +253,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         dateFormatter.dateFormat = "MM/dd, HH:mm"
         let timeSincePub = Date().timeIntervalSince(item.pubDate!)
         let timeSincePubInMin = Int(timeSincePub) / 60
-        let time = calculateTime(minutesSincePub: timeSincePubInMin)
         
-        let dateStr = dateFormatter.string(from: item.pubDate!)
+        if timeSincePubInMin < timeIntervalNews {
+            let time = calculateTime(minutesSincePub: timeSincePubInMin)
+            let title = item.title! + "\t" + String(time)
+            return title
+        }
+        else {
+            return ""
+        }
+  
+        
+        
+//        let dateStr = dateFormatter.string(from: item.pubDate!)
         // let title = item.title! + "\t" + dateStr
-        let title = item.title! + "\t" + String(time)
-        return title
+        
+    
     }
     
     func calculateTime(minutesSincePub: Int) -> String {

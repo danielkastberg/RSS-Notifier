@@ -5,9 +5,10 @@
 //  Created by Daniel Kastberg on 2021-10-31.
 //
 
-struct Outline {
+public struct Outline {
     var title = ""
     var html = ""
+    var xmlUrl = ""
 }
 
 import Foundation
@@ -17,19 +18,17 @@ class ParserBase : NSObject, XMLParserDelegate  {
     var currentElement:String = ""
     var foundCharacters = ""
     var foundHtml = ""
+    var foundXmlUrl = ""
     var foundTitle = ""
     weak var parent:ParserBase? = nil
     
-    var depth = 0
-    var depthIndent: String {
-        return [String](repeating: "  ", count: self.depth).joined()
-    }
+
 
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
         
         foundTitle = attributeDict["title"]! as String
         foundHtml = attributeDict["htmlUrl"]! as String
-        
+        foundXmlUrl = attributeDict["xmlUrl"]! as String
         
 //        guard let html = attributeDict["htmlUrl"] else {
 //

@@ -8,6 +8,19 @@
 import Cocoa
 import Alamofire
 
+// Prova OPML bibliotek och se om det blir snabbare eller mer tillförlitigligt.
+
+/*
+ TODO
+ Add OPML writing.
+ Fix bug that not all sources url gets loaded
+ Add notification support
+ Add different shade in menu item to indicate that it has been read
+ Maybe add read notification to be saved between instances
+ Add icon for each source to be loaded for each article in the menu
+ Add some window for a quick read of the rss description
+ */
+
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -23,6 +36,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let refreshItem = NSMenuItem()
     let categoryItem = NSMenuItem()
     
+    var listOfCategories = [NSMenuItem]()
+    
+    var urls = [""]
+    
 
     
     
@@ -31,7 +48,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        
+        let oplmR = OPMLReader()
+        let category = oplmR.readOPML()
+        
+        let categories = category.getCategories()
+        
+        
+        
+        
+        
+        
+        
+        
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        
         
 
         
@@ -47,8 +78,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         
-        let oplmR = OPMLReader()
-        oplmR.readOPML()
  
         
         
@@ -61,8 +90,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         refreshItem.action = #selector(rssRead)
         refreshItem.target = self
         
-        categoryItem.title = "Category"
-        categoryItem.target = self
+        
+        
+        for c in categories {
+            var categoryItem = NSMenuItem()
+            categoryItem.title = c.title
+            for outline in c.items {
+                urls.append(outline.xmlUrl)
+                categoryItem = update(urlString: outline.xmlUrl, CategoryItem: categoryItem)
+                print(categoryItem.title)
+            }
+            categoryItem.target = self
+            statusBarMenu.addItem(categoryItem)
+        }
+        
+        
+        
+//        categoryItem.title = "Category"
+//        categoryItem.target = self
         
         categoryItem.submenu = subMenu
         
@@ -70,32 +115,104 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Adds all the items to the menu that pops down when clicking the icon
         statusBarMenu.addItem(quitItem)
         statusBarMenu.addItem(refreshItem)
-        statusBarMenu.addItem(categoryItem)
+//        statusBarMenu.addItem(categoryItem)
 
         
         statusItem?.menu = statusBarMenu
+        
+        // Removes the app from the dock
+        NSApp.setActivationPolicy(.accessory)
 
 
     }
     
-    @objc func printQuote(_ sender: Any?) {
-      let quoteText = "Never put off until tomorrow what you can do the day after tomorrow."
-      let quoteAuthor = "Mark Twain"
-      
-      print("\(quoteText) — \(quoteAuthor)")
-    }
+    
     
     
     @objc func quit () {
         exit(0)
     }
-    
-
-    
+            
     @objc func rssRead() {
+//        let urlString = urls.representedObject
+//        let url = URL(string: urlString as! String)!
         self.subMenu = NSMenu()
+        
+
+        
+        
         var i = 0
-        let url: URL = URL(string: "https://m.sweclockers.com/feeds/forum/trad/999559")!
+        //        let url: URL = URL(string: "https://m.sweclockers.com/feeds/forum/trad/999559")!
+        
+       for urlString in urls {
+//           let url = URL(string: urlString)
+//            let url = URL(string: urlString as! String)!
+           
+//           guard let url = URL(string: urlString) else {
+//               print("CANNOT OPEN URL")
+//               return
+//           }
+//
+//           print(url)
+//            AF.request(url).responseRSS() { (response) -> Void in
+//                if let feed: RSSFeed = response.value {
+//                    /// Do something with your new RSSFeed object!
+//                    for item in feed.items {
+//                        let article = NSMenuItem()
+//                        let title = self.formatDate(item: item)
+//
+//                        //let article = NSMenuItem(title: title, action: #selector(self.openBrowser(urlSender:)), keyEquivalent: String(i))
+//                        let someObj: NSString = item.link! as NSString
+//                        article.representedObject = someObj
+//                        article.action = #selector(self.openBrowser(urlSender:))
+//                        article.title = title
+//                        i+=1
+//
+//                        print(article.title)
+//                        self.subMenu.addItem(article)
+//                    }
+//                }
+//            }
+           
+           if let url = URL(string: urlString) {
+               print(url)
+                AF.request(url).responseRSS() { (response) -> Void in
+                    if let feed: RSSFeed = response.value {
+                        /// Do something with your new RSSFeed object!
+                        for item in feed.items {
+                            let article = NSMenuItem()
+                            let title = self.formatDate(item: item)
+
+                            //let article = NSMenuItem(title: title, action: #selector(self.openBrowser(urlSender:)), keyEquivalent: String(i))
+                            let someObj: NSString = item.link! as NSString
+                            article.representedObject = someObj
+                            article.action = #selector(self.openBrowser(urlSender:))
+                            article.title = title
+                            i+=1
+
+                            print(article.title)
+                            self.subMenu.addItem(article)
+                        }
+                    }
+                }
+           }
+           else {
+               print("CANNOT OPEN URL")
+           }
+        }
+
+        
+        categoryItem.submenu = self.subMenu
+    }
+    
+    
+    
+    func update(urlString: String, CategoryItem: NSMenuItem) -> NSMenuItem {
+        
+        let url = URL(string: urlString)!
+        let subMenu = NSMenu()
+        var i = 0
+//        let url: URL = URL(string: "https://m.sweclockers.com/feeds/forum/trad/999559")!
 
         AF.request(url).responseRSS() { (response) -> Void in
             if let feed: RSSFeed = response.value {
@@ -111,14 +228,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     article.title = title
                     i+=1
 
-                    print(article.title)
-                    self.subMenu.addItem(article)
+                    subMenu.addItem(article)
                 }
             }
         }
-        categoryItem.submenu = subMenu
+        CategoryItem.submenu = subMenu
+        return CategoryItem
     }
-    
     
     @objc func openBrowser(urlSender: NSMenuItem) {
         let urlString = urlSender.representedObject
@@ -158,7 +274,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Spara alla kanaler som jag vill hämta från i ett XML dok.
         //Spara URL i XML dok.
         //Loopa igenom XML tills tomt, hittar jag en URL gör en sökning med RSS
-        rssRead()
+//        for url in urls {
+//            update(urlString: url)
+//        }
 
     }
 
@@ -168,11 +286,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
         return true
-    }
-    
-    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
-        NSApp.setActivationPolicy(.accessory)
-        return false
     }
 
 

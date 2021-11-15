@@ -7,37 +7,44 @@
 
 import Foundation
 
-
+public struct CategoryStruct {
+    var title = ""
+    var numberOf: Int = 0
+    var outlines = [Outline]()
+    var out = Outline()
+    var items = [Item]()
+}
 
 class OPMLReader: ParserBase {
     
-    func readOPML() {
-        
+    func readOPML() -> Category {
+        let category = Category()
         let xmlPath = Bundle.main.path(forResource: "Subscriptions", ofType: "xml")
+        if xmlPath == nil {
+            NSLog("Failed to find Subscription file")
+        }
         let url1 = URL(fileURLWithPath: xmlPath!) 
         do {
-            var data = try Data(contentsOf: url1)
+            let data = try Data(contentsOf: url1)
             let parser = XMLParser(data: data)
-            let category = Category()
+     
      
             parser.delegate = category
             
 
             parser.parse()
-            print(category.numberOfCategories)
 
-//            for item in channel.items {
-////                print("item = \(item.title) \(item.link) \(item.desc)")
-//                print("\(item.title)")
+//            for item in category.items {
+//                print("item = \(item.title) \(item.xmlUrl) \(item.html)")
 //            }
         }
         catch {
-            print("error dude")
+            NSLog("Failed to parse opml file")
         }
         
 
 
-
+        return category
     }
 }
 

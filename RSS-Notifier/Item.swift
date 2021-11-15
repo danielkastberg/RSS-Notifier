@@ -11,24 +11,29 @@ import Foundation
 
 class Item : ParserBase {
     
-    var link:String = ""
-    var desc:String = ""
+    var html:String = ""
+    var xmlUrl:String = ""
     var title:String = ""
     var date: Date = Date()
-    var i = 0
+    var outline = [Outline]()
+    var out = Outline()
+    
 
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-        var outline = Outline()
+        
         
 
         // if we finished an item tag, the ParserBase parent
         // would have accumulated the found characters
         // so just assign that to our item variable
         if elementName == "outline" {
-            outline.html = foundHtml
-            outline.title = foundTitle
-            print(outline.html)
-            print(outline.title)
+            out.xmlUrl = foundXmlUrl
+            out.html = foundHtml
+            out.title = foundTitle
+            html = foundHtml
+            xmlUrl = foundXmlUrl
+            title = foundTitle
+            outline.append(out)
             self.title = foundCharacters
         }
 
@@ -41,6 +46,12 @@ class Item : ParserBase {
 
         // reset found characters
         foundCharacters = ""
+    }
+    
+    func getOutline() -> Outline {
+        print("fuck you")
+        print(out.html)
+        return out
     }
 
 }

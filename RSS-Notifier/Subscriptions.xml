@@ -5,28 +5,28 @@
         <category title="Sport">
             <outline htmlUrl="https://www.reddit.com/r/reddevils/" title="/r/RedDevils: The Reddit home for Manchester United" xmlUrl="https://www.reddit.com/r/reddevils/.rss" type="rss" text="/r/RedDevils: The Reddit home for Manchester United"/>
             <outline htmlUrl="https://www.reddit.com/r/soccer/" title="The back page of the internet" xmlUrl="https://www.reddit.com/r/soccer/.rss" type="rss" text="The back page of the internet"/>
-            <outline htmlUrl="http://www.aftonbladet.se/sportbladet/" title="(No Title)" xmlUrl="http://www.aftonbladet.se/sportbladet/rss.xml" type="rss" text="(No Title)"/>
+            <outline htmlUrl="https://www.aftonbladet.se/sportbladet/" title="(No Title)" xmlUrl="https://www.aftonbladet.se/sportbladet/rss.xml" type="rss" text="(No Title)"/>
         </category>
         <category title="Ekonomi">
-            <outline htmlUrl="http://www.digital.di.se/rss" title="Di Digital - Senaste nytt" xmlUrl="http://digital.di.se/rss" type="rss" text="Di Digital - Senaste nytt"/>
-            <outline htmlUrl="https://blogg.avanza.se" title="Aktuellt från Avanza" xmlUrl="http://blogg.avanza.se/avanza/feed/" type="rss" text="Aktuellt från Avanza"/>
-            <outline htmlUrl="http://www.va.se/rss/" title="RSS" xmlUrl="https://www.va.se/rss/" type="rss" text="RSS"/>
+            <outline htmlUrl="https://www.digital.di.se/rss" title="Di Digital - Senaste nytt" xmlUrl="https://digital.di.se/rss" type="rss" text="Di Digital - Senaste nytt"/>
+            <outline htmlUrl="https://blogg.avanza.se" title="Aktuellt från Avanza" xmlUrl="https://blogg.avanza.se/avanza/feed/" type="rss" text="Aktuellt från Avanza"/>
+            <outline htmlUrl="https://www.va.se/rss/" title="RSS" xmlUrl="https://www.va.se/rss/" type="rss" text="RSS"/>
             <outline htmlUrl="https://www.placera.se" title="Placera.se" xmlUrl="https://www.avanza.se/placera/forstasidan.rss.xml" type="rss" text="Placera.se"/>
         </category>
         <category title="Nyheter">
-            <outline htmlUrl="https://www.dn.se/" title="Nyheter" xmlUrl="http://www.dn.se/rss/senaste-nytt" type="rss" text="Nyheter"/>
-            <outline htmlUrl="https://www.svd.se/" title="SvD - Startsidan" xmlUrl="http://www.svd.se/?service=rss&amp;type=senastenytt" type="rss" text="SvD - Startsidan"/>
-            <outline htmlUrl="http://sverigesradio.se/sida/default.aspx?programid=83" title="Nyheter (Ekot)" xmlUrl="http://api.sr.se/api/rssfeed/rssfeed.aspx?rssfeed=83" type="rss" text="Nyheter (Ekot)"/>
-            <outline htmlUrl="http://www.aftonbladet.se/" title="Aftonbladet: Sveriges nyhetskälla och mötesplats" xmlUrl="http://www.aftonbladet.se/rss.xml" type="rss" text="Aftonbladet: Sveriges nyhetskälla och mötesplats"/>
+            <outline htmlUrl="https://www.dn.se/" title="Nyheter" xmlUrl="https://www.dn.se/rss/senaste-nytt" type="rss" text="Nyheter"/>
+            <outline htmlUrl="https://www.svd.se/" title="SvD - Startsidan" xmlUrl="https://www.svd.se/?service=rss&amp;type=senastenytt" type="rss" text="SvD - Startsidan"/>
+            <outline htmlUrl="https://sverigesradio.se/sida/default.aspx?programid=83" title="Nyheter (Ekot)" xmlUrl="https://api.sr.se/api/rssfeed/rssfeed.aspx?rssfeed=83" type="rss" text="Nyheter (Ekot)"/>
+            <outline htmlUrl="https://www.aftonbladet.se/" title="Aftonbladet: Sveriges nyhetskälla och mötesplats" xmlUrl="https://www.aftonbladet.se/rss.xml" type="rss" text="Aftonbladet: Sveriges nyhetskälla och mötesplats"/>
         </category>
         <category title="Deals">
-            <outline htmlUrl="https://www.sweclockers.com" title="Övriga fynd | SweClockers.com" xmlUrl="http://www.sweclockers.com/feeds/forum/trad/1465406" type="rss" text="Övriga fynd | SweClockers.com"/>
+            <outline htmlUrl="https://www.sweclockers.com" title="Övriga fynd | SweClockers.com" xmlUrl="https://www.sweclockers.com/feeds/forum/trad/1465406" type="rss" text="Övriga fynd | SweClockers.com"/>
             <outline htmlUrl="https://www.sweclockers.com" title="Dagens fynd (bara tips, ingen diskussion) — Läs första inlägget först! | SweClockers.com" xmlUrl="https://m.sweclockers.com/feeds/forum/trad/999559" type="rss" text="Dagens fynd (bara tips, ingen diskussion) — Läs första inlägget först! | SweClockers.com"/>
         </category>
         <category title="Teknik">
-            <outline htmlUrl="//www.idg.se" title="Hetaste IT-nyheterna från IDG.se" xmlUrl="http://www.idg.se/tjanster/rss/rss.xml" type="rss" text="Hetaste IT-nyheterna från IDG.se"/>
+            <outline htmlUrl="//www.idg.se" title="Hetaste IT-nyheterna från IDG.se" xmlUrl="https://www.idg.se/tjanster/rss/rss.xml" type="rss" text="Hetaste IT-nyheterna från IDG.se"/>
             <outline htmlUrl="https://www.99.se" title="99.se" xmlUrl="https://www.99mac.se/feed/artiklar" type="rss" text="99.se"/>
-            <outline htmlUrl="https://www.sweclockers.com" title="SweClockers.com" xmlUrl="http://www.sweclockers.com/feeds/news.xml" type="rss" text="SweClockers.com"/>
+            <outline htmlUrl="https://www.sweclockers.com" title="SweClockers.com" xmlUrl="https://www.sweclockers.com/feeds/news.xml" type="rss" text="SweClockers.com"/>
         </category>
     </body>
 </opml>

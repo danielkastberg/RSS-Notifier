@@ -9,12 +9,11 @@ import Foundation
 
 
 class Category: ParserBase {
-    
+    var cs = CategoryStruct()
     var title = ""
-    
-    var count = 0
     var items = [Item]()
-    var numberOfCategories = 0
+    var numberOf: Int = 0
+    var categories = [CategoryStruct]()
 
     override func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
 
@@ -22,12 +21,19 @@ class Category: ParserBase {
         // to parsing to a new instance of Marker
 
         if elementName == "category" {
-            numberOfCategories += 1
+            cs.numberOf += 1
+            cs.title = attributeDict["title"]!
+        
+            
+            numberOf += 1
             title = attributeDict["title"]!
             print("category title = " + title)
             let item = Item()
             items.append(item)
-            
+            cs.items.append(item)
+            categories.append(cs)
+
+
             
 
             // push responsibility
@@ -38,6 +44,10 @@ class Category: ParserBase {
             // it can return parsing responsibility back
             item.parent = self
         }
+    }
+    
+    func getCategories() -> [CategoryStruct] {
+        return categories
     }
 }
 

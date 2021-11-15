@@ -131,11 +131,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     
     
-    
+    /*
+     Quits the program
+     */
     @objc func quit () {
         exit(0)
     }
-            
+           
+    /*
+     Used to read the RSS. Is called when the user presses the "Refresh item"
+     */
     @objc func rssRead() {
 //        let urlString = urls.representedObject
 //        let url = URL(string: urlString as! String)!
@@ -242,12 +247,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return CategoryItem
     }
     
+    /*
+     Opens the browser for the link that is sent.
+     Used to open a link from one article
+     */
     @objc func openBrowser(urlSender: NSMenuItem) {
         let urlString = urlSender.representedObject
         let url = URL(string: urlString as! String)!
         NSWorkspace.shared.open(url)
     }
     
+    /*
+     Formats the time and calculates how long ago the article was published from the current time.
+     Also filters away too old news
+     */
     func formatDate(item: RSSItem) -> String {
         let dateFormatter: DateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd, HH:mm"
@@ -270,7 +283,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
     
     }
-    
+    /*
+     Calculates the time and puts it into a string to be used next to the title
+     Formats the time to ex, 1h 24 min instead of 84 min
+     */
     func calculateTime(minutesSincePub: Int) -> String {
         var time = String(minutesSincePub) + "m"
         if (minutesSincePub > 60) {

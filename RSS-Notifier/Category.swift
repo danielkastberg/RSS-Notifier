@@ -11,7 +11,7 @@ import Foundation
 class Category: ParserBase {
     var cs = CategoryStruct()
     var title = ""
-    var items = [Item]()
+    var items = [Outline]()
     var numberOf: Int = 0
     var categories = [CategoryStruct]()
 
@@ -28,7 +28,7 @@ class Category: ParserBase {
             numberOf += 1
             title = attributeDict["title"]!
             print("category title = " + title)
-            let item = Item()
+            let item = Outline()
             items.append(item)
             cs.items.append(item)
             categories.append(cs)

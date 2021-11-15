@@ -14,7 +14,7 @@
 		658103BA27304E2F00974AAF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103B927304E2F00974AAF /* ViewController.swift */; };
 		658103BC27304E3100974AAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 658103BB27304E3100974AAF /* Assets.xcassets */; };
 		658103CA27304E8800974AAF /* ParserBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103C627304E8700974AAF /* ParserBase.swift */; };
-		658103CC27304E8800974AAF /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103C827304E8800974AAF /* Item.swift */; };
+		658103CC27304E8800974AAF /* Outline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103C827304E8800974AAF /* Outline.swift */; };
 		658103F72730546900974AAF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 658103F52730546900974AAF /* Main.storyboard */; };
 		658104142730641700974AAF /* StatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658104132730641700974AAF /* StatusBar.swift */; };
 		65DD272327333DD10057E47F /* RSSFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DD270027333B540057E47F /* RSSFeed.swift */; };
@@ -107,7 +107,7 @@
 		658103BB27304E3100974AAF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		658103C027304E3100974AAF /* RSS_Notifier.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RSS_Notifier.entitlements; sourceTree = "<group>"; };
 		658103C627304E8700974AAF /* ParserBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserBase.swift; sourceTree = "<group>"; };
-		658103C827304E8800974AAF /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		658103C827304E8800974AAF /* Outline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Outline.swift; sourceTree = "<group>"; };
 		658103F62730546900974AAF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		658104132730641700974AAF /* StatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBar.swift; sourceTree = "<group>"; };
 		65DD26D1273339DE0057E47F /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = "RSS-Notifier/Alamofire/Alamofire.xcodeproj"; sourceTree = "<group>"; };
@@ -159,7 +159,7 @@
 				65FE3B82273B56FA00F8FF74 /* AlamofireRSSParser.h */,
 				65FE3B81273B56FA00F8FF74 /* AlamofireRSSParser.swift */,
 				658103B927304E2F00974AAF /* ViewController.swift */,
-				658103C827304E8800974AAF /* Item.swift */,
+				658103C827304E8800974AAF /* Outline.swift */,
 				658103C627304E8700974AAF /* ParserBase.swift */,
 				658103BB27304E3100974AAF /* Assets.xcassets */,
 				658103C027304E3100974AAF /* RSS_Notifier.entitlements */,
@@ -331,7 +331,7 @@
 				658104142730641700974AAF /* StatusBar.swift in Sources */,
 				65DD272527333DD10057E47F /* RSSItem.swift in Sources */,
 				65FE3B83273B56FA00F8FF74 /* AlamofireRSSParser.swift in Sources */,
-				658103CC27304E8800974AAF /* Item.swift in Sources */,
+				658103CC27304E8800974AAF /* Outline.swift in Sources */,
 				658103BA27304E2F00974AAF /* ViewController.swift in Sources */,
 				65621BBD2743070C00DE62C3 /* Category.swift in Sources */,
 				65621BBE2743070C00DE62C3 /* OPMLReader.swift in Sources */,

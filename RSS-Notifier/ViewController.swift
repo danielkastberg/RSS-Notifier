@@ -13,6 +13,8 @@ class ViewController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print("Här får jag inte vara. Det finns barn här")
 
         
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)

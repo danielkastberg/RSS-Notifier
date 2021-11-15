@@ -12,7 +12,7 @@ public struct CategoryStruct {
     var numberOf: Int = 0
     var outlines = [Outline]()
     var out = Outline()
-    var items = [Item]()
+    var items = [Outline]()
 }
 
 class OPMLReader: ParserBase {

@@ -5,11 +5,6 @@
 //  Created by Daniel Kastberg on 2021-10-31.
 //
 
-public struct Outline {
-    var title = ""
-    var html = ""
-    var xmlUrl = ""
-}
 
 import Foundation
 

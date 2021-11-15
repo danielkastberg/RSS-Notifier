@@ -97,7 +97,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         refreshItem.target = self
         
         
-        
+        var i = 0
         for c in categories {
             var categoryItem = NSMenuItem()
             categoryItem.title = c.title
@@ -105,7 +105,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             for outline in c.items {
                 urls.append(outline.xmlUrl)
                 categoryItem = update(urlString: outline.xmlUrl, CategoryItem: categoryItem)
-                print(categoryItem.title)
+                i += 1
+                print(i)
             }
             categoryItem.target = self
             statusBarMenu.addItem(categoryItem)

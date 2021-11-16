@@ -22,16 +22,17 @@ import Alamofire
  Add notification support
  Add different shade in menu item to indicate that it has been read
  Maybe add read notification to be saved between instances
- Add icon for each source to be loaded for each article in the menu
  Add some window for a quick read of the rss description
  Add a setting window, that the user can choose the time interval in which the news should be displayed.
  Change the font and size on the text displayed.
  Fix text formatting
  
  Look into threads (DispatchQueue) and if I can avoid running everything from "awakeFronNib"
- Maybe get to load the RSS in a thread and then fill the menu Item. Don't know how much the program will gain on it but
- it will be more thread safe than the current situation. Though this was supposed to be a weekend project....
- Optimistic for never developed in Swift nor MacOS....
+ Maybe get to load the RSS in a thread and then fill the menu Item. Don't know how much the program will gain on it since
+ I will still recreate the menuitems but to not clutter the memory and it will be more cpu consuming searching through
+ the articles and filter than simply recreate everything. Masybe it will be more thread safe than the current situation.
+ 
+ Try an clean up the code and refactor it. If it gets to overwhelming maybe start from the beginning since now I actually have some knowledge.
  
  */
 
@@ -115,6 +116,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             listOfCategories.append(categoryItem)
             for outline in c.items {
                 urls.append(outline.xmlUrl)
+                print(outline.xmlUrl)
                 categoryItem = laodRss(urlString: outline.xmlUrl, htmlString: outline.html, categoryItem: categoryItem)
             }
             categoryItem.target = self
@@ -176,8 +178,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         refreshItem.action = #selector(refresh)
         refreshItem.target = self
 
-        statusBarMenu.addItem(quitItem)
-        statusBarMenu.addItem(refreshItem)
+
+
         
         let categories = category.getCategories()
         for c in categories {
@@ -189,7 +191,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             categoryItem.target = self
             statusBarMenu.addItem(categoryItem)
+            statusItem?.menu = statusBarMenu
         }
+        
+        statusBarMenu.addItem(quitItem)
+        statusBarMenu.addItem(refreshItem)
     }
     
     

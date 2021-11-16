@@ -25,6 +25,8 @@ class ParserBase : NSObject, XMLParserDelegate  {
         self.foundHtml = attributeDict["htmlUrl"]! as String
         self.foundXmlUrl = attributeDict["xmlUrl"]! as String
         
+        
+        
 //        guard let html = attributeDict["htmlUrl"] else {
 //
 //            return

@@ -93,7 +93,7 @@ iOSInjectionProject/
 
 #Mac file
 DS_Store
-
+.DS_STORE
 
 ## Gcc Patch
 /*.gcno

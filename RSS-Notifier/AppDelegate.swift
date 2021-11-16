@@ -9,6 +9,11 @@ import Cocoa
 import Alamofire
 
 // Prova OPML bibliotek och se om det blir snabbare eller mer tillförlitigligt.
+// Kan även behöva se över en HTML parser
+// Lutar mer och mer att jag provar med ett färdigt biblitotek
+// så jag kan fokusera på skolan och alla andra grupprpjekt.
+// Spara det här isf på en egen branch så finns det kvar om jag vill jobba vidare
+// eller visa upp eller kolla tillbaka
 
 /*
  TODO
@@ -22,6 +27,12 @@ import Alamofire
  Add a setting window, that the user can choose the time interval in which the news should be displayed.
  Change the font and size on the text displayed.
  Fix text formatting
+ 
+ Look into threads (DispatchQueue) and if I can avoid running everything from "awakeFronNib"
+ Maybe get to load the RSS in a thread and then fill the menu Item. Don't know how much the program will gain on it but
+ it will be more thread safe than the current situation. Though this was supposed to be a weekend project....
+ Optimistic for never developed in Swift nor MacOS....
+ 
  */
 
 
@@ -62,11 +73,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         
         
-        
-        
-        
-        
-        
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         
         
@@ -78,10 +84,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             image.isTemplate = true
             image.size = CGSize(width: 19, height: 19)
             statusItem?.button?.image = image
+            refreshItem.title = "Refresh"
         }
         else {
             statusItem?.button?.title = "RSS Notifier"
         }
+        
+        
+        
+        
         
         
  
@@ -93,20 +104,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Creates a NSMenuItem to handle the RSS refresh
         refreshItem.title = "Refresh"
-        refreshItem.action = #selector(rssRead)
+        refreshItem.action = #selector(refresh)
         refreshItem.target = self
         
+//        print(categories.indices)
         
-        var i = 0
         for c in categories {
             var categoryItem = NSMenuItem()
             categoryItem.title = c.title
             listOfCategories.append(categoryItem)
             for outline in c.items {
                 urls.append(outline.xmlUrl)
-                categoryItem = update(urlString: outline.xmlUrl, CategoryItem: categoryItem)
-                i += 1
-                print(i)
+                categoryItem = laodRss(urlString: outline.xmlUrl, htmlString: outline.html, categoryItem: categoryItem)
             }
             categoryItem.target = self
             statusBarMenu.addItem(categoryItem)
@@ -130,8 +139,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // Removes the app from the dock
         NSApp.setActivationPolicy(.accessory)
-
-
+    }
+    
+    func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
     }
     
     
@@ -142,11 +153,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func quit () {
         exit(0)
     }
+    
            
     /*
      Used to read the RSS. Is called when the user presses the "Refresh item"
      */
-    @objc func rssRead() {
+    @objc func refresh() {
 //        let urlString = urls.representedObject
 //        let url = URL(string: urlString as! String)!
         self.subMenu = NSMenu()
@@ -161,7 +173,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //
         // Creates a NSMenuItem to handle the RSS refresh
         refreshItem.title = "Refresh"
-        refreshItem.action = #selector(rssRead)
+        refreshItem.action = #selector(refresh)
         refreshItem.target = self
 
         statusBarMenu.addItem(quitItem)
@@ -173,93 +185,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             categoryItem.title = c.title
             for outline in c.items {
                 urls.append(outline.xmlUrl)
-                categoryItem = update(urlString: outline.xmlUrl, CategoryItem: categoryItem)
-                print(categoryItem.title)
+                categoryItem = laodRss(urlString: outline.xmlUrl, htmlString: outline.html, categoryItem: categoryItem)
             }
             categoryItem.target = self
             statusBarMenu.addItem(categoryItem)
         }
-        
-
-        
-        
-//        var i = 0
-//        //        let url: URL = URL(string: "https://m.sweclockers.com/feeds/forum/trad/999559")!
-//
-//       for urlString in urls {
-////           let url = URL(string: urlString)
-////            let url = URL(string: urlString as! String)!
-//
-////           guard let url = URL(string: urlString) else {
-////               print("CANNOT OPEN URL")
-////               return
-////           }
-////
-////           print(url)
-////            AF.request(url).responseRSS() { (response) -> Void in
-////                if let feed: RSSFeed = response.value {
-////                    /// Do something with your new RSSFeed object!
-////                    for item in feed.items {
-////                        let article = NSMenuItem()
-////                        let title = self.formatDate(item: item)
-////
-////                        //let article = NSMenuItem(title: title, action: #selector(self.openBrowser(urlSender:)), keyEquivalent: String(i))
-////                        let someObj: NSString = item.link! as NSString
-////                        article.representedObject = someObj
-////                        article.action = #selector(self.openBrowser(urlSender:))
-////                        article.title = title
-////                        i+=1
-////
-////                        print(article.title)
-////                        self.subMenu.addItem(article)
-////                    }
-////                }
-////            }
-//
-//           if let url = URL(string: urlString) {
-//                AF.request(url).responseRSS() { (response) -> Void in
-//                    if let feed: RSSFeed = response.value {
-//                        /// Do something with your new RSSFeed object!
-//                        for item in feed.items {
-//                            print(item.title)
-//                            let article = NSMenuItem()
-//                            let title = self.formatDate(item: item)
-//
-//                            //let article = NSMenuItem(title: title, action: #selector(self.openBrowser(urlSender:)), keyEquivalent: String(i))
-//                            let someObj: NSString = item.link! as NSString
-//                            article.representedObject = someObj
-//                            article.action = #selector(self.openBrowser(urlSender:))
-//                            article.title = title
-//                            i+=1
-//
-//                            print(article.title)
-//                            self.subMenu.addItem(article)
-//                        }
-//                    }
-//                }
-//           }
-//           else {
-//               print("CANNOT OPEN URL")
-//           }
-//        }
-//
-//
-//        categoryItem.submenu = self.subMenu
     }
     
     
     
-    func update(urlString: String, CategoryItem: NSMenuItem) -> NSMenuItem {
+    func laodRss(urlString: String, htmlString: String, categoryItem: NSMenuItem) -> NSMenuItem {
         
         let url = URL(string: urlString)!
         let subMenu = NSMenu()
-        var i = 0
+
 //        let url: URL = URL(string: "https://m.sweclockers.com/feeds/forum/trad/999559")!
 
         AF.request(url).responseRSS() { (response) -> Void in
             if let feed: RSSFeed = response.value {
                 /// Do something with your new RSSFeed object!
                 for item in feed.items {
+                    
                     let article = NSMenuItem()
                     let title = self.formatDate(item: item)
                     if title != "" {
@@ -267,18 +213,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         article.representedObject = someObj
                         article.action = #selector(self.openBrowser(urlSender:))
                         article.title = title
-                        i+=1
-
+                        
+                        //// Get the url from the article and add /favicon.ico to get the image
+                        /// Will add the image to each article to indicate the source
+                        let url = URL(string: htmlString+"favicon.ico")
+                        
+                        self.getData(from: url!) { data, response, error in
+                            guard let data = data, error == nil else { return }
+//                            print(response?.suggestedFilename ?? url!.lastPathComponent)
+//                            print("Download Finished")
+                            //// always update the UI from the main thread
+                            DispatchQueue.main.async() { [weak self] in
+                                article.image = NSImage(data: data)
+                                article.image?.size = CGSize(width: 15, height: 15)
+//                                print("Image loaded")
+                            }
+                        }
                         subMenu.addItem(article)
                     }
-                    
-                    //let article = NSMenuItem(title: title, action: #selector(self.openBrowser(urlSender:)), keyEquivalent: String(i))
-
                 }
             }
         }
-        CategoryItem.submenu = subMenu
-        return CategoryItem
+        categoryItem.submenu = subMenu
+        return categoryItem
     }
     
     /*

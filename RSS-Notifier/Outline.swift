@@ -40,5 +40,8 @@ class Outline : ParserBase {
 
         // reset found characters
         foundCharacters = ""
+        foundHtml = ""
+        foundTitle = ""
+        foundXmlUrl = ""
     }
 }

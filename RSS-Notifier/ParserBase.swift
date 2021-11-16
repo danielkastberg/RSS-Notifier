@@ -21,9 +21,9 @@ class ParserBase : NSObject, XMLParserDelegate  {
 
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
         
-        foundTitle = attributeDict["title"]! as String
-        foundHtml = attributeDict["htmlUrl"]! as String
-        foundXmlUrl = attributeDict["xmlUrl"]! as String
+        self.foundTitle = attributeDict["title"]! as String
+        self.foundHtml = attributeDict["htmlUrl"]! as String
+        self.foundXmlUrl = attributeDict["xmlUrl"]! as String
         
 //        guard let html = attributeDict["htmlUrl"] else {
 //

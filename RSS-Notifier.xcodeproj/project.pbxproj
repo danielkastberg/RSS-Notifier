@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		65125EF027431DE80057026E /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 65125EE727431DE80057026E /* icon.png */; };
 		65621BBC2743070C00DE62C3 /* Subscriptions.xml in Resources */ = {isa = PBXBuildFile; fileRef = 65621BB92743070C00DE62C3 /* Subscriptions.xml */; };
 		65621BBD2743070C00DE62C3 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65621BBA2743070C00DE62C3 /* Category.swift */; };
 		65621BBE2743070C00DE62C3 /* OPMLReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65621BBB2743070C00DE62C3 /* OPMLReader.swift */; };
@@ -98,6 +99,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		65125EE727431DE80057026E /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = "../../../../.Trash/Rss Logo-32-64-96-128-256-512px/icon.png"; sourceTree = "<group>"; };
 		65621BB92743070C00DE62C3 /* Subscriptions.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Subscriptions.xml; sourceTree = "<group>"; };
 		65621BBA2743070C00DE62C3 /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		65621BBB2743070C00DE62C3 /* OPMLReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPMLReader.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 		658103B627304E2F00974AAF /* RSS-Notifier */ = {
 			isa = PBXGroup;
 			children = (
+				65125EE727431DE80057026E /* icon.png */,
 				65621BBA2743070C00DE62C3 /* Category.swift */,
 				65621BBB2743070C00DE62C3 /* OPMLReader.swift */,
 				65621BB92743070C00DE62C3 /* Subscriptions.xml */,
@@ -317,6 +320,7 @@
 			files = (
 				658103BC27304E3100974AAF /* Assets.xcassets in Resources */,
 				65621BBC2743070C00DE62C3 /* Subscriptions.xml in Resources */,
+				65125EF027431DE80057026E /* icon.png in Resources */,
 				658103F72730546900974AAF /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

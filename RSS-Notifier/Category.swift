@@ -27,7 +27,7 @@ class Category: ParserBase {
             
             numberOf += 1
             title = attributeDict["title"]!
-            print("category title = " + title)
+//            print("category title = " + title)
             let item = Outline()
             items.append(item)
             cs.items.append(item)

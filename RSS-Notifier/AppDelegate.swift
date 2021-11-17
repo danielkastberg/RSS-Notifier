@@ -45,12 +45,14 @@ public struct menuItem {
 class AppDelegate: NSObject, NSApplicationDelegate {
     
     var statusItem: NSStatusItem?
-
+    
     var statusBarMenu = NSMenu()
     var subMenu = NSMenu()
     
-    let refreshItem = NSMenuItem()
-    let categoryItem = NSMenuItem()
+    var refreshItem = NSMenuItem()
+    var quitItem = NSMenuItem()
+    
+    var categoryItem = NSMenuItem()
     
     var listOfCategories = [NSMenuItem]()
     
@@ -83,24 +85,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         
         
-        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+      
         
         
 
+
         
-        // Checks if there is an image to use as icon.
-        // If not loads a title instead
-        if let image = NSImage(named: "AppIcon") {
-            image.isTemplate = true
-            image.size = CGSize(width: 19, height: 19)
-            statusItem?.button?.image = image
-            refreshItem.title = "Refresh"
-        }
-        else {
-            statusItem?.button?.title = "RSS Notifier"
-        }
-        
-        
+        createMenu()
+        loadAppIcon()
         
         
         
@@ -108,14 +100,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
  
         
         
-        // Creates a item to Quit the program
-        let quitItem = NSMenuItem(title: "Quit", action: #selector(quit), keyEquivalent: "q")
-        
+     
 
-        // Creates a NSMenuItem to handle the RSS refresh
-        refreshItem.title = "Refresh"
-        refreshItem.action = #selector(refresh)
-        refreshItem.target = self
         
 //        print(categories.indices)
 //        var first = true
@@ -148,45 +134,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        }
         
         
-        for i in 0...categories.endIndex-1 {
-            var categoryList = [NSMenuItem]()
-         
-            var sub = NSMenu()
-            var categoryItem = NSMenuItem()
-            var articleItem = NSMenuItem()
-            categoryItem.title = categories[i].title
-            
-            for outline in categories[i].outlines {
-                let sub = laodRss(outline: outline, subMenu: sub)
-                
-                print(sub.items)
-            }
-            categoryItem.submenu = sub
-            categoryItem.target = self
-            statusBarMenu.addItem(categoryItem)
-            statusItem?.menu = statusBarMenu
-        }
-        
-
-  
-        
-        
-        
-        
-//        categoryItem.title = "Category"
-//        categoryItem.target = self
-        
-       categoryItem.submenu = subMenu
-
-        
-        
-        // Adds all the items to the menu that pops down when clicking the icon
-        statusBarMenu.addItem(quitItem)
-        statusBarMenu.addItem(refreshItem)
-//        statusBarMenu.addItem(categoryItem)
-
-        
-        statusItem?.menu = statusBarMenu
+        refresh()
         
         // Removes the app from the dock
         NSApp.setActivationPolicy(.accessory)
@@ -205,6 +153,42 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         exit(0)
     }
     
+    func createMenu() {
+        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        
+        self.subMenu = NSMenu()
+        statusBarMenu = NSMenu()
+        
+        // Creates a item to Quit the program
+        quitItem = NSMenuItem(title: "Quit", action: #selector(quit), keyEquivalent: "q")
+        
+
+        // Creates a NSMenuItem to handle the RSS refresh
+        refreshItem = NSMenuItem()
+        refreshItem.title = "Refresh"
+        refreshItem.action = #selector(refresh)
+        refreshItem.target = self
+        
+        
+
+    }
+    
+    /*
+     Checks if there is an image to use as
+     If not loads a title instead
+     */
+    func loadAppIcon() {
+        if let image = NSImage(named: "AppIcon") {
+            image.isTemplate = true
+            image.size = CGSize(width: 19, height: 19)
+            statusItem?.button?.image = image
+            refreshItem.title = "Refresh"
+        }
+        else {
+            statusItem?.button?.title = "RSS Notifier"
+        }
+    }
+    
            
     /*
      Used to read the RSS. Is called when the user presses the "Refresh item"
@@ -212,20 +196,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func refresh() {
 //        let urlString = urls.representedObject
 //        let url = URL(string: urlString as! String)!
-        self.subMenu = NSMenu()
- 
-    
-        statusBarMenu = NSMenu()
-//
-        let quitItem = NSMenuItem(title: "Quit", action: #selector(quit), keyEquivalent: "q")
-        
-        let refreshItem = NSMenuItem()
-//
-//
-        // Creates a NSMenuItem to handle the RSS refresh
-        refreshItem.title = "Refresh"
-        refreshItem.action = #selector(refresh)
-        refreshItem.target = self
+
 
 
 
@@ -262,9 +233,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             statusBarMenu.addItem(categoryItem)
             statusItem?.menu = statusBarMenu
         }
-        
         statusBarMenu.addItem(quitItem)
         statusBarMenu.addItem(refreshItem)
+
     }
     
     
@@ -284,7 +255,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     let timeString = self.formatDate(item: item)
                     if timeString != "" {
                         var title = self.shortenText(item: item.title!)
-                        title = title + timeString
+                        title = title + " " + timeString
 //                        let attributedString = NSMutableAttributedString(string: title, attributes: [NSAttributedString.Key.font : NSFont.systemFont(ofSize: 12)])
 //                        let test = attributedString.string
                         let someObj: NSString = item.link! as NSString

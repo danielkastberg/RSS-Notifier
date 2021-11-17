@@ -281,9 +281,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 for item in feed.items {
 
                     let article = NSMenuItem()
-                    let title = self.formatDate(item: item)
-                    if title != "" {
+                    let timeString = self.formatDate(item: item)
+                    if timeString != "" {
+                        var tit = ""
+                        let stringLength = 40
+                       
+                        if item.title!.count > stringLength {
+                            tit = item.title!
+                            for _ in stringLength...tit.count {
+                                tit.remove(at: tit.index(before: tit.endIndex))
+                            }
+                            tit.append("...")
+                          
+                        }
+                        else {
+                            tit = item.title!
+                        }
+                        let title = tit + "  " + timeString
+//                        let attributedString = NSMutableAttributedString(string: title, attributes: [NSAttributedString.Key.font : NSFont.systemFont(ofSize: 12)])
+//                        let test = attributedString.string
                         let someObj: NSString = item.link! as NSString
+//                        article.attributedTitle = attributedString
+                        
                         article.representedObject = someObj
                         article.action = #selector(self.openBrowser(urlSender:))
                         article.title = title
@@ -336,8 +355,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         if timeSincePubInMin < timeIntervalNews {
             let time = calculateTime(minutesSincePub: timeSincePubInMin)
-            let title = item.title! + "\t" + String(time)
-            return title
+//            let title = item.title! + "\t" + String(time)
+            return time
         }
         else {
             return ""

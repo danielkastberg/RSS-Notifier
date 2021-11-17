@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<opml version="1.0">
+    <head>RSS Notifier Subscriptions</head>
+    <body>
+        <outline title="Nyheter">
+            <outline htmlUrl="https://www.dn.se/" title="Nyheter" xmlUrl="https://www.dn.se/rss/senaste-nytt" type="rss" text="Nyheter"/>
+            <outline htmlUrl="https://sverigesradio.se/" title="Nyheter (Ekot)" xmlUrl="https://api.sr.se/api/rssfeed/rssfeed.aspx?rssfeed=83" type="rss" text="Nyheter (Ekot)"/>
+            <outline htmlUrl="https://www.svd.se/" title="SvD - Startsidan" xmlUrl="https://www.svd.se/?service=rss&amp;type=senastenytt" type="rss" text="SvD - Startsidan"/>
+            <outline htmlUrl="https://aftonbladet.se/" title="Senaste nytt - De senaste nyheterna" xmlUrl="https://rss.aftonbladet.se/rss2/small/pages/sections/senastenytt/" type="rss" text="Senaste nytt - De senaste nyheterna"/>
+        </outline>
+        <outline title="Sport">
+            <outline htmlUrl="https://www.reddit.com/" title="/r/RedDevils: The Reddit home for Manchester United" xmlUrl="https://www.reddit.com/r/reddevils/.rss" type="rss" text="/r/RedDevils: The Reddit home for Manchester United"/>
+            <outline htmlUrl="https://www.reddit.com/" title="The back page of the internet" xmlUrl="https://www.reddit.com/r/soccer/.rss" type="rss" text="The back page of the internet"/>
+            <outline htmlUrl="https://www.aftonbladet.se/sportbladet/" title="(No Title)" xmlUrl="https://www.aftonbladet.se/sportbladet/rss.xml" type="rss" text="(No Title)"/>
+        </outline>
+        <outline title="Deals">
+            <outline htmlUrl="https://www.sweclockers.com" title="Dagens fynd (bara tips, ingen diskussion) — Läs första inlägget först! | SweClockers.com" xmlUrl="https://m.sweclockers.com/feeds/forum/trad/999559" type="rss" text="Dagens fynd (bara tips, ingen diskussion) — Läs första inlägget först! | SweClockers.com"/>
+            <outline htmlUrl="https://www.sweclockers.com" title="Övriga fynd | SweClockers.com" xmlUrl="https://www.sweclockers.com/feeds/forum/trad/1465406" type="rss" text="Övriga fynd | SweClockers.com"/>
+        </outline>
+        <outline title="Ekonomi">
+            <outline htmlUrl="https://www.placera.se" title="Placera.se" xmlUrl="https://www.avanza.se/placera/forstasidan.rss.xml" type="rss" text="Placera.se"/>
+            <outline htmlUrl="https://di.se" title="Di Digital - Senaste nytt" xmlUrl="https://digital.di.se/rss" type="rss" text="Di Digital - Senaste nytt"/>
+            <outline htmlUrl="https://blogg.avanza.se" title="Aktuellt från Avanza" xmlUrl="https://blogg.avanza.se/avanza/feed/" type="rss" text="Aktuellt från Avanza"/>
+        </outline>
+        <outline title="Teknik">
+            <outline htmlUrl="https://teknikveckan.se" title="Teknikveckan" xmlUrl="https://teknikveckan.se/feed" type="rss" text="Teknikveckan"/>
+            <outline htmlUrl="https://www.idg.se" title="Hetaste IT-nyheterna från IDG.se" xmlUrl="https://www.idg.se/tjanster/rss/rss.xml" type="rss" text="Hetaste IT-nyheterna från IDG.se"/>
+            <outline htmlUrl="https://www.99.se" title="99.se" xmlUrl="https://www.99mac.se/feed/artiklar" type="rss" text="99.se"/>
+            <outline htmlUrl="https://www.sweclockers.com" title="SweClockers.com" xmlUrl="https://www.sweclockers.com/feeds/news.xml" type="rss" text="SweClockers.com"/>
+        </outline>
+    </body>
+</opml>

@@ -17,8 +17,6 @@ import Alamofire
 
 /*
  TODO
- Add OPML writing.
- Fix bug that not all sources url gets loaded
  Add notification support
  Add different shade in menu item to indicate that it has been read
  Maybe add read notification to be saved between instances
@@ -26,6 +24,7 @@ import Alamofire
  Add a setting window, that the user can choose the time interval in which the news should be displayed.
  Change the font and size on the text displayed.
  Fix text formatting
+ Sort items after date
  
  Look into threads (DispatchQueue) and if I can avoid running everything from "awakeFronNib"
  Maybe get to load the RSS in a thread and then fill the menu Item. Don't know how much the program will gain on it since
@@ -35,6 +34,11 @@ import Alamofire
  Try an clean up the code and refactor it. If it gets to overwhelming maybe start from the beginning since now I actually have some knowledge.
  
  */
+
+public struct menuItem {
+    var title = ""
+    var date = Date()
+}
 
 
 @main
@@ -50,7 +54,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     var listOfCategories = [NSMenuItem]()
     
-    var category = Category()
+    var categories = [Category]()
+    
+    var outlines = [Outline]()
     
     
     // How old news that should be displayed in minutes.
@@ -68,9 +74,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         
         let oplmR = OPMLReader()
-        category = oplmR.readOPML()
+        categories = oplmR.readOPML()
         
-        let categories = category.getCategories()
+
+        
+        
+//        let categories = category.getCategories()
         
         
         
@@ -109,26 +118,66 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         refreshItem.target = self
         
 //        print(categories.indices)
+//        var first = true
+//        for out in outlines {
+//            var sub = NSMenu()
+//            var articleItem = NSMenuItem()
+//            var categoryItem = NSMenuItem()
+//            if out.xmlUrl == "" {
+//                if first == true {
+//                    categoryItem.title = out.title
+//                    first = false
+//                }
+//                else {
+//
+//                    categoryItem.title = out.title
+//
+//                }
+//            }
+//            else {
+//                articleItem.title = out.title
+//                urls.append(out.xmlUrl)
+//                categoryItem = laodRss(outline: out, categoryItem: categoryItem)
+////                sub.addItem(categoryItem)
+//            }
+//            categoryItem.target = self
+//            print(categoryItem.title)
+//            statusBarMenu.addItem(categoryItem)
+//            categoryItem.menu?.setSubmenu(sub, for: articleItem)
+//            statusItem?.menu = statusBarMenu
+//        }
         
-        for c in categories {
+        
+        for i in 0...categories.endIndex-1 {
+            var categoryList = [NSMenuItem]()
+         
+            var sub = NSMenu()
             var categoryItem = NSMenuItem()
-            categoryItem.title = c.title
-            listOfCategories.append(categoryItem)
-            for outline in c.items {
-                urls.append(outline.xmlUrl)
-                print(outline.xmlUrl)
-                categoryItem = laodRss(urlString: outline.xmlUrl, htmlString: outline.html, categoryItem: categoryItem)
+            var articleItem = NSMenuItem()
+            categoryItem.title = categories[i].title
+            
+            for outline in categories[i].outlines {
+                let sub = laodRss(outline: outline, subMenu: sub)
+                
+                print(sub.items)
             }
+            categoryItem.submenu = sub
             categoryItem.target = self
             statusBarMenu.addItem(categoryItem)
+            statusItem?.menu = statusBarMenu
         }
+        
+
+  
+        
         
         
         
 //        categoryItem.title = "Category"
 //        categoryItem.target = self
         
-        categoryItem.submenu = subMenu
+       categoryItem.submenu = subMenu
+
         
         
         // Adds all the items to the menu that pops down when clicking the icon
@@ -181,14 +230,34 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 
         
-        let categories = category.getCategories()
-        for c in categories {
+//        let categories = category.getCategories()
+//        for c in categories {
+//            var categoryItem = NSMenuItem()
+//            categoryItem.title = c.title
+//            for outline in c.items {
+//                urls.append(outline.xmlUrl)
+//                categoryItem = laodRss(urlString: outline.xmlUrl, htmlString: outline.html, categoryItem: categoryItem)
+//            }
+//            categoryItem.target = self
+//            statusBarMenu.addItem(categoryItem)
+//            statusItem?.menu = statusBarMenu
+//        }
+        
+        
+        for i in 0...categories.endIndex-1 {
+            var categoryList = [NSMenuItem]()
+         
+            var sub = NSMenu()
             var categoryItem = NSMenuItem()
-            categoryItem.title = c.title
-            for outline in c.items {
-                urls.append(outline.xmlUrl)
-                categoryItem = laodRss(urlString: outline.xmlUrl, htmlString: outline.html, categoryItem: categoryItem)
+            var articleItem = NSMenuItem()
+            categoryItem.title = categories[i].title
+            
+            for outline in categories[i].outlines {
+                let sub = laodRss(outline: outline, subMenu: sub)
+                
+                print(sub.items)
             }
+            categoryItem.submenu = sub
             categoryItem.target = self
             statusBarMenu.addItem(categoryItem)
             statusItem?.menu = statusBarMenu
@@ -200,30 +269,48 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     
     
-    func laodRss(urlString: String, htmlString: String, categoryItem: NSMenuItem) -> NSMenuItem {
-        
-        let url = URL(string: urlString)!
-        let subMenu = NSMenu()
+    func laodRss(outline: Outline, subMenu: NSMenu) -> NSMenu {
+        var articleList = [NSMenuItem]()
 
-//        let url: URL = URL(string: "https://m.sweclockers.com/feeds/forum/trad/999559")!
+        let url = URL(string: outline.xmlUrl)!
+    
 
         AF.request(url).responseRSS() { (response) -> Void in
             if let feed: RSSFeed = response.value {
                 /// Do something with your new RSSFeed object!
                 for item in feed.items {
-                    
+
                     let article = NSMenuItem()
-                    let title = self.formatDate(item: item)
-                    if title != "" {
+                    let timeString = self.formatDate(item: item)
+                    if timeString != "" {
+                        var tit = ""
+                        let stringLength = 40
+                       
+                        if item.title!.count > stringLength {
+                            tit = item.title!
+                            for _ in stringLength...tit.count {
+                                tit.remove(at: tit.index(before: tit.endIndex))
+                            }
+                            tit.append("...")
+                          
+                        }
+                        else {
+                            tit = item.title!
+                        }
+                        let title = tit + "  " + timeString
+//                        let attributedString = NSMutableAttributedString(string: title, attributes: [NSAttributedString.Key.font : NSFont.systemFont(ofSize: 12)])
+//                        let test = attributedString.string
                         let someObj: NSString = item.link! as NSString
+//                        article.attributedTitle = attributedString
+                        
                         article.representedObject = someObj
                         article.action = #selector(self.openBrowser(urlSender:))
                         article.title = title
-                        
+
                         //// Get the url from the article and add /favicon.ico to get the image
                         /// Will add the image to each article to indicate the source
-                        let url = URL(string: htmlString+"favicon.ico")
-                        
+                        let url = URL(string: outline.icon)
+
                         self.getData(from: url!) { data, response, error in
                             guard let data = data, error == nil else { return }
 //                            print(response?.suggestedFilename ?? url!.lastPathComponent)
@@ -240,8 +327,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             }
         }
-        categoryItem.submenu = subMenu
-        return categoryItem
+//        categoryItem.submenu = subMenu
+        return subMenu
     }
     
     /*
@@ -250,7 +337,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
      */
     @objc func openBrowser(urlSender: NSMenuItem) {
         let urlString = urlSender.representedObject
-        let url = URL(string: urlString as! String)!
+        guard let url = URL(string: urlString as! String) else {
+            return
+        }
         NSWorkspace.shared.open(url)
     }
     
@@ -266,8 +355,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         if timeSincePubInMin < timeIntervalNews {
             let time = calculateTime(minutesSincePub: timeSincePubInMin)
-            let title = item.title! + "\t" + String(time)
-            return title
+//            let title = item.title! + "\t" + String(time)
+            return time
         }
         else {
             return ""

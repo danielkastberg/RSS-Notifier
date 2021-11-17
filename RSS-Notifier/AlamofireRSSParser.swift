@@ -130,7 +130,17 @@ open class AlamofireRSSParser: NSObject, XMLParserDelegate {
             }
             
             if (elementName == "title") {
-                currentItem.title = self.currentString
+                let buff = self.currentString
+                let range = NSRange(location: 0, length: buff!.utf16.count)
+                let regex = try! NSRegularExpression(pattern: "^\\W+quot;")
+                let pattern = "^\\W+quot;|\\W+quot;$"
+                let replacement = ""
+                let newSentence = buff!.replacingOccurrences(
+                    of: pattern,
+                    with: replacement,
+                    options: .regularExpression
+                )
+                currentItem.title = newSentence
             }
             
             if (elementName == "description") {

@@ -8,7 +8,7 @@
             <outline htmlUrl="https://www.aftonbladet.se/" title="Sportbladet" xmlUrl="https://rss.aftonbladet.se/rss2/small/pages/sections/senastenytt/sport/" type="rss" text="(No Title)"/>
         </category>
         <category title="Ekonomi">
-            <outline htmlUrl="https://www.digital.di.se/rss" title="Di Digital - Senaste nytt" xmlUrl="https://digital.di.se/rss" type="rss" text="Di Digital - Senaste nytt"/>
+            <outline htmlUrl="https://www.di.se" title="Di Digital - Senaste nytt" xmlUrl="https://digital.di.se/rss" type="rss" text="Di Digital - Senaste nytt"/>
             <outline htmlUrl="https://blogg.avanza.se" title="Aktuellt från Avanza" xmlUrl="https://blogg.avanza.se/avanza/feed/" type="rss" text="Aktuellt från Avanza"/>
             <outline htmlUrl="https://www.avanza.se/" title="Placera.se" xmlUrl="https://www.avanza.se/placera/forstasidan.rss.xml" type="rss" text="Placera.se"/>
         </category>

@@ -16,7 +16,7 @@ public struct Outline {
 }
 
 
-public struct CategoryStruct {
+public struct Category {
     var title = ""
     var numberOf: Int = 0
     var outlines = [Outline]()
@@ -27,10 +27,10 @@ public struct CategoryStruct {
 
 class OPMLReader {
     
-    func readOPML() -> [Outline]  {
-        var outlines: [Outline]?
+    func readOPML() -> [Category]  {
+        var categories = [Category]()
         
-        let xmlPath = Bundle.main.path(forResource: "Sub", ofType: "xml")
+        let xmlPath = Bundle.main.path(forResource: "Subscriptions", ofType: "xml")
         if xmlPath == nil {
             NSLog("Failed to find Subscription file")
         }
@@ -46,7 +46,7 @@ class OPMLReader {
             
             
             parser.parse()
-            outlines = parserBase.getOutlines()
+            categories = parserBase.getCategories()
             
         
             
@@ -58,7 +58,7 @@ class OPMLReader {
         catch {
             NSLog("Failed to parse opml file")
         }
-        return outlines!
+        return categories
     }
 }
 

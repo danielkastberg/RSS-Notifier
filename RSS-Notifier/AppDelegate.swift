@@ -36,6 +36,11 @@ import Alamofire
  
  */
 
+public struct menuItem {
+    var title = ""
+    var date = Date()
+}
+
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -50,7 +55,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     var listOfCategories = [NSMenuItem]()
     
-    var category = CategoryStruct()
+    var categories = [Category]()
     
     var outlines = [Outline]()
     
@@ -70,7 +75,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         
         let oplmR = OPMLReader()
-        outlines = oplmR.readOPML()
+        categories = oplmR.readOPML()
+        
+
         
         
 //        let categories = category.getCategories()
@@ -112,25 +119,57 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         refreshItem.target = self
         
 //        print(categories.indices)
+//        var first = true
+//        for out in outlines {
+//            var sub = NSMenu()
+//            var articleItem = NSMenuItem()
+//            var categoryItem = NSMenuItem()
+//            if out.xmlUrl == "" {
+//                if first == true {
+//                    categoryItem.title = out.title
+//                    first = false
+//                }
+//                else {
+//
+//                    categoryItem.title = out.title
+//
+//                }
+//            }
+//            else {
+//                articleItem.title = out.title
+//                urls.append(out.xmlUrl)
+//                categoryItem = laodRss(outline: out, categoryItem: categoryItem)
+////                sub.addItem(categoryItem)
+//            }
+//            categoryItem.target = self
+//            print(categoryItem.title)
+//            statusBarMenu.addItem(categoryItem)
+//            categoryItem.menu?.setSubmenu(sub, for: articleItem)
+//            statusItem?.menu = statusBarMenu
+//        }
         
-        for out in outlines {
+        
+        for i in 0...categories.endIndex-1 {
+            var categoryList = [NSMenuItem]()
+         
             var sub = NSMenu()
-            var articleItem = NSMenuItem()
             var categoryItem = NSMenuItem()
-            if out.xmlUrl == "" {
-                categoryItem.title = out.title
+            var articleItem = NSMenuItem()
+            categoryItem.title = categories[i].title
+            
+            for outline in categories[i].outlines {
+                let sub = laodRss(outline: outline, subMenu: sub)
+                
+                print(sub.items)
             }
-            else {
-                articleItem.title = out.title
-                urls.append(out.xmlUrl)
-                categoryItem = laodRss(outline: out, categoryItem: categoryItem)
-                sub.addItem(categoryItem)
-            }
+            categoryItem.submenu = sub
             categoryItem.target = self
-            print(categoryItem.title)
-            statusBarMenu.addItem(articleItem)
+            statusBarMenu.addItem(categoryItem)
             statusItem?.menu = statusBarMenu
         }
+        
+
+  
         
         
         
@@ -138,7 +177,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        categoryItem.title = "Category"
 //        categoryItem.target = self
         
-        categoryItem.submenu = subMenu
+       categoryItem.submenu = subMenu
+
         
         
         // Adds all the items to the menu that pops down when clicking the icon
@@ -210,10 +250,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     
     
-    func laodRss(outline: Outline, categoryItem: NSMenuItem) -> NSMenuItem {
+    func laodRss(outline: Outline, subMenu: NSMenu) -> NSMenu {
+        var articleList = [NSMenuItem]()
 
         let url = URL(string: outline.xmlUrl)!
-        let subMenu = NSMenu()
+    
 
         AF.request(url).responseRSS() { (response) -> Void in
             if let feed: RSSFeed = response.value {
@@ -248,8 +289,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             }
         }
-        categoryItem.submenu = subMenu
-        return categoryItem
+//        categoryItem.submenu = subMenu
+        return subMenu
     }
     
     /*
@@ -258,7 +299,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
      */
     @objc func openBrowser(urlSender: NSMenuItem) {
         let urlString = urlSender.representedObject
-        let url = URL(string: urlString as! String)!
+        guard let url = URL(string: urlString as! String) else {
+            return
+        }
         NSWorkspace.shared.open(url)
     }
     

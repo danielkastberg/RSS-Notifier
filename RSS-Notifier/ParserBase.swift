@@ -17,11 +17,19 @@ class ParserBase : NSObject, XMLParserDelegate  {
     var foundTitle = ""
     weak var parent:ParserBase? = nil
     var count = 0
-    var listOFOutlines = [Outline]()
+    var listOfOutlines = [Outline]()
+    var listOfCategories = [Category]()
     
 
 
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
+        
+        
+        if elementName == "category" {
+            var category = Category()
+            category.title = attributeDict["title"]! as String
+            listOfCategories.append(category)
+        }
         
         if elementName == "outline" {
             var outline = Outline()
@@ -49,7 +57,7 @@ class ParserBase : NSObject, XMLParserDelegate  {
                 outline.icon = outline.html+"/favicon.ico"
             }
   
-            listOFOutlines.append(outline)
+            listOfOutlines.append(outline)
         }
     }
         func parser(_ parser: XMLParser, foundCharacters string: String) {
@@ -67,13 +75,19 @@ class ParserBase : NSObject, XMLParserDelegate  {
     }
     
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-        if elementName == "outline" {
+        if elementName == "category" {
+            listOfCategories[count].outlines = listOfOutlines
             count += 1
+            listOfOutlines = [Outline]()
         }
     }
     
     func getOutlines() -> [Outline] {
-        return listOFOutlines
+        return listOfOutlines
+    }
+    
+    func getCategories() -> [Category] {
+        return listOfCategories
     }
 
 }

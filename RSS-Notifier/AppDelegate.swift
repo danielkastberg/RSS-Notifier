@@ -283,21 +283,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     let article = NSMenuItem()
                     let timeString = self.formatDate(item: item)
                     if timeString != "" {
-                        var tit = ""
-                        let stringLength = 40
-                       
-                        if item.title!.count > stringLength {
-                            tit = item.title!
-                            for _ in stringLength...tit.count {
-                                tit.remove(at: tit.index(before: tit.endIndex))
-                            }
-                            tit.append("...")
-                          
-                        }
-                        else {
-                            tit = item.title!
-                        }
-                        let title = tit + "  " + timeString
+                        var title = self.shortenText(item: item.title!)
+                        title = title + timeString
 //                        let attributedString = NSMutableAttributedString(string: title, attributes: [NSAttributedString.Key.font : NSFont.systemFont(ofSize: 12)])
 //                        let test = attributedString.string
                         let someObj: NSString = item.link! as NSString
@@ -382,6 +369,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         return time
+    }
+    
+    /*
+     If the title of the article is to long the functions cut it of after 40 char
+     and adds thre dots ... to indicate that the full title isn't showing
+     */
+    func shortenText(item: String) -> String {
+        var title = ""
+        let stringLength = 40
+       
+        if item.count > stringLength {
+            title = item
+            for _ in stringLength...title.count {
+                title.remove(at: title.index(before: title.endIndex))
+            }
+            title.append("...")
+          
+        }
+        else {
+            title = item
+        }
+        return title
+        
     }
  
     

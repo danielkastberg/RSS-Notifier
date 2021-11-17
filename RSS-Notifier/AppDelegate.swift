@@ -50,7 +50,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     var listOfCategories = [NSMenuItem]()
     
-    var category = Category()
+    var category = CategoryStruct()
+    
+    var outlines = [Outline]()
     
     
     // How old news that should be displayed in minutes.
@@ -68,9 +70,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         
         let oplmR = OPMLReader()
-        category = oplmR.readOPML()
+        outlines = oplmR.readOPML()
         
-        let categories = category.getCategories()
+        
+//        let categories = category.getCategories()
         
         
         
@@ -110,18 +113,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
 //        print(categories.indices)
         
-        for c in categories {
+        for out in outlines {
+            var sub = NSMenu()
+            var articleItem = NSMenuItem()
             var categoryItem = NSMenuItem()
-            categoryItem.title = c.title
-            listOfCategories.append(categoryItem)
-            for outline in c.items {
-                urls.append(outline.xmlUrl)
-                print(outline.xmlUrl)
-                categoryItem = laodRss(urlString: outline.xmlUrl, htmlString: outline.html, categoryItem: categoryItem)
+            if out.xmlUrl == "" {
+                categoryItem.title = out.title
+            }
+            else {
+                articleItem.title = out.title
+                urls.append(out.xmlUrl)
+                categoryItem = laodRss(outline: out, categoryItem: categoryItem)
+                sub.addItem(categoryItem)
             }
             categoryItem.target = self
-            statusBarMenu.addItem(categoryItem)
+            print(categoryItem.title)
+            statusBarMenu.addItem(articleItem)
+            statusItem?.menu = statusBarMenu
         }
+        
         
         
         
@@ -181,18 +191,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 
         
-        let categories = category.getCategories()
-        for c in categories {
-            var categoryItem = NSMenuItem()
-            categoryItem.title = c.title
-            for outline in c.items {
-                urls.append(outline.xmlUrl)
-                categoryItem = laodRss(urlString: outline.xmlUrl, htmlString: outline.html, categoryItem: categoryItem)
-            }
-            categoryItem.target = self
-            statusBarMenu.addItem(categoryItem)
-            statusItem?.menu = statusBarMenu
-        }
+//        let categories = category.getCategories()
+//        for c in categories {
+//            var categoryItem = NSMenuItem()
+//            categoryItem.title = c.title
+//            for outline in c.items {
+//                urls.append(outline.xmlUrl)
+//                categoryItem = laodRss(urlString: outline.xmlUrl, htmlString: outline.html, categoryItem: categoryItem)
+//            }
+//            categoryItem.target = self
+//            statusBarMenu.addItem(categoryItem)
+//            statusItem?.menu = statusBarMenu
+//        }
         
         statusBarMenu.addItem(quitItem)
         statusBarMenu.addItem(refreshItem)
@@ -200,18 +210,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     
     
-    func laodRss(urlString: String, htmlString: String, categoryItem: NSMenuItem) -> NSMenuItem {
-        
-        let url = URL(string: urlString)!
-        let subMenu = NSMenu()
+    func laodRss(outline: Outline, categoryItem: NSMenuItem) -> NSMenuItem {
 
-//        let url: URL = URL(string: "https://m.sweclockers.com/feeds/forum/trad/999559")!
+        let url = URL(string: outline.xmlUrl)!
+        let subMenu = NSMenu()
 
         AF.request(url).responseRSS() { (response) -> Void in
             if let feed: RSSFeed = response.value {
                 /// Do something with your new RSSFeed object!
                 for item in feed.items {
-                    
+
                     let article = NSMenuItem()
                     let title = self.formatDate(item: item)
                     if title != "" {
@@ -219,11 +227,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         article.representedObject = someObj
                         article.action = #selector(self.openBrowser(urlSender:))
                         article.title = title
-                        
+
                         //// Get the url from the article and add /favicon.ico to get the image
                         /// Will add the image to each article to indicate the source
-                        let url = URL(string: htmlString+"favicon.ico")
-                        
+                        let url = URL(string: outline.icon)
+
                         self.getData(from: url!) { data, response, error in
                             guard let data = data, error == nil else { return }
 //                            print(response?.suggestedFilename ?? url!.lastPathComponent)

@@ -52,7 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var refreshItem = NSMenuItem()
     var quitItem = NSMenuItem()
     
-    var categoryItem = NSMenuItem()
+    
     
     var listOfCategories = [NSMenuItem]()
     
@@ -78,63 +78,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let oplmR = OPMLReader()
         categories = oplmR.readOPML()
         
-
         
-        
-//        let categories = category.getCategories()
-        
-        
-        
-      
-        
-        
-
-
-        
-        createMenu()
-        loadAppIcon()
-        
-        
-        
-        
- 
-        
-        
-     
-
-        
-//        print(categories.indices)
-//        var first = true
-//        for out in outlines {
-//            var sub = NSMenu()
-//            var articleItem = NSMenuItem()
-//            var categoryItem = NSMenuItem()
-//            if out.xmlUrl == "" {
-//                if first == true {
-//                    categoryItem.title = out.title
-//                    first = false
-//                }
-//                else {
-//
-//                    categoryItem.title = out.title
-//
-//                }
-//            }
-//            else {
-//                articleItem.title = out.title
-//                urls.append(out.xmlUrl)
-//                categoryItem = laodRss(outline: out, categoryItem: categoryItem)
-////                sub.addItem(categoryItem)
-//            }
-//            categoryItem.target = self
-//            print(categoryItem.title)
-//            statusBarMenu.addItem(categoryItem)
-//            categoryItem.menu?.setSubmenu(sub, for: articleItem)
-//            statusItem?.menu = statusBarMenu
-//        }
-        
+        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         
         refresh()
+        loadAppIcon()
+  
         
         // Removes the app from the dock
         NSApp.setActivationPolicy(.accessory)
@@ -153,30 +102,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         exit(0)
     }
     
+
+    
+    /// Creates the submenu and menuitems. Only the basic structure, no feeds or articles
     func createMenu() {
-        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         
         self.subMenu = NSMenu()
-        statusBarMenu = NSMenu()
+        self.statusBarMenu = NSMenu()
         
         // Creates a item to Quit the program
-        quitItem = NSMenuItem(title: "Quit", action: #selector(quit), keyEquivalent: "q")
+        self.quitItem = NSMenuItem(title: "Quit", action: #selector(quit), keyEquivalent: "q")
         
 
         // Creates a NSMenuItem to handle the RSS refresh
-        refreshItem = NSMenuItem()
-        refreshItem.title = "Refresh"
-        refreshItem.action = #selector(refresh)
-        refreshItem.target = self
-        
-        
-
+        self.refreshItem = NSMenuItem()
+        self.refreshItem.title = "Refresh"
+        self.refreshItem.action = #selector(refresh)
+        self.refreshItem.target = self
     }
     
-    /*
-     Checks if there is an image to use as
-     If not loads a title instead
-     */
+    
+    
+    /// Checks if there is an image to use as icon, If not loads a title instead
     func loadAppIcon() {
         if let image = NSImage(named: "AppIcon") {
             image.isTemplate = true
@@ -190,15 +137,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
            
-    /*
-     Used to read the RSS. Is called when the user presses the "Refresh item"
-     */
+    
+     ///Used to read the RSS. Is called when the user presses the "Refresh item"
     @objc func refresh() {
-//        let urlString = urls.representedObject
-//        let url = URL(string: urlString as! String)!
-
-
-
+        createMenu()
 
         
 //        let categories = category.getCategories()

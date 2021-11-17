@@ -17,8 +17,6 @@ import Alamofire
 
 /*
  TODO
- Add OPML writing.
- Fix bug that not all sources url gets loaded
  Add notification support
  Add different shade in menu item to indicate that it has been read
  Maybe add read notification to be saved between instances
@@ -26,6 +24,7 @@ import Alamofire
  Add a setting window, that the user can choose the time interval in which the news should be displayed.
  Change the font and size on the text displayed.
  Fix text formatting
+ Sort items after date
  
  Look into threads (DispatchQueue) and if I can avoid running everything from "awakeFronNib"
  Maybe get to load the RSS in a thread and then fill the menu Item. Don't know how much the program will gain on it since
@@ -243,6 +242,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //            statusBarMenu.addItem(categoryItem)
 //            statusItem?.menu = statusBarMenu
 //        }
+        
+        
+        for i in 0...categories.endIndex-1 {
+            var categoryList = [NSMenuItem]()
+         
+            var sub = NSMenu()
+            var categoryItem = NSMenuItem()
+            var articleItem = NSMenuItem()
+            categoryItem.title = categories[i].title
+            
+            for outline in categories[i].outlines {
+                let sub = laodRss(outline: outline, subMenu: sub)
+                
+                print(sub.items)
+            }
+            categoryItem.submenu = sub
+            categoryItem.target = self
+            statusBarMenu.addItem(categoryItem)
+            statusItem?.menu = statusBarMenu
+        }
         
         statusBarMenu.addItem(quitItem)
         statusBarMenu.addItem(refreshItem)

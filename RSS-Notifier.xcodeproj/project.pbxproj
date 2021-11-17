@@ -11,7 +11,6 @@
 		65621BBC2743070C00DE62C3 /* Subscriptions.xml in Resources */ = {isa = PBXBuildFile; fileRef = 65621BB92743070C00DE62C3 /* Subscriptions.xml */; };
 		65621BBE2743070C00DE62C3 /* OPMLReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65621BBB2743070C00DE62C3 /* OPMLReader.swift */; };
 		6572FAE32744639100DA9F99 /* Sub.xml in Resources */ = {isa = PBXBuildFile; fileRef = 6572FAE22744639100DA9F99 /* Sub.xml */; };
-		6572FAE5274468E100DA9F99 /* Outline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6572FAE4274468E100DA9F99 /* Outline.swift */; };
 		658103B827304E2F00974AAF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103B727304E2F00974AAF /* AppDelegate.swift */; };
 		658103BA27304E2F00974AAF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103B927304E2F00974AAF /* ViewController.swift */; };
 		658103BC27304E3100974AAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 658103BB27304E3100974AAF /* Assets.xcassets */; };
@@ -102,7 +101,6 @@
 		65621BB92743070C00DE62C3 /* Subscriptions.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Subscriptions.xml; sourceTree = "<group>"; };
 		65621BBB2743070C00DE62C3 /* OPMLReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPMLReader.swift; sourceTree = "<group>"; };
 		6572FAE22744639100DA9F99 /* Sub.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Sub.xml; sourceTree = "<group>"; };
-		6572FAE4274468E100DA9F99 /* Outline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Outline.swift; sourceTree = "<group>"; };
 		658103B427304E2F00974AAF /* RSS-Notifier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RSS-Notifier.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		658103B727304E2F00974AAF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		658103B927304E2F00974AAF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -161,7 +159,6 @@
 				65FE3B81273B56FA00F8FF74 /* AlamofireRSSParser.swift */,
 				658103B927304E2F00974AAF /* ViewController.swift */,
 				658103C627304E8700974AAF /* ParserBase.swift */,
-				6572FAE4274468E100DA9F99 /* Outline.swift */,
 				658103BB27304E3100974AAF /* Assets.xcassets */,
 				658103C027304E3100974AAF /* RSS_Notifier.entitlements */,
 				658103F52730546900974AAF /* Main.storyboard */,
@@ -330,7 +327,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6572FAE5274468E100DA9F99 /* Outline.swift in Sources */,
 				65DD272527333DD10057E47F /* RSSItem.swift in Sources */,
 				65FE3B83273B56FA00F8FF74 /* AlamofireRSSParser.swift in Sources */,
 				658103BA27304E2F00974AAF /* ViewController.swift in Sources */,

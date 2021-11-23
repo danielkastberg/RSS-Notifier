@@ -61,7 +61,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var outlines = [Outline]()
     
     
-    // How old news that should be displayed in minutes.
+    //// Sets a limit on how old the news are allowerd to be. In minutes
     var timeIntervalNews = 1440
     
     var urls = [""]

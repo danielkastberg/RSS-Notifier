@@ -54,7 +54,13 @@ class ParserBase : NSObject, XMLParserDelegate  {
             }
             else {
                 outline.xmlUrl = attributeDict["xmlUrl"]! as String
-                outline.icon = outline.html+"/favicon.ico"
+                if outline.html.last == "/" {
+                    outline.icon = outline.html+"favicon.ico"
+                }
+                else {
+                    outline.icon = outline.html+"/favicon.ico"
+                }
+                
             }
   
             listOfOutlines.append(outline)

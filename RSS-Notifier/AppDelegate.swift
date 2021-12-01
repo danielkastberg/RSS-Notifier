@@ -38,6 +38,8 @@ import Alamofire
 public struct menuItem {
     var title = ""
     var date = Date()
+    var link = ""
+    var icon = ""
 }
 
 
@@ -51,6 +53,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     var refreshItem = NSMenuItem()
     var quitItem = NSMenuItem()
+    
+    var theMenu: NSMenu?
+    typealias FinishedDownload = (NSMenu) -> Void
     
     
     
@@ -159,6 +164,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         for i in 0...categories.endIndex-1 {
             var categoryList = [NSMenuItem]()
+            
+            theMenu = NSMenu()
          
             var sub = NSMenu()
             var categoryItem = NSMenuItem()
@@ -166,9 +173,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             categoryItem.title = categories[i].title
             
             for outline in categories[i].outlines {
-                let sub = laodRss(outline: outline, subMenu: sub)
-                
-                print(sub.items)
+                laodRss(outline: outline, subMenu: theMenu!) {
+                    sub in self.theMenu = sub
+                }
             }
             categoryItem.submenu = sub
             categoryItem.target = self
@@ -182,7 +189,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     
     
-    func laodRss(outline: Outline, subMenu: NSMenu) -> NSMenu {
+    func laodRss(outline: Outline, subMenu: NSMenu, completed : @escaping FinishedDownload) {
         var articleList = [NSMenuItem]()
 
         let url = URL(string: outline.xmlUrl)!
@@ -225,10 +232,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         subMenu.addItem(article)
                     }
                 }
+                completed(subMenu)
             }
         }
 //        categoryItem.submenu = subMenu
-        return subMenu
+        
     }
     
     /*

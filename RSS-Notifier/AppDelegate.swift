@@ -167,6 +167,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 
             AF.request(url).responseRSS() { [weak self] (response) -> Void in
                 if let feed: RSSFeed = response.value {
+//                    print(feed.link)
                     for item in feed.items {
                         let time: Int = self?.filterTime(date: item.pubDate ?? Date.now) ?? 0
             
@@ -178,6 +179,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                             art.link = item.link ?? ""
                             art.icon = self?.outlines[i].html ?? ""
                             art.date = item.pubDate ?? Date.now
+
                             
                             art.timeString = self?.calculateTime(minutesSincePub: time) ?? ""
                             

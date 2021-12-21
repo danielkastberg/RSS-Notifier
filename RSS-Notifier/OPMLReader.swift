@@ -13,6 +13,7 @@ public struct Outline {
     var html = ""
     var xmlUrl = ""
     var icon = ""
+    var category = ""
 }
 
 
@@ -27,8 +28,9 @@ public struct Category {
 
 class OPMLReader {
     
-    func readOPML() -> [Category]  {
+    func readOPML() -> [Outline]  {
         var categories = [Category]()
+        var outlines = [Outline]()
         
         let xmlPath = Bundle.main.path(forResource: "Subscriptions", ofType: "xml")
         if xmlPath == nil {
@@ -46,7 +48,8 @@ class OPMLReader {
             
             
             parser.parse()
-            categories = parserBase.getCategories()
+            outlines = parserBase.getOutlines()
+            
             
         
             
@@ -58,7 +61,7 @@ class OPMLReader {
         catch {
             NSLog("Failed to parse opml file")
         }
-        return categories
+        return outlines
     }
 }
 

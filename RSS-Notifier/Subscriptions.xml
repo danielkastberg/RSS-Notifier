@@ -24,7 +24,6 @@
         </category>
         <category title="Teknik">
             <outline htmlUrl="https://teknikveckan.se/" title="Teknikveckan" xmlUrl="https://teknikveckan.se/feed" type="rss" text="Teknikveckan"/>
-            <outline htmlUrl="https://www.idg.se/" title="Hetaste IT-nyheterna från IDG.se" xmlUrl="https://www.idg.se/tjanster/rss/rss.xml" type="rss" text="Hetaste IT-nyheterna från IDG.se"/>
             <outline htmlUrl="https://www.99.se/" title="99.se" xmlUrl="https://www.99mac.se/feed/artiklar" type="rss" text="99.se"/>
             <outline htmlUrl="https://www.sweclockers.com/" title="SweClockers.com" xmlUrl="https://www.sweclockers.com/feeds/news.xml" type="rss" text="SweClockers.com"/>
         </category>

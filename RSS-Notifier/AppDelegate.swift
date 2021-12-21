@@ -35,11 +35,14 @@ import Alamofire
  
  */
 
-public struct menuItem {
+public struct Articles {
     var title = ""
     var date = Date()
     var link = ""
     var icon = ""
+    var category = ""
+    var timeSincePubInMin = 0
+    var timeString = ""
 }
 
 
@@ -61,13 +64,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     var listOfCategories = [NSMenuItem]()
     
-    var categories = [Category]()
+    
     
     var outlines = [Outline]()
     
     
     //// Sets a limit on how old the news are allowerd to be. In minutes
-    var timeIntervalNews = 1440
+    let timeIntervalNews = 1440
     
     var urls = [""]
     
@@ -81,7 +84,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         
         let oplmR = OPMLReader()
-        categories = oplmR.readOPML()
+        outlines = oplmR.readOPML()
         
         
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -146,98 +149,168 @@ class AppDelegate: NSObject, NSApplicationDelegate {
      ///Used to read the RSS. Is called when the user presses the "Refresh item"
     @objc func refresh() {
         createMenu()
+        var RSSItems = [RSSItem]()
+        
+        var articles = [Articles]()
+        
+        var categories = [String]()
+        
+        let group = DispatchGroup()
+        
+        for i in 0 ... outlines.endIndex-1 {
 
-        
-//        let categories = category.getCategories()
-//        for c in categories {
-//            var categoryItem = NSMenuItem()
-//            categoryItem.title = c.title
-//            for outline in c.items {
-//                urls.append(outline.xmlUrl)
-//                categoryItem = laodRss(urlString: outline.xmlUrl, htmlString: outline.html, categoryItem: categoryItem)
-//            }
-//            categoryItem.target = self
-//            statusBarMenu.addItem(categoryItem)
-//            statusItem?.menu = statusBarMenu
-//        }
-        
-        
-        for i in 0...categories.endIndex-1 {
-            var categoryList = [NSMenuItem]()
+            group.enter()
+                
+            let url = URL(string: outlines[i].xmlUrl)!
+            let category = outlines[i].category
+            categories.append(category)
+                
+            AF.request(url).responseRSS() { [weak self] (response) -> Void in
+                if let feed: RSSFeed = response.value {
+                    for item in feed.items {
+                        let time: Int = self?.filterTime(date: item.pubDate ?? Date.now) ?? 0
             
-            theMenu = NSMenu()
+                        if time != 0 {
+                            var art = Articles()
+                            
+                            
+                            art.title = item.title ?? ""
+                            art.link = item.link ?? ""
+                            art.icon = self?.outlines[i].html ?? ""
+                            
+                            art.timeString = self?.calculateTime(minutesSincePub: time) ?? ""
+                            
          
-            var sub = NSMenu()
-            var categoryItem = NSMenuItem()
-            var articleItem = NSMenuItem()
-            categoryItem.title = categories[i].title
-            
-            for outline in categories[i].outlines {
-                laodRss(outline: outline, subMenu: theMenu!) {
-                    sub in self.theMenu = sub
-                }
-            }
-            categoryItem.submenu = sub
-            categoryItem.target = self
-            statusBarMenu.addItem(categoryItem)
-            statusItem?.menu = statusBarMenu
-        }
-        statusBarMenu.addItem(quitItem)
-        statusBarMenu.addItem(refreshItem)
-
-    }
-    
-    
-    
-    func laodRss(outline: Outline, subMenu: NSMenu, completed : @escaping FinishedDownload) {
-        var articleList = [NSMenuItem]()
-
-        let url = URL(string: outline.xmlUrl)!
-    
-
-        AF.request(url).responseRSS() { (response) -> Void in
-            if let feed: RSSFeed = response.value {
-                /// Do something with your new RSSFeed object!
-                for item in feed.items {
-
-                    let article = NSMenuItem()
-                    let timeString = self.formatDate(item: item)
-                    if timeString != "" {
-                        var title = self.shortenText(item: item.title!)
-                        title = title + " " + timeString
-//                        let attributedString = NSMutableAttributedString(string: title, attributes: [NSAttributedString.Key.font : NSFont.systemFont(ofSize: 12)])
-//                        let test = attributedString.string
-                        let someObj: NSString = item.link! as NSString
-//                        article.attributedTitle = attributedString
+                            art.category = category
                         
-                        article.representedObject = someObj
-                        article.action = #selector(self.openBrowser(urlSender:))
-                        article.title = title
-
-                        //// Get the url from the article and add /favicon.ico to get the image
-                        /// Will add the image to each article to indicate the source
-                        let url = URL(string: outline.icon)
-
-                        self.getData(from: url!) { data, response, error in
-                            guard let data = data, error == nil else { return }
-//                            print(response?.suggestedFilename ?? url!.lastPathComponent)
-//                            print("Download Finished")
-                            //// always update the UI from the main thread
-                            DispatchQueue.main.async() { [weak self] in
-                                article.image = NSImage(data: data)
-                                article.image?.size = CGSize(width: 15, height: 15)
-//                                print("Image loaded")
-                            }
+                            
+                            
+                            
+                            articles.append(art)
                         }
-                        subMenu.addItem(article)
+   
+            
+                        
+//                        art.date = item.pubDate ?? Date.now
+                        
+                        
+                        
+                        
+                     
                     }
                 }
-                completed(subMenu)
+                group.leave()
             }
+            
         }
-//        categoryItem.submenu = subMenu
         
+        group.notify(queue: .main) {
+            let unique = Array(Set(categories))
+           articles = articles.sorted(by: {$0.date.compare($1.date) == .orderedAscending})
+            for i in 0 ... unique.endIndex-1 {
+                var categoryItem = NSMenuItem()
+                var sub = NSMenu()
+                categoryItem.title = unique[i]
+                for article in articles {
+                    if article.category.elementsEqual(categoryItem.title) {
+                        
+                        
+                        var articleItem = NSMenuItem()
+                        let someObj: NSString = article.link as NSString
+                        articleItem.representedObject = someObj
+                        articleItem.action = #selector(self.openBrowser(urlSender:))
+                        var title = article.title + " " + article.timeString
+                        title = self.shortenText(item: title)
+                        articleItem.title = title
+                        
+                        let url = URL(string: article.icon + "/favicon.ico")
+                        
+                        
+      
+                              self.getData(from: url!) { data, response, error in
+                                  guard let data = data, error == nil else { return }
+      //                            print(response?.suggestedFilename ?? url!.lastPathComponent)
+      //                            print("Download Finished")
+                                  //// always update the UI from the main thread
+                                  DispatchQueue.main.async() { [weak self] in
+                                      articleItem.image = NSImage(data: data)
+                                      articleItem.image?.size = CGSize(width: 15, height: 15)
+      //                                print("Image loaded")
+                                  }
+                              }
+                        
+                        sub.addItem(articleItem)
+         
+                    }
+                }
+                categoryItem.submenu = sub
+                categoryItem.target = self
+                self.statusBarMenu.addItem(categoryItem)
+                self.statusItem?.menu = self.statusBarMenu
+                
+            }
+            self.statusBarMenu.addItem(self.quitItem)
+            self.statusBarMenu.addItem(self.refreshItem)
+        }
+
+        
+        
+
+
+
     }
+    
+    
+    
+//    func laodRss(outline: Outline, subMenu: NSMenu, completed : @escaping FinishedDownload) {
+//        var articleList = [NSMenuItem]()
+//
+//        let url = URL(string: outline.xmlUrl)!
+//
+//
+//        AF.request(url).responseRSS() { (response) -> Void in
+//            if let feed: RSSFeed = response.value {
+//                /// Do something with your new RSSFeed object!
+//                for item in feed.items {
+//
+//                    let article = NSMenuItem()
+//                    let timeString = self.formatDate(item: item)
+//                    if timeString != "" {
+//                        var title = self.shortenText(item: item.title!)
+//                        title = title + " " + timeString
+////                        let attributedString = NSMutableAttributedString(string: title, attributes: [NSAttributedString.Key.font : NSFont.systemFont(ofSize: 12)])
+////                        let test = attributedString.string
+//                        let someObj: NSString = item.link! as NSString
+////                        article.attributedTitle = attributedString
+//
+//                        article.representedObject = someObj
+//                        article.action = #selector(self.openBrowser(urlSender:))
+//                        article.title = title
+//
+//                        //// Get the url from the article and add /favicon.ico to get the image
+//                        /// Will add the image to each article to indicate the source
+//                        let url = URL(string: outline.icon)
+//
+//                        self.getData(from: url!) { data, response, error in
+//                            guard let data = data, error == nil else { return }
+////                            print(response?.suggestedFilename ?? url!.lastPathComponent)
+////                            print("Download Finished")
+//                            //// always update the UI from the main thread
+//                            DispatchQueue.main.async() { [weak self] in
+//                                article.image = NSImage(data: data)
+//                                article.image?.size = CGSize(width: 15, height: 15)
+////                                print("Image loaded")
+//                            }
+//                        }
+//                        subMenu.addItem(article)
+//                    }
+//                }
+//                completed(subMenu)
+//            }
+//        }
+////        categoryItem.submenu = subMenu
+//
+//    }
     
     /*
      Opens the browser for the link that is sent.
@@ -255,28 +328,72 @@ class AppDelegate: NSObject, NSApplicationDelegate {
      Formats the time and calculates how long ago the article was published from the current time.
      Also filters away too old news
      */
-    func formatDate(item: RSSItem) -> String {
+    func formatDate(date: Date) -> String {
         let dateFormatter: DateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd, HH:mm"
-        let timeSincePub = Date().timeIntervalSince(item.pubDate!)
+        let timeSincePub = Date().timeIntervalSince(date)
         let timeSincePubInMin = Int(timeSincePub) / 60
         
         if timeSincePubInMin < timeIntervalNews {
-            let time = calculateTime(minutesSincePub: timeSincePubInMin)
+            let time: String = calculateTime(minutesSincePub: timeSincePubInMin)
 //            let title = item.title! + "\t" + String(time)
             return time
         }
         else {
             return ""
         }
-  
-        
-        
-//        let dateStr = dateFormatter.string(from: item.pubDate!)
-        // let title = item.title! + "\t" + dateStr
-        
-    
     }
+    
+
+    
+    private func convert(minutes: Int) -> (hours: Int, minutes: Int) {
+        return ((minutes % 3600) / 60, (minutes % 3600) % 60)
+    }
+    
+//    func filterTime(date: Date) -> Date {
+//        let timeSincePub = Date().timeIntervalSince(date)
+//        let timeSincePubInMin = Int(timeSincePub) / 60
+//
+//
+//        if timeSincePubInMin < timeIntervalNews {
+//
+//            let seconds = timeSincePubInMin * 60
+//
+//
+//
+//            return Date.init(timeIntervalSinceNow: Double(seconds))
+//        }
+//        else {
+//            return Date.distantPast
+//        }
+//    }
+    
+    func filterTime(date: Date) -> Int {
+        let timeSincePub = Date().timeIntervalSince(date)
+        let timeSincePubInMin = Int(timeSincePub) / 60
+        
+
+        if timeSincePubInMin < timeIntervalNews {
+            
+            
+            return timeSincePubInMin
+        }
+        else {
+            return 0
+        }
+    }
+    
+    
+//    func calculateTime(minutesSincePub: Int) -> Int {
+//        var time = minutesSincePub
+//        if (minutesSincePub > 60) {
+//            let hours = minutesSincePub / 60
+//            let minutes = minutesSincePub % 60
+//            time = hours + minutes
+//        }
+//
+//        return time
+//    }
     /*
      Calculates the time and puts it into a string to be used next to the title
      Formats the time to ex, 1h 24 min instead of 84 min
@@ -288,6 +405,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let minutes = minutesSincePub % 60
             time = String(hours) + "h " + String(minutes) + "m"
         }
+        
         
         return time
     }

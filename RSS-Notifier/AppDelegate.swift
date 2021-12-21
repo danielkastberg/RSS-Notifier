@@ -177,6 +177,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                             
                             art.title = item.title ?? ""
                             art.link = item.link ?? ""
+                            print(art.link)
                             art.icon = self?.outlines[i].html ?? ""
                             art.date = item.pubDate ?? Date.now
 

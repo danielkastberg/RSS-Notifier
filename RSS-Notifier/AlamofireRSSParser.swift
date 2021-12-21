@@ -119,6 +119,7 @@ open class AlamofireRSSParser: NSObject, XMLParserDelegate {
         if ((elementName == "item") || (elementName == "entry")) {
             self.currentItem = RSSItem()
         }
+        
     }
     
     open func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
@@ -150,8 +151,20 @@ open class AlamofireRSSParser: NSObject, XMLParserDelegate {
             }
             
             if (elementName == "link") {
-                currentItem.link = self.currentString
+                if self.currentString == "" {
+                    if let attributes = self.currentAttributes {
+                        if let url = attributes["href"] {
+                            currentItem.link = url
+                        }
+                    }
+                }
+                else {
+                    currentItem.link = self.currentString
+                }
+             
             }
+            
+
             
             if (elementName == "guid") {
                 currentItem.guid = self.currentString

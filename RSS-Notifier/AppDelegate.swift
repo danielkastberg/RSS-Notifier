@@ -177,6 +177,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                             art.title = item.title ?? ""
                             art.link = item.link ?? ""
                             art.icon = self?.outlines[i].html ?? ""
+                            art.date = item.pubDate ?? Date.now
                             
                             art.timeString = self?.calculateTime(minutesSincePub: time) ?? ""
                             
@@ -206,12 +207,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         group.notify(queue: .main) {
             let unique = Array(Set(categories))
-           articles = articles.sorted(by: {$0.date.compare($1.date) == .orderedAscending})
+            articles = articles.sorted(by: {$0.date.compare($1.date) == .orderedDescending})
+
+            
             for i in 0 ... unique.endIndex-1 {
                 var categoryItem = NSMenuItem()
                 var sub = NSMenu()
                 categoryItem.title = unique[i]
                 for article in articles {
+//                    print(article.title + " " + article.timeString)
                     if article.category.elementsEqual(categoryItem.title) {
                         
                         
@@ -219,8 +223,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         let someObj: NSString = article.link as NSString
                         articleItem.representedObject = someObj
                         articleItem.action = #selector(self.openBrowser(urlSender:))
-                        var title = article.title + " " + article.timeString
-                        title = self.shortenText(item: title)
+                        var title = self.shortenText(item: article.title)
+                        title = title + " " + article.timeString
                         articleItem.title = title
                         
                         let url = URL(string: article.icon + "/favicon.ico")

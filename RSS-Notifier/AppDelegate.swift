@@ -45,6 +45,13 @@ public struct Articles {
     var timeString = ""
 }
 
+extension Sequence where Element: Hashable {
+    func uniqued() -> [Element] {
+        var set = Set<Element>()
+        return filter { set.insert($0).inserted }
+    }
+}
+
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -174,33 +181,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         if time != 0 {
                             var art = Articles()
                             
-                            
                             art.title = item.title ?? ""
                             art.link = item.link ?? ""
-                            print(art.link)
                             art.icon = self?.outlines[i].html ?? ""
                             art.date = item.pubDate ?? Date.now
-
-                            
                             art.timeString = self?.calculateTime(minutesSincePub: time) ?? ""
-                            
-         
                             art.category = category
-                        
-                            
-                            
                             
                             articles.append(art)
                         }
-   
-            
-                        
-//                        art.date = item.pubDate ?? Date.now
-                        
-                        
-                        
-                        
-                     
                     }
                 }
                 group.leave()
@@ -209,7 +198,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         group.notify(queue: .main) {
-            let unique = Array(Set(categories))
+//            let unique = Array(Set(categories))
+            let unique = self.uniqueSet(source: categories)
             articles = articles.sorted(by: {$0.date.compare($1.date) == .orderedDescending})
 
             
@@ -259,13 +249,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.statusBarMenu.addItem(self.quitItem)
             self.statusBarMenu.addItem(self.refreshItem)
         }
-
-        
-        
-
-
-
     }
+    
+    func uniqueSet<S : Sequence, T : Hashable>(source: S) -> [T] where S.Iterator.Element == T {
+        var buffer = [T]()
+        var added = Set<T>()
+        for elem in source {
+            if !added.contains(elem) {
+                buffer.append(elem)
+                added.insert(elem)
+            }
+        }
+        return buffer
+    }
+    
+    
+
     
     
     

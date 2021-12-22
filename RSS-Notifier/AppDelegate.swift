@@ -7,6 +7,7 @@
 
 import Cocoa
 import Alamofire
+import UserNotifications
 
 // Prova OPML bibliotek och se om det blir snabbare eller mer tillförlitigligt.
 // Kan även behöva se över en HTML parser
@@ -45,16 +46,13 @@ public struct Articles {
     var timeString = ""
 }
 
-extension Sequence where Element: Hashable {
-    func uniqued() -> [Element] {
-        var set = Set<Element>()
-        return filter { set.insert($0).inserted }
-    }
-}
+
 
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
+    
+    let un = UNUserNotificationCenter.current()
     
     var statusItem: NSStatusItem?
     
@@ -63,15 +61,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     var refreshItem = NSMenuItem()
     var quitItem = NSMenuItem()
-    
-    var theMenu: NSMenu?
-    typealias FinishedDownload = (NSMenu) -> Void
-    
-    
-    
-    var listOfCategories = [NSMenuItem]()
-    
-    
+
     
     var outlines = [Outline]()
     
@@ -79,7 +69,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     //// Sets a limit on how old the news are allowerd to be. In minutes
     let timeIntervalNews = 1440
     
-    var urls = [""]
+    
     
 
     
@@ -220,6 +210,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         title = title + " " + article.timeString
                         articleItem.title = title
                         
+                        //// Get the url from the article and add /favicon.ico to get the image
+                        /// Will add the image to each article to indicate the source
                         let url = URL(string: article.icon + "/favicon.ico")
                         
                         
@@ -237,6 +229,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                               }
                         
                         sub.addItem(articleItem)
+                        sub.update()
          
                     }
                 }
@@ -248,6 +241,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             self.statusBarMenu.addItem(self.quitItem)
             self.statusBarMenu.addItem(self.refreshItem)
+        
+            self.notifyUser()
         }
     }
     
@@ -263,60 +258,40 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return buffer
     }
     
-    
-
-    
-    
-    
-//    func laodRss(outline: Outline, subMenu: NSMenu, completed : @escaping FinishedDownload) {
-//        var articleList = [NSMenuItem]()
-//
-//        let url = URL(string: outline.xmlUrl)!
-//
-//
-//        AF.request(url).responseRSS() { (response) -> Void in
-//            if let feed: RSSFeed = response.value {
-//                /// Do something with your new RSSFeed object!
-//                for item in feed.items {
-//
-//                    let article = NSMenuItem()
-//                    let timeString = self.formatDate(item: item)
-//                    if timeString != "" {
-//                        var title = self.shortenText(item: item.title!)
-//                        title = title + " " + timeString
-////                        let attributedString = NSMutableAttributedString(string: title, attributes: [NSAttributedString.Key.font : NSFont.systemFont(ofSize: 12)])
-////                        let test = attributedString.string
-//                        let someObj: NSString = item.link! as NSString
-////                        article.attributedTitle = attributedString
-//
-//                        article.representedObject = someObj
-//                        article.action = #selector(self.openBrowser(urlSender:))
-//                        article.title = title
-//
-//                        //// Get the url from the article and add /favicon.ico to get the image
-//                        /// Will add the image to each article to indicate the source
-//                        let url = URL(string: outline.icon)
-//
-//                        self.getData(from: url!) { data, response, error in
-//                            guard let data = data, error == nil else { return }
-////                            print(response?.suggestedFilename ?? url!.lastPathComponent)
-////                            print("Download Finished")
-//                            //// always update the UI from the main thread
-//                            DispatchQueue.main.async() { [weak self] in
-//                                article.image = NSImage(data: data)
-//                                article.image?.size = CGSize(width: 15, height: 15)
-////                                print("Image loaded")
-//                            }
-//                        }
-//                        subMenu.addItem(article)
-//                    }
-//                }
-//                completed(subMenu)
-//            }
-//        }
-////        categoryItem.submenu = subMenu
-//
-//    }
+    func notifyUser() {
+        un.requestAuthorization(options: [.alert, .sound]) { (authorized, error) in
+            if authorized {
+                print("Authorized")
+            }
+            else if !authorized {
+                print("Not authorized")
+            }
+            else {
+                print(error?.localizedDescription as Any)
+            }
+            
+            self.un.getNotificationSettings { (settings) in
+                if settings.authorizationStatus == .authorized {
+                    
+                    let content = UNMutableNotificationContent()
+                    
+                    content.title = "News flash asshole"
+                    content.subtitle = "Wake up"
+                    content.body = "Everyone is doing it"
+                    content.sound = UNNotificationSound.default
+                    
+                    
+                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                    let id = "NewsTest"
+                    let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
+                    
+                    self.un.add(request) { (error) in
+                        if error != nil {print(error?.localizedDescription as Any)}
+                    }
+                }
+            }
+        }
+    }
     
     /*
      Opens the browser for the link that is sent.
@@ -355,24 +330,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func convert(minutes: Int) -> (hours: Int, minutes: Int) {
         return ((minutes % 3600) / 60, (minutes % 3600) % 60)
     }
-    
-//    func filterTime(date: Date) -> Date {
-//        let timeSincePub = Date().timeIntervalSince(date)
-//        let timeSincePubInMin = Int(timeSincePub) / 60
-//
-//
-//        if timeSincePubInMin < timeIntervalNews {
-//
-//            let seconds = timeSincePubInMin * 60
-//
-//
-//
-//            return Date.init(timeIntervalSinceNow: Double(seconds))
-//        }
-//        else {
-//            return Date.distantPast
-//        }
-//    }
+
     
     func filterTime(date: Date) -> Int {
         let timeSincePub = Date().timeIntervalSince(date)
@@ -389,17 +347,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    
-//    func calculateTime(minutesSincePub: Int) -> Int {
-//        var time = minutesSincePub
-//        if (minutesSincePub > 60) {
-//            let hours = minutesSincePub / 60
-//            let minutes = minutesSincePub % 60
-//            time = hours + minutes
-//        }
-//
-//        return time
-//    }
+
     /*
      Calculates the time and puts it into a string to be used next to the title
      Formats the time to ex, 1h 24 min instead of 84 min
@@ -444,12 +392,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Spara alla kanaler som jag vill hämta från i ett XML dok.
-        //Spara URL i XML dok.
-        //Loopa igenom XML tills tomt, hittar jag en URL gör en sökning med RSS
-//        for url in urls {
-//            update(urlString: url)
-//        }
+        un.delegate = self
 
     }
 
@@ -464,3 +407,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 }
 
+
+
+extension Sequence where Element: Hashable {
+    func uniqued() -> [Element] {
+        var set = Set<Element>()
+        return filter { set.insert($0).inserted }
+    }
+}
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        return completionHandler(.list)
+    }
+}

@@ -27,9 +27,6 @@ class ParserBase : NSObject, XMLParserDelegate  {
         
         
         if elementName == "category" {
-            var category = Category()
-            category.title = attributeDict["title"]! as String
-            listOfCategories.append(category)
             categoryName = attributeDict["title"]! as String
         }
         
@@ -46,7 +43,6 @@ class ParserBase : NSObject, XMLParserDelegate  {
             
             if attributeDict["htmlUrl"] == nil {
                 outline.html = ""
-//                print(outline.title)
             }
             else {
                 outline.html = attributeDict["htmlUrl"]! as String
@@ -94,10 +90,6 @@ class ParserBase : NSObject, XMLParserDelegate  {
     
     func getOutlines() -> [Outline] {
         return listOfOutlines
-    }
-    
-    func getCategories() -> [Category] {
-        return listOfCategories
     }
 
 }

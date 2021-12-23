@@ -8,6 +8,7 @@
 import Cocoa
 import Alamofire
 import UserNotifications
+import FaviconFinder
 
 // Prova OPML bibliotek och se om det blir snabbare eller mer tillförlitigligt.
 // Kan även behöva se över en HTML parser
@@ -44,6 +45,7 @@ public struct Articles {
     var category = ""
     var timeSincePubInMin = 0
     var timeString = ""
+    var source = ""
 }
 
 
@@ -96,6 +98,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+    }
+    
+    func getIcons(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        
     }
     
     
@@ -154,11 +160,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         let group = DispatchGroup()
         
+        let iconGroup = DispatchGroup()
+        
+        var icons = [String: NSImage]()
+        
         for i in 0 ... outlines.endIndex-1 {
+            
+            iconGroup.enter()
+            DispatchQueue.global().async { [weak self] in
+                let iconUrl = URL(string: (self?.outlines[i].html)!)
+                FaviconFinder(url: iconUrl!).downloadFavicon { result in
+                    switch result {
+                    case .success(let favicon):
+                        print("URL of Favicon: \(favicon.url)")
+                        icons[self?.outlines[i].title ?? ""] = favicon.image
+                    case .failure(let error):
+                        print("Error: \(error)")
+                    }
+                    iconGroup.leave()
+                }
+            }
 
             group.enter()
                 
             let url = URL(string: outlines[i].xmlUrl)!
+            
+
             let category = outlines[i].category
             categories.append(category)
                 
@@ -177,6 +204,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                             art.date = item.pubDate ?? Date.now
                             art.timeString = self?.calculateTime(minutesSincePub: time) ?? ""
                             art.category = category
+                            art.source = (self?.outlines[i].title) ?? ""
+                            
                             
                             articles.append(art)
                         }
@@ -191,6 +220,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //            let unique = Array(Set(categories))
             let unique = self.uniqueSet(source: categories)
             articles = articles.sorted(by: {$0.date.compare($1.date) == .orderedDescending})
+            
 
             
             for i in 0 ... unique.endIndex-1 {
@@ -202,6 +232,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     if article.category.elementsEqual(categoryItem.title) {
                         
                         
+                        
+                        
                         var articleItem = NSMenuItem()
                         let someObj: NSString = article.link as NSString
                         articleItem.representedObject = someObj
@@ -209,24 +241,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         var title = self.shortenText(item: article.title)
                         title = title + " " + article.timeString
                         articleItem.title = title
-                        
-                        //// Get the url from the article and add /favicon.ico to get the image
-                        /// Will add the image to each article to indicate the source
-                        let url = URL(string: article.icon + "/favicon.ico")
-                        
-                        
-      
-                              self.getData(from: url!) { data, response, error in
-                                  guard let data = data, error == nil else { return }
-      //                            print(response?.suggestedFilename ?? url!.lastPathComponent)
-      //                            print("Download Finished")
-                                  //// always update the UI from the main thread
-                                  DispatchQueue.main.async() { [weak self] in
-                                      articleItem.image = NSImage(data: data)
-                                      articleItem.image?.size = CGSize(width: 15, height: 15)
-      //                                print("Image loaded")
-                                  }
-                              }
+                        iconGroup.notify(queue: .global()) {
+
+                            articleItem.image = icons[article.source]
+                            articleItem.image?.size = CGSize(width: 15, height: 15)
+
+
+                        }
+     
+//                        let url = URL(string: article.icon + "/favicon.ico")
+//
+//                        //// Get the url from the article and add /favicon.ico to get the image
+//                        /// Will add the image to each article to indicate the source
+//                        self.getData(from: url!) { data, response, error in
+//                            guard let data = data, error == nil else { return }
+//                            //                            print(response?.suggestedFilename ?? url!.lastPathComponent)
+//                            //                            print("Download Finished")
+//                            //// always update the UI from the main thread
+//                            DispatchQueue.main.async() { [weak self] in
+//                                articleItem.image = NSImage(data: data)
+//                                articleItem.image?.size = CGSize(width: 15, height: 15)
+//                                //                                print("Image loaded")
+//                            }
+//                        }
+
                         
                         sub.addItem(articleItem)
                         sub.update()
@@ -238,11 +276,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.statusBarMenu.addItem(categoryItem)
                 self.statusItem?.menu = self.statusBarMenu
                 
+                self.notifyUser(categoryTitle: unique[i], articleTitle: articles[i].title, source: articles[i].source)
+                
             }
             self.statusBarMenu.addItem(self.quitItem)
             self.statusBarMenu.addItem(self.refreshItem)
         
-            self.notifyUser()
+ 
         }
     }
     
@@ -258,13 +298,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return buffer
     }
     
-    func notifyUser() {
+    func notifyUser(categoryTitle: String, articleTitle: String, source: String) {
         un.requestAuthorization(options: [.alert, .sound]) { (authorized, error) in
             if authorized {
                 print("Authorized")
             }
             else if !authorized {
                 print("Not authorized")
+                
             }
             else {
                 print(error?.localizedDescription as Any)
@@ -275,14 +316,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     
                     let content = UNMutableNotificationContent()
                     
-                    content.title = "News flash asshole"
-                    content.subtitle = "Wake up"
-                    content.body = "Everyone is doing it"
+                    content.title = categoryTitle
+                    content.subtitle = source
+                    content.body = articleTitle
                     content.sound = UNNotificationSound.default
                     
                     
                     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-                    let id = "NewsTest"
+                    let id = "RSSNotifier"
                     let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
                     
                     self.un.add(request) { (error) in

@@ -29,7 +29,6 @@ public struct Category {
 class OPMLReader {
     
     func readOPML() -> [Outline]  {
-        var categories = [Category]()
         var outlines = [Outline]()
         
         let xmlPath = Bundle.main.path(forResource: "Subscriptions", ofType: "xml")

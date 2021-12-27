@@ -10,6 +10,7 @@ import Alamofire
 import UserNotifications
 import FaviconFinder
 
+
 // Prova OPML bibliotek och se om det blir snabbare eller mer tillförlitigligt.
 // Kan även behöva se över en HTML parser
 // Lutar mer och mer att jag provar med ett färdigt biblitotek
@@ -46,6 +47,7 @@ public struct Articles {
     var timeSincePubInMin = 0
     var timeString = ""
     var source = ""
+    var isClicked = false
 }
 
 
@@ -54,12 +56,13 @@ public struct Articles {
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
     
-    let un = UNUserNotificationCenter.current()
+    
     
     var statusItem: NSStatusItem?
+
     
     var statusBarMenu = NSMenu()
-    var subMenu = NSMenu()
+    
     
     var refreshItem = NSMenuItem()
     var quitItem = NSMenuItem()
@@ -67,27 +70,43 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     var outlines = [Outline]()
     
+    var icons = [String: NSImage]()
+    
+    let iconGroup = DispatchGroup()
+    
     
     //// Sets a limit on how old the news are allowerd to be. In minutes
     let timeIntervalNews = 1440
     
     
     
-
-    
-    
     
   
+    fileprivate func loadIcons() {
+        for out in outlines {
+            Task {
+                iconGroup.enter()
+                let icon = await self.getFavicon(html: out.html)
+                icons[out.title] = icon
+                iconGroup.leave()
+                
+            }
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        
+
         let oplmR = OPMLReader()
         outlines = oplmR.readOPML()
+        
+        loadIcons()
         
         
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         
+
         refresh()
         loadAppIcon()
   
@@ -98,10 +117,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
-    }
-    
-    func getIcons(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
-        
     }
     
     
@@ -118,7 +133,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// Creates the submenu and menuitems. Only the basic structure, no feeds or articles
     func createMenu() {
         
-        self.subMenu = NSMenu()
+        
         self.statusBarMenu = NSMenu()
         
         // Creates a item to Quit the program
@@ -136,16 +151,36 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     /// Checks if there is an image to use as icon, If not loads a title instead
     func loadAppIcon() {
-        if let image = NSImage(named: "AppIcon") {
+        DispatchQueue.main.async {
+            guard let image = NSImage(named: "AppIcon") else {
+                self.statusItem?.button?.title = "RSS Notifier"
+                return
+            }
             image.isTemplate = true
             image.size = CGSize(width: 19, height: 19)
-            statusItem?.button?.image = image
-            refreshItem.title = "Refresh"
+            self.statusItem?.button?.image = image
+            self.refreshItem.title = "Refresh"
         }
-        else {
-            statusItem?.button?.title = "RSS Notifier"
-        }
+
     }
+    
+    func getFavicon(html: String) async -> NSImage{
+
+        let iconUrl = URL(string: (html))!
+        do {
+            let favicon = try await FaviconFinder(url: iconUrl).downloadFavicon()
+            print("URL of Favicon: \(favicon.url)")
+            return favicon.image
+        } catch {
+            print(FaviconError.emptyFavicon.localizedDescription)
+        }
+
+
+        return NSImage(byReferencingFile: "icon.png")!
+
+
+    }
+    
     
            
     
@@ -160,27 +195,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         let group = DispatchGroup()
         
-        let iconGroup = DispatchGroup()
+     
         
-        var icons = [String: NSImage]()
+        
         
         for i in 0 ... outlines.endIndex-1 {
-            
-            iconGroup.enter()
-            DispatchQueue.global().async { [weak self] in
-                let iconUrl = URL(string: (self?.outlines[i].html)!)
-                FaviconFinder(url: iconUrl!).downloadFavicon { result in
-                    switch result {
-                    case .success(let favicon):
-                        print("URL of Favicon: \(favicon.url)")
-                        icons[self?.outlines[i].title ?? ""] = favicon.image
-                    case .failure(let error):
-                        print("Error: \(error)")
-                    }
-                    iconGroup.leave()
-                }
-            }
-
             group.enter()
                 
             let url = URL(string: outlines[i].xmlUrl)!
@@ -224,51 +243,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
             
             for i in 0 ... unique.endIndex-1 {
-                var categoryItem = NSMenuItem()
-                var sub = NSMenu()
+                let categoryItem = NSMenuItem()
+                let sub = NSMenu()
                 categoryItem.title = unique[i]
                 for article in articles {
 //                    print(article.title + " " + article.timeString)
                     if article.category.elementsEqual(categoryItem.title) {
-                        
-                        
-                        
-                        
-                        var articleItem = NSMenuItem()
+                        let articleItem = NSMenuItem()
                         let someObj: NSString = article.link as NSString
                         articleItem.representedObject = someObj
                         articleItem.action = #selector(self.openBrowser(urlSender:))
                         var title = self.shortenText(item: article.title)
                         title = title + " " + article.timeString
                         articleItem.title = title
-                        iconGroup.notify(queue: .global()) {
-
-                            articleItem.image = icons[article.source]
+                        
+                        
+                        self.iconGroup.notify(queue: .main) {
+                            articleItem.image = self.icons[article.source]
                             articleItem.image?.size = CGSize(width: 15, height: 15)
-
-
                         }
-     
-//                        let url = URL(string: article.icon + "/favicon.ico")
-//
-//                        //// Get the url from the article and add /favicon.ico to get the image
-//                        /// Will add the image to each article to indicate the source
-//                        self.getData(from: url!) { data, response, error in
-//                            guard let data = data, error == nil else { return }
-//                            //                            print(response?.suggestedFilename ?? url!.lastPathComponent)
-//                            //                            print("Download Finished")
-//                            //// always update the UI from the main thread
-//                            DispatchQueue.main.async() { [weak self] in
-//                                articleItem.image = NSImage(data: data)
-//                                articleItem.image?.size = CGSize(width: 15, height: 15)
-//                                //                                print("Image loaded")
-//                            }
-//                        }
-
                         
                         sub.addItem(articleItem)
-                        sub.update()
-         
+
                     }
                 }
                 categoryItem.submenu = sub
@@ -276,13 +272,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.statusBarMenu.addItem(categoryItem)
                 self.statusItem?.menu = self.statusBarMenu
                 
-                self.notifyUser(categoryTitle: unique[i], articleTitle: articles[i].title, source: articles[i].source)
+          
+                notifyUser(categoryTitle: articles[i].category, articleTitle: articles[i].title, source: articles[i].source)
                 
             }
+            let frame = CGRect(origin: .zero, size: CGSize(width: 100, height: 20))
+            let lineView = NSView(frame: CGRect(x: 0, y: 100, width: 240, height: 1.0))
+            let viewHint = NSView(frame: frame)
+            viewHint.drawPageBorder(with: CGSize(width: 100, height: 20))
+            viewHint.layer?.borderColor = CGColor.black
+
+            let lineItem = NSMenuItem()
+            lineItem.view = lineView
+            self.statusBarMenu.addItem(lineItem)
+   
             self.statusBarMenu.addItem(self.quitItem)
             self.statusBarMenu.addItem(self.refreshItem)
-        
- 
+
+                    
+            
         }
     }
     
@@ -298,41 +306,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return buffer
     }
     
-    func notifyUser(categoryTitle: String, articleTitle: String, source: String) {
-        un.requestAuthorization(options: [.alert, .sound]) { (authorized, error) in
-            if authorized {
-                print("Authorized")
-            }
-            else if !authorized {
-                print("Not authorized")
-                
-            }
-            else {
-                print(error?.localizedDescription as Any)
-            }
-            
-            self.un.getNotificationSettings { (settings) in
-                if settings.authorizationStatus == .authorized {
-                    
-                    let content = UNMutableNotificationContent()
-                    
-                    content.title = categoryTitle
-                    content.subtitle = source
-                    content.body = articleTitle
-                    content.sound = UNNotificationSound.default
-                    
-                    
-                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-                    let id = "RSSNotifier"
-                    let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
-                    
-                    self.un.add(request) { (error) in
-                        if error != nil {print(error?.localizedDescription as Any)}
-                    }
-                }
-            }
-        }
-    }
+
     
     /*
      Opens the browser for the link that is sent.
@@ -434,6 +408,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         un.delegate = self
+
 
     }
 

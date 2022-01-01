@@ -52,7 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private var outlines = [Outline]()
     
-    private var icons = [String: NSImage]()
+//    private var icons = [String: NSImage]()
     
     private let iconGroup = DispatchGroup()
     
@@ -77,7 +77,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         loadAppIcon()
   
         
-        /// Removes the app from the dock
+        // Removes the app from the dock
         NSApp.setActivationPolicy(.accessory)
     }
     
@@ -92,7 +92,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 iconGroup.enter()
                 do {
                     let icon = try await self.getFavicon(html: out.html)
-                    icons[out.title] = icon
+//                    icons[out.title] = icon
+                    saveImage(out.title, icon)
                 }
                 catch {
                     print("No image was found \(error)")
@@ -101,6 +102,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
     }
+    
+
     
      
     /// Quits the program
@@ -139,7 +142,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.statusItem?.button?.image = image
             self.refreshItem.title = "Refresh"
         }
-
     }
     
     /// Parses the html and finds the favicon using FaviconFinder
@@ -150,10 +152,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             print("URL of Favicon: \(favicon.url)")
             return favicon.image
         } catch {
-//            print("No image was found \(error)")
             throw FaviconError.failedToFindFavicon
-//            return load(imageUrlPath: "icon.png")!
-//            return NSImage(imageLiteralResourceName: "icon.png")
         }
     
     }
@@ -187,7 +186,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         articleItem.title = title
         
         self.iconGroup.notify(queue: .main) {
-            articleItem.image = self.icons[article.source]
+//            articleItem.image = self.icons[article.source]
+//            articleItem.image?.size = CGSize(width: 15, height: 15)
+            guard let image = loadImage(article.source) else {
+                return
+            }
+            articleItem.image = image
             articleItem.image?.size = CGSize(width: 15, height: 15)
         }
         
@@ -278,7 +282,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             DispatchQueue.global().async {
                 for late in latest {
                     if !self.latestCopy.contains(late.category) {
-                        notifyUser(article: late, icons: self.icons)
+                        notifyUser(article: late)
                         sleep(1)
                     }
                 }

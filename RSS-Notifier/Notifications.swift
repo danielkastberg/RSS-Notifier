@@ -13,7 +13,7 @@ import AppKit
 let un = UNUserNotificationCenter.current()
 
 
-func notifyUser(article: Article, icons: [String: NSImage]) {
+func notifyUser(article: Article) {
 //    print("\(categoryTitle) + \(articleTitle) + \(source)")
     un.requestAuthorization(options: [.alert, .sound]) { (authorized, error) in
         if authorized {
@@ -37,6 +37,16 @@ func notifyUser(article: Article, icons: [String: NSImage]) {
                 content.body = article.title
                 content.threadIdentifier = "RSS Notifier"
                 content.sound = UNNotificationSound.default
+                
+                let imageURL = loadImageURL(article.source)
+                
+                
+                do {
+                    let attachment = try UNNotificationAttachment.init(identifier: article.source, url: imageURL, options: .none)
+                    content.attachments = [attachment]
+                } catch {
+                    print("Error loading image : \(error)")
+                }
                 
          
                 

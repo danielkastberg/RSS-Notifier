@@ -11,46 +11,28 @@ import UserNotifications
 import FaviconFinder
 
 
-// Prova OPML bibliotek och se om det blir snabbare eller mer tillförlitigligt.
-// Kan även behöva se över en HTML parser
-// Lutar mer och mer att jag provar med ett färdigt biblitotek
-// så jag kan fokusera på skolan och alla andra grupprpjekt.
-// Spara det här isf på en egen branch så finns det kvar om jag vill jobba vidare
-// eller visa upp eller kolla tillbaka
 
 /*
  TODO
- Add notification support
  Add different shade in menu item to indicate that it has been read
  Maybe add read notification to be saved between instances
  Add some window for a quick read of the rss description
  Add a setting window, that the user can choose the time interval in which the news should be displayed.
  Change the font and size on the text displayed.
- Fix text formatting
- Sort items after date
- 
- Look into threads (DispatchQueue) and if I can avoid running everything from "awakeFronNib"
- Maybe get to load the RSS in a thread and then fill the menu Item. Don't know how much the program will gain on it since
- I will still recreate the menuitems but to not clutter the memory and it will be more cpu consuming searching through
- the articles and filter than simply recreate everything. Masybe it will be more thread safe than the current situation.
- 
- Try an clean up the code and refactor it. If it gets to overwhelming maybe start from the beginning since now I actually have some knowledge.
  
  */
 
-public struct Articles {
+public struct Article {
     var title = ""
     var date = Date()
     var link = ""
     var icon = ""
     var category = ""
     var timeSincePubInMin = 0
-    var timeString = ""
+    var time = ""
     var source = ""
     var isClicked = false
 }
-
-
 
 
 @main
@@ -58,41 +40,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     
     
-    var statusItem: NSStatusItem?
+    private var statusItem: NSStatusItem?
 
     
-    var statusBarMenu = NSMenu()
+    private var statusBarMenu = NSMenu()
     
     
-    var refreshItem = NSMenuItem()
-    var quitItem = NSMenuItem()
+    private var refreshItem = NSMenuItem()
+    private var quitItem = NSMenuItem()
 
     
-    var outlines = [Outline]()
+    private var outlines = [Outline]()
     
-    var icons = [String: NSImage]()
+    private var icons = [String: NSImage]()
     
-    let iconGroup = DispatchGroup()
+    private let iconGroup = DispatchGroup()
     
+    private var latestCopy = [String]()
     
-    //// Sets a limit on how old the news are allowerd to be. In minutes
-    let timeIntervalNews = 1440
-    
-    
-    
-    
-  
-    fileprivate func loadIcons() {
-        for out in outlines {
-            Task {
-                iconGroup.enter()
-                let icon = await self.getFavicon(html: out.html)
-                icons[out.title] = icon
-                iconGroup.leave()
-                
-            }
-        }
-    }
+    private var articlesCopy = [Article]()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -111,7 +77,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         loadAppIcon()
   
         
-        // Removes the app from the dock
+        /// Removes the app from the dock
         NSApp.setActivationPolicy(.accessory)
     }
     
@@ -119,21 +85,33 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
     }
     
+    /// Gets the icon for each source and stores it in a list.
+    fileprivate func loadIcons() {
+        for out in outlines {
+            Task {
+                iconGroup.enter()
+                do {
+                    let icon = try await self.getFavicon(html: out.html)
+                    icons[out.title] = icon
+                }
+                catch {
+                    print("No image was found \(error)")
+                }
+                iconGroup.leave()
+            }
+        }
+    }
     
-    
-    /*
-     Quits the program
-     */
+     
+    /// Quits the program
     @objc func quit () {
         exit(0)
     }
     
 
     
-    /// Creates the submenu and menuitems. Only the basic structure, no feeds or articles
+    /// Creates the submenu and menuitems. Only the basic structure, no feeds nor articles
     func createMenu() {
-        
-        
         self.statusBarMenu = NSMenu()
         
         // Creates a item to Quit the program
@@ -164,118 +142,151 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     }
     
-    func getFavicon(html: String) async -> NSImage{
-
+    /// Parses the html and finds the favicon using FaviconFinder
+    func getFavicon(html: String) async throws -> NSImage {
         let iconUrl = URL(string: (html))!
         do {
             let favicon = try await FaviconFinder(url: iconUrl).downloadFavicon()
             print("URL of Favicon: \(favicon.url)")
             return favicon.image
         } catch {
-            print(FaviconError.emptyFavicon.localizedDescription)
+//            print("No image was found \(error)")
+            throw FaviconError.failedToFindFavicon
+//            return load(imageUrlPath: "icon.png")!
+//            return NSImage(imageLiteralResourceName: "icon.png")
         }
-
-
-        return NSImage(byReferencingFile: "icon.png")!
-
-
+    
     }
     
+    /// Creates and assignes the attributes from an news item to a article
+    fileprivate func createArticle(_ item: RSSItem, _ outline: Outline, _ time: Int) -> Article {
+        var article = Article()
+        article.title = item.title ?? ""
+        article.link = item.link ?? ""
+        article.icon = outline.html
+        article.date = item.pubDate ?? Date.now
+        article.time = calculateTime(minutesSincePub: time)
+        article.category = outline.category
+        article.source = outline.title
+        
+        return article
+    }
     
-           
+
     
-     ///Used to read the RSS. Is called when the user presses the "Refresh item"
+    /// Creates a NSMenuItem and asignes it a title with a timestamp
+    fileprivate func createArticleItem(_ article: Article) -> NSMenuItem {
+        let articleItem = NSMenuItem()
+        
+        let someObj: NSString = article.link as NSString
+        articleItem.representedObject = someObj
+        articleItem.action = #selector(self.openBrowser(urlSender:))
+        
+        var title = shortenText(item: article.title)
+        title = title + " " + article.time
+        articleItem.title = title
+        
+        self.iconGroup.notify(queue: .main) {
+            articleItem.image = self.icons[article.source]
+            articleItem.image?.size = CGSize(width: 15, height: 15)
+        }
+        
+        return articleItem
+    }
+    
+    /// Adds an empty item to indicate that the news are to old
+    fileprivate func addEmptyItem(_ sub: NSMenu) -> NSMenu {
+        if sub.items.isEmpty {
+            let empty = NSMenuItem()
+            empty.title = "No new news found"
+            sub.addItem(empty)
+        }
+        return sub
+    }
+    
+    ///Used to read the RSS. Is called when the user presses the "Refresh item"
     @objc func refresh() {
         createMenu()
-        var RSSItems = [RSSItem]()
-        
-        var articles = [Articles]()
-        
+        var articles = [Article]()
         var categories = [String]()
-        
         let group = DispatchGroup()
+
         
-     
+        var used = [String]()
         
-        
-        
-        for i in 0 ... outlines.endIndex-1 {
+
+        for out in outlines {
             group.enter()
                 
-            let url = URL(string: outlines[i].xmlUrl)!
+            let url = URL(string: out.xmlUrl)!
             
-
-            let category = outlines[i].category
+            let category = out.category
             categories.append(category)
                 
             AF.request(url).responseRSS() { [weak self] (response) -> Void in
+                if (response.error != nil) {
+                    notfiyOffline()
+                }
                 if let feed: RSSFeed = response.value {
-//                    print(feed.link)
                     for item in feed.items {
-                        let time: Int = self?.filterTime(date: item.pubDate ?? Date.now) ?? 0
+                        let time: Int = filterTime(date: item.pubDate ?? Date.now)
             
                         if time != 0 {
-                            var art = Articles()
-                            
-                            art.title = item.title ?? ""
-                            art.link = item.link ?? ""
-                            art.icon = self?.outlines[i].html ?? ""
-                            art.date = item.pubDate ?? Date.now
-                            art.timeString = self?.calculateTime(minutesSincePub: time) ?? ""
-                            art.category = category
-                            art.source = (self?.outlines[i].title) ?? ""
-                            
-                            
-                            articles.append(art)
+                            let article = self?.createArticle(item, out, time)
+                            articles.append(article!)
                         }
                     }
                 }
                 group.leave()
             }
-            
         }
         
-        group.notify(queue: .main) {
-//            let unique = Array(Set(categories))
-            let unique = self.uniqueSet(source: categories)
-            articles = articles.sorted(by: {$0.date.compare($1.date) == .orderedDescending})
-            
 
-            
-            for i in 0 ... unique.endIndex-1 {
+        group.notify(queue: .main) {
+            var latest = [Article]()
+
+            let uniqueCategories = self.uniqueSet(source: categories)
+            articles = articles.sorted(by: {$0.date.compare($1.date) == .orderedDescending})
+
+            for uC in uniqueCategories {
                 let categoryItem = NSMenuItem()
-                let sub = NSMenu()
-                categoryItem.title = unique[i]
+                var sub = NSMenu()
+                categoryItem.title = uC
                 for article in articles {
-//                    print(article.title + " " + article.timeString)
                     if article.category.elementsEqual(categoryItem.title) {
-                        let articleItem = NSMenuItem()
-                        let someObj: NSString = article.link as NSString
-                        articleItem.representedObject = someObj
-                        articleItem.action = #selector(self.openBrowser(urlSender:))
-                        var title = self.shortenText(item: article.title)
-                        title = title + " " + article.timeString
-                        articleItem.title = title
-                        
-                        
-                        self.iconGroup.notify(queue: .main) {
-                            articleItem.image = self.icons[article.source]
-                            articleItem.image?.size = CGSize(width: 15, height: 15)
+                        if !used.contains(article.category) {
+                            used.append(article.category)
+                            latest.append(article)
                         }
+                        let articleItem = self.createArticleItem(article)
                         
                         sub.addItem(articleItem)
-
                     }
                 }
+                sub = self.addEmptyItem(sub)
+                
                 categoryItem.submenu = sub
                 categoryItem.target = self
                 self.statusBarMenu.addItem(categoryItem)
                 self.statusItem?.menu = self.statusBarMenu
                 
           
-                notifyUser(categoryTitle: articles[i].category, articleTitle: articles[i].title, source: articles[i].source)
+//                notifyUser(categoryTitle: articles[i].category, articleTitle: articles[i].title, source: articles[i].source)
                 
             }
+            
+            DispatchQueue.global().async {
+                for late in latest {
+                    if !self.latestCopy.contains(late.category) {
+                        notifyUser(article: late, icons: self.icons)
+                        sleep(1)
+                    }
+                }
+                self.latestCopy = used
+            }
+            
+         
+            
             let frame = CGRect(origin: .zero, size: CGSize(width: 100, height: 20))
             let lineView = NSView(frame: CGRect(x: 0, y: 100, width: 240, height: 1.0))
             let viewHint = NSView(frame: frame)
@@ -288,10 +299,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
    
             self.statusBarMenu.addItem(self.quitItem)
             self.statusBarMenu.addItem(self.refreshItem)
-
-                    
-            
         }
+        
+        
+        articlesCopy = articles
+       
     }
     
     func uniqueSet<S : Sequence, T : Hashable>(source: S) -> [T] where S.Iterator.Element == T {
@@ -320,25 +332,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSWorkspace.shared.open(url)
     }
     
-    /*
-     Formats the time and calculates how long ago the article was published from the current time.
-     Also filters away too old news
-     */
-    func formatDate(date: Date) -> String {
-        let dateFormatter: DateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM/dd, HH:mm"
-        let timeSincePub = Date().timeIntervalSince(date)
-        let timeSincePubInMin = Int(timeSincePub) / 60
-        
-        if timeSincePubInMin < timeIntervalNews {
-            let time: String = calculateTime(minutesSincePub: timeSincePubInMin)
-//            let title = item.title! + "\t" + String(time)
-            return time
-        }
-        else {
-            return ""
-        }
-    }
+
     
 
     
@@ -347,64 +341,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     
-    func filterTime(date: Date) -> Int {
-        let timeSincePub = Date().timeIntervalSince(date)
-        let timeSincePubInMin = Int(timeSincePub) / 60
-        
-
-        if timeSincePubInMin < timeIntervalNews {
-            
-            
-            return timeSincePubInMin
-        }
-        else {
-            return 0
-        }
-    }
-    
-
-    /*
-     Calculates the time and puts it into a string to be used next to the title
-     Formats the time to ex, 1h 24 min instead of 84 min
-     */
-    func calculateTime(minutesSincePub: Int) -> String {
-        var time = String(minutesSincePub) + "m"
-        if (minutesSincePub > 60) {
-            let hours = minutesSincePub / 60
-            let minutes = minutesSincePub % 60
-            time = String(hours) + "h " + String(minutes) + "m"
-        }
-        
-        
-        return time
-    }
-    
-    /*
-     If the title of the article is to long the functions cut it of after 40 char
-     and adds thre dots ... to indicate that the full title isn't showing
-     */
-    func shortenText(item: String) -> String {
-        var title = ""
-        let stringLength = 40
-       
-        if item.count > stringLength {
-            title = item
-            for _ in stringLength...title.count {
-                title.remove(at: title.index(before: title.endIndex))
-            }
-            title.append("...")
-          
-        }
-        else {
-            title = item
-        }
-        return title
-        
-    }
- 
-    
-    
-
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         un.delegate = self
@@ -419,8 +355,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
         return true
     }
-
-
 }
 
 
@@ -437,3 +371,5 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         return completionHandler(.list)
     }
 }
+
+

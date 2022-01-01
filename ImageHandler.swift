@@ -5,7 +5,6 @@
 //  Created by Daniel Kastberg on 2022-01-01.
 //
 
-import Foundation
 import AppKit
 
 private let directory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
@@ -24,12 +23,18 @@ private func cleanName(_ fileName: String) -> String {
     return shorterName
 }
 
+func imageExist(_ fileName: String) -> Bool {
+    let cleanTitle = cleanName(fileName)
+    let url = directory.appendingPathComponent(cleanTitle+".png")
+    return FileManager.default.fileExists(atPath: url.path)
+}
+
 
 
 func saveImage(_ imageTitle: String, _ icon: NSImage) {
-    var cleanTitle = cleanName(imageTitle)
+    let cleanTitle = cleanName(imageTitle)
     let url = directory.appendingPathComponent(cleanTitle+".png")
-    
+
     // Convert to Data
     if let data = icon.tiffRepresentation {
         do {
@@ -42,7 +47,7 @@ func saveImage(_ imageTitle: String, _ icon: NSImage) {
 
 
 func loadImageURL(_ imageTitle: String) -> URL {
-    var cleanTitle = cleanName(imageTitle)
+    let cleanTitle = cleanName(imageTitle)
     let imageURL = directory.appendingPathComponent(cleanTitle+".png")
     
     return imageURL

@@ -91,9 +91,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             Task {
                 iconGroup.enter()
                 do {
-                    let icon = try await self.getFavicon(html: out.html)
-//                    icons[out.title] = icon
-                    saveImage(out.title, icon)
+                    if !imageExist(out.title) {
+                        let icon = try await self.getFavicon(html: out.html)
+//                      icons[out.title] = icon
+                        saveImage(out.title, icon)
+                    }
                 }
                 catch {
                     print("No image was found \(error)")
@@ -149,7 +151,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let iconUrl = URL(string: (html))!
         do {
             let favicon = try await FaviconFinder(url: iconUrl).downloadFavicon()
-            print("URL of Favicon: \(favicon.url)")
+//            print("URL of Favicon: \(favicon.url)")
             return favicon.image
         } catch {
             throw FaviconError.failedToFindFavicon
@@ -230,6 +232,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             AF.request(url).responseRSS() { [weak self] (response) -> Void in
                 if (response.error != nil) {
                     notfiyOffline()
+                    return
                 }
                 if let feed: RSSFeed = response.value {
                     for item in feed.items {

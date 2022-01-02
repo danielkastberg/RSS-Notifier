@@ -22,27 +22,10 @@ import FaviconFinder
  
  */
 
-public struct Article {
-    var title = ""
-    var date = Date()
-    var link = ""
-    var icon = ""
-    var category = ""
-    var timeSincePubInMin = 0
-    var time = ""
-    var source = ""
-    var isClicked = false
-}
-
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
-    
-    
-    
     private var statusItem: NSStatusItem?
-
-    
     private var statusBarMenu = NSMenu()
     
     
@@ -105,8 +88,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-
-    
      
     /// Quits the program
     @objc func quit () {
@@ -147,6 +128,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     /// Parses the html and finds the favicon using FaviconFinder
+    ///
+    ///  - Parameters:
+    ///     html - The link of the website
+    ///
+    ///   - Returns:Icon from the website
     func getFavicon(html: String) async throws -> NSImage {
         let iconUrl = URL(string: (html))!
         do {
@@ -159,21 +145,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     }
     
-    /// Creates and assignes the attributes from an news item to a article
-    fileprivate func createArticle(_ item: RSSItem, _ outline: Outline, _ time: Int) -> Article {
-        var article = Article()
-        article.title = item.title ?? ""
-        article.link = item.link ?? ""
-        article.icon = outline.html
-        article.date = item.pubDate ?? Date.now
-        article.time = calculateTime(minutesSincePub: time)
-        article.category = outline.category
-        article.source = outline.title
-        
-        return article
-    }
-    
-
     
     /// Creates a NSMenuItem and asignes it a title with a timestamp
     fileprivate func createArticleItem(_ article: Article) -> NSMenuItem {
@@ -210,6 +181,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return sub
     }
     
+    /// Displays the latest news in a notification from each category
+    fileprivate func showNotifications(latest: [Article], used: [String]) {
+        DispatchQueue.global().async {
+            for late in latest {
+                if !self.latestCopy.contains(late.category) {
+                    notifyUser(article: late)
+                    sleep(1)
+                }
+            }
+            self.latestCopy = used
+        }
+    }
+    
     ///Used to read the RSS. Is called when the user presses the "Refresh item"
     @objc func refresh() {
         createMenu()
@@ -239,8 +223,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         let time: Int = filterTime(date: item.pubDate ?? Date.now)
             
                         if time != 0 {
-                            let article = self?.createArticle(item, out, time)
-                            articles.append(article!)
+                            let article = createArticle(item, out, time)
+                            articles.append(article)
                         }
                     }
                 }
@@ -281,16 +265,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //                notifyUser(categoryTitle: articles[i].category, articleTitle: articles[i].title, source: articles[i].source)
                 
             }
-            
-            DispatchQueue.global().async {
-                for late in latest {
-                    if !self.latestCopy.contains(late.category) {
-                        notifyUser(article: late)
-                        sleep(1)
-                    }
-                }
-                self.latestCopy = used
-            }
+            self.showNotifications(latest: latest, used: used)
             
          
             

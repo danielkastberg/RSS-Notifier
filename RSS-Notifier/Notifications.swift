@@ -14,7 +14,6 @@ let un = UNUserNotificationCenter.current()
 
 
 func notifyUser(article: Article) {
-//    print("\(categoryTitle) + \(articleTitle) + \(source)")
     un.requestAuthorization(options: [.alert, .sound]) { (authorized, error) in
         if authorized {
             print("Authorized")
@@ -65,7 +64,6 @@ func notifyUser(article: Article) {
 
 
 func notfiyOffline() {
-//    print("\(categoryTitle) + \(articleTitle) + \(source)")
     un.requestAuthorization(options: [.alert, .sound]) { (authorized, error) in
         if authorized {
             print("Authorized")
@@ -83,13 +81,10 @@ func notfiyOffline() {
                 
                 let content = UNMutableNotificationContent()
                 
-                content.title = "No internet connection"
+                content.title = "Could not load news"
                 content.threadIdentifier = "RSS Notifier"
                 content.sound = UNNotificationSound.default
-                
-         
-                
-                
+
                 let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
                 let id = "No internet"
                 let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)

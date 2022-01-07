@@ -35,13 +35,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private var outlines = [Outline]()
     
-//    private var icons = [String: NSImage]()
-    
     private let iconGroup = DispatchGroup()
     
     private var latestCopy = [String]()
     
     private var articlesCopy = [Article]()
+    
+    var usedTitle = [String]()
+    
+    private var latest = [Article]()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -146,7 +148,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     
-    /// Creates a NSMenuItem and asignes it a title with a timestamp
+    /// Creates a NSMenuItem and asignes it a title with a
+    ///  - Parameters:
+    ///     article - Article from one RSS source
+    ///  - Returns: Menu item containing the article with link
     fileprivate func createArticleItem(_ article: Article) -> NSMenuItem {
         let articleItem = NSMenuItem()
         
@@ -171,7 +176,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return articleItem
     }
     
-    /// Adds an empty item to indicate that the news are to old
+    /// Adds an empty item to indicate that the news are too old
     fileprivate func addEmptyItem(_ sub: NSMenu) -> NSMenu {
         if sub.items.isEmpty {
             let empty = NSMenuItem()
@@ -185,8 +190,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     fileprivate func showNotifications(latest: [Article], used: [String]) {
         DispatchQueue.global().async {
             for late in latest {
-                if !self.latestCopy.contains(late.category) {
+                if !self.usedTitle.contains(late.title) {
+//                    print("Visar notis för \(late.title)")
                     notifyUser(article: late)
+                    self.usedTitle.append(late.title)
                     sleep(1)
                 }
             }
@@ -234,7 +241,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
 
         group.notify(queue: .main) {
-            var latest = [Article]()
+            self.latest = [Article]()
 
             let uniqueCategories = self.uniqueSet(source: categories)
             articles = articles.sorted(by: {$0.date.compare($1.date) == .orderedDescending})
@@ -247,7 +254,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     if article.category.elementsEqual(categoryItem.title) {
                         if !used.contains(article.category) {
                             used.append(article.category)
-                            latest.append(article)
+                            self.latest.append(article)
                         }
                         let articleItem = self.createArticleItem(article)
                         
@@ -265,7 +272,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //                notifyUser(categoryTitle: articles[i].category, articleTitle: articles[i].title, source: articles[i].source)
                 
             }
-            self.showNotifications(latest: latest, used: used)
+            self.showNotifications(latest: self.latest, used: used)
+            if self.usedTitle.count > 100 {
+                let titleCopy = self.usedTitle
+                self.usedTitle = [String]()
+                self.usedTitle = Array(titleCopy.prefix(upTo: 5))
+            }
             
          
             
@@ -288,6 +300,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
        
     }
     
+    /// Removes duplicate items from a set
+    ///  - Parameters:
+    ///     source - The set containing duplicates
     func uniqueSet<S : Sequence, T : Hashable>(source: S) -> [T] where S.Iterator.Element == T {
         var buffer = [T]()
         var added = Set<T>()
@@ -302,10 +317,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
 
     
-    /*
-     Opens the browser for the link that is sent.
-     Used to open a link from one article
-     */
+
+     ///Opens the browser for the link that is sent.
+     ///Links the menu item with the action.
+    ///  - Parameters:
+    ///     urlSender - A NSMenuItem containing a link-
+     
     @objc func openBrowser(urlSender: NSMenuItem) {
         let urlString = urlSender.representedObject
         guard let url = URL(string: urlString as! String) else {
@@ -349,7 +366,44 @@ extension Sequence where Element: Hashable {
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
+    
+    /// Dirty solution on opening a link from the selected notification.
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        for article in latest {
+            if article.category == response.notification.request.content.title {
+                switch response.actionIdentifier {
+                case "Open":
+                    ActionHandler.sharedActionHandler.open(link: article.link)
+                    break
+                    
+                default:
+                    break
+                }
+            }
+        }
+    }
+    
+    
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        let application = NSApplication.shared
+        
+        if(application.isActive){
+          print("user tapped the notification bar when the app is in foreground")
+            application.setActivationPolicy(.accessory)
+          
+        }
+        
+        if(!application.isActive)
+        {
+          print("user tapped the notification bar when the app is in background")
+            application.setActivationPolicy(.accessory)
+        }
+        
+        /* Change root view controller to a specific viewcontroller */
+        // let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        // let vc = storyboard.instantiateViewController(withIdentifier: "ViewControllerStoryboardID") as? ViewController
+        // self.window?.rootViewController = vc
+        
         return completionHandler(.list)
     }
 }

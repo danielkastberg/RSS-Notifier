@@ -10,21 +10,26 @@ import UserNotifications
 import AppKit
 
 
+
 let un = UNUserNotificationCenter.current()
 
+private var latestArticle = ""
 
+/// Checks authorization and if allowed shows the user a notification.
+///  - Parameters:
+///     article - The article to display
 func notifyUser(article: Article) {
     un.requestAuthorization(options: [.alert, .sound]) { (authorized, error) in
-        if authorized {
-            print("Authorized")
-        }
-        else if !authorized {
-            print("Not authorized")
-            
-        }
-        else {
-            print(error?.localizedDescription as Any)
-        }
+//        if authorized {
+//            print("Authorized")
+//        }
+//        else if !authorized {
+//            print("Not authorized")
+//
+//        }
+//        else {
+//            print(error?.localizedDescription as Any)
+//        }
         
         un.getNotificationSettings { (settings) in
             if settings.authorizationStatus == .authorized {
@@ -35,8 +40,12 @@ func notifyUser(article: Article) {
                 content.subtitle = article.source
                 content.body = article.title
                 content.threadIdentifier = "RSS Notifier"
-                content.sound = UNNotificationSound.default
+                content.categoryIdentifier = "News"
+
                 
+                content.sound = nil
+                
+
                 let imageURL = loadImageURL(article.source)
                 
                 
@@ -47,13 +56,20 @@ func notifyUser(article: Article) {
                     print("Error loading image : \(error)")
                 }
                 
+                let open = UNNotificationAction(identifier: "Open", title: "Open", options: [.destructive])
+
          
+                let category = UNNotificationCategory(identifier: content.categoryIdentifier, actions: [open], intentIdentifiers: [], options: [])
                 
                 
                 let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-                let id = article.source
+                let id = article.category
                 let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
                 
+    
+                un.setNotificationCategories([category])
+                
+
                 un.add(request) { (error) in
                     if error != nil {print(error?.localizedDescription as Any)}
                 }
@@ -63,6 +79,7 @@ func notifyUser(article: Article) {
 }
 
 
+/// Checks authorization and if allowed shows the user a notification saying the program couldn't load the RSS
 func notfiyOffline() {
     un.requestAuthorization(options: [.alert, .sound]) { (authorized, error) in
         if authorized {
@@ -96,3 +113,25 @@ func notfiyOffline() {
         }
     }
 }
+
+// copy sound file to /Library/Sounds directory, it will be auto detect and played when a push notification arrive
+func copyFileToDirectory(fromPath:String, fileName:String) {
+    do {
+        let libraryDir = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.libraryDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+        let directoryPath = "\(libraryDir.first!)/Sounds"
+        try FileManager.default.createDirectory(atPath: directoryPath, withIntermediateDirectories: true, attributes: nil)
+
+        let systemSoundPath = "\(fromPath)/\(fileName)"
+        let notificationSoundPath = "\(directoryPath)/paper-effect.caf"
+
+        let fileExist = FileManager.default.fileExists(atPath: notificationSoundPath)
+        if (fileExist) {
+            try FileManager.default.removeItem(atPath: notificationSoundPath)
+        }
+        try FileManager.default.copyItem(atPath: systemSoundPath, toPath: notificationSoundPath)
+    }
+    catch let error as NSError {
+        print("Error: \(error)")
+    }
+}
+

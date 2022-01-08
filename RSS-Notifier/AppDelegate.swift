@@ -39,6 +39,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private var latestCopy = [String]()
     
+    private let fontsize: CGFloat = 12
+
     private var articlesCopy = [Article]()
     
     var usedTitle = [String]()
@@ -103,14 +105,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.statusBarMenu = NSMenu()
         
         // Creates a item to Quit the program
-        self.quitItem = NSMenuItem(title: "Quit", action: #selector(quit), keyEquivalent: "q")
+//        self.quitItem = NSMenuItem(title: "Quit", action: #selector(quit), keyEquivalent: "q")
+        
+        self.quitItem.attributedTitle = useCustomFont(title: "Quit")
+        self.quitItem.action = #selector(quit)
+        self.quitItem.keyEquivalent = "q"
+        
+        
         
 
         // Creates a NSMenuItem to handle the RSS refresh
         self.refreshItem = NSMenuItem()
-        self.refreshItem.title = "Refresh"
+//        self.refreshItem.title = "Refresh"
+        self.refreshItem.attributedTitle = useCustomFont(title: "Refresh")
         self.refreshItem.action = #selector(refresh)
         self.refreshItem.target = self
+    }
+    
+    func useCustomFont(title: String) -> NSMutableAttributedString {
+        let font = NSFont(name: "OpenSans-Regular", size: fontsize)
+        return NSMutableAttributedString(string: title, attributes: [NSAttributedString.Key.font : font as Any])
+        
     }
     
     
@@ -161,7 +176,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         var title = shortenText(item: article.title)
         title = title + " " + article.time
-        articleItem.title = title
+//        articleItem.title = title
+        articleItem.attributedTitle = useCustomFont(title: title)
         
         self.iconGroup.notify(queue: .main) {
 //            articleItem.image = self.icons[article.source]
@@ -223,6 +239,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             AF.request(url).responseRSS() { [weak self] (response) -> Void in
                 if (response.error != nil) {
                     notfiyOffline()
+                    self!.statusBarMenu.addItem(self!.quitItem)
+                    self!.statusBarMenu.addItem(self!.refreshItem)
                     return
                 }
                 if let feed: RSSFeed = response.value {
@@ -249,7 +267,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             for uC in uniqueCategories {
                 let categoryItem = NSMenuItem()
                 var sub = NSMenu()
-                categoryItem.title = uC
+//                categoryItem.title = uC
+                categoryItem.attributedTitle = self.useCustomFont(title: uC)
                 for article in articles {
                     if article.category.elementsEqual(categoryItem.title) {
                         if !used.contains(article.category) {

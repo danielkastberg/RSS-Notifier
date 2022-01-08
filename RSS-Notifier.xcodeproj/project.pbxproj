@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		651C8C58277A3EC200D491A0 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651C8C57277A3EC200D491A0 /* Notifications.swift */; };
 		651C8C5A277A460900D491A0 /* TitleFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651C8C59277A460900D491A0 /* TitleFormatting.swift */; };
+		652039EF2789EAFD0027A7E3 /* ActionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652039EE2789EAFD0027A7E3 /* ActionHandler.swift */; };
+		652039F62789EE1F0027A7E3 /* NeuePlak-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 652039F52789EE1F0027A7E3 /* NeuePlak-SemiBold.ttf */; };
+		652039F82789F3190027A7E3 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 652039F72789F3190027A7E3 /* OpenSans-Light.ttf */; };
+		652039FA2789F4850027A7E3 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 652039F92789F4850027A7E3 /* OpenSans-Regular.ttf */; };
 		6534DDE12743C85900D500F2 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6534DDD82743C85900D500F2 /* icon.png */; };
 		65570AEB2778E46700DF91B2 /* FaviconFinder in Frameworks */ = {isa = PBXBuildFile; productRef = 65570AEA2778E46700DF91B2 /* FaviconFinder */; };
 		65621BBC2743070C00DE62C3 /* Subscriptions.xml in Resources */ = {isa = PBXBuildFile; fileRef = 65621BB92743070C00DE62C3 /* Subscriptions.xml */; };
@@ -53,6 +57,12 @@
 /* Begin PBXFileReference section */
 		651C8C57277A3EC200D491A0 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		651C8C59277A460900D491A0 /* TitleFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleFormatting.swift; sourceTree = "<group>"; };
+		652039ED2789EAA00027A7E3 /* RSS-Notifier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RSS-Notifier.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		652039EE2789EAFD0027A7E3 /* ActionHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionHandler.swift; sourceTree = "<group>"; };
+		652039F42789EDB70027A7E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		652039F52789EE1F0027A7E3 /* NeuePlak-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NeuePlak-SemiBold.ttf"; sourceTree = "<group>"; };
+		652039F72789F3190027A7E3 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Light.ttf"; sourceTree = "<group>"; };
+		652039F92789F4850027A7E3 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
 		6534DDD82743C85900D500F2 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = "../../../../Downloads/Rss Logo-32-64-96-128-256-512px/icon.png"; sourceTree = "<group>"; };
 		65621BB92743070C00DE62C3 /* Subscriptions.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Subscriptions.xml; sourceTree = "<group>"; };
 		65621BBB2743070C00DE62C3 /* OPMLReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPMLReader.swift; sourceTree = "<group>"; };
@@ -63,7 +73,6 @@
 		658103C027304E3100974AAF /* RSS_Notifier.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RSS_Notifier.entitlements; sourceTree = "<group>"; };
 		658103C627304E8700974AAF /* ParserBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserBase.swift; sourceTree = "<group>"; };
 		658103F62730546900974AAF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		659E4E4327810125002BBC6F /* RSS-Notifier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "RSS-Notifier.app"; path = "/Users/daniel/Documents/Egna Projekt/RSS-Notifier/build/Debug/RSS-Notifier.app"; sourceTree = "<absolute>"; };
 		659E4E4427810EED002BBC6F /* ImageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageHandler.swift; sourceTree = "<group>"; };
 		659E4E46278121EB002BBC6F /* Article.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
 		65DD270027333B540057E47F /* RSSFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSFeed.swift; sourceTree = "<group>"; };
@@ -90,19 +99,25 @@
 			children = (
 				658103B627304E2F00974AAF /* RSS-Notifier */,
 				65DD272F273341870057E47F /* Frameworks */,
+				652039ED2789EAA00027A7E3 /* RSS-Notifier.app */,
 			);
 			sourceTree = "<group>";
 		};
 		658103B627304E2F00974AAF /* RSS-Notifier */ = {
 			isa = PBXGroup;
 			children = (
+				652039F42789EDB70027A7E3 /* Info.plist */,
 				65FE3B82273B56FA00F8FF74 /* AlamofireRSSParser.h */,
 				65FE3B81273B56FA00F8FF74 /* AlamofireRSSParser.swift */,
 				658103B727304E2F00974AAF /* AppDelegate.swift */,
+				652039EE2789EAFD0027A7E3 /* ActionHandler.swift */,
 				659E4E46278121EB002BBC6F /* Article.swift */,
 				658103BB27304E3100974AAF /* Assets.xcassets */,
+				652039F52789EE1F0027A7E3 /* NeuePlak-SemiBold.ttf */,
 				6534DDD82743C85900D500F2 /* icon.png */,
 				659E4E4427810EED002BBC6F /* ImageHandler.swift */,
+				652039F72789F3190027A7E3 /* OpenSans-Light.ttf */,
+				652039F92789F4850027A7E3 /* OpenSans-Regular.ttf */,
 				658103F52730546900974AAF /* Main.storyboard */,
 				651C8C57277A3EC200D491A0 /* Notifications.swift */,
 				65621BBB2743070C00DE62C3 /* OPMLReader.swift */,
@@ -148,7 +163,7 @@
 				65570AEA2778E46700DF91B2 /* FaviconFinder */,
 			);
 			productName = "RSS-Notifier";
-			productReference = 659E4E4327810125002BBC6F /* RSS-Notifier.app */;
+			productReference = 652039ED2789EAA00027A7E3 /* RSS-Notifier.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -193,10 +208,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				652039F62789EE1F0027A7E3 /* NeuePlak-SemiBold.ttf in Resources */,
 				658103BC27304E3100974AAF /* Assets.xcassets in Resources */,
+				652039F82789F3190027A7E3 /* OpenSans-Light.ttf in Resources */,
 				6534DDE12743C85900D500F2 /* icon.png in Resources */,
 				6572FAE32744639100DA9F99 /* Sub.xml in Resources */,
 				65621BBC2743070C00DE62C3 /* Subscriptions.xml in Resources */,
+				652039FA2789F4850027A7E3 /* OpenSans-Regular.ttf in Resources */,
 				658103F72730546900974AAF /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -218,6 +236,7 @@
 				65621BBE2743070C00DE62C3 /* OPMLReader.swift in Sources */,
 				65DD272327333DD10057E47F /* RSSFeed.swift in Sources */,
 				658103B827304E2F00974AAF /* AppDelegate.swift in Sources */,
+				652039EF2789EAFD0027A7E3 /* ActionHandler.swift in Sources */,
 				658103CA27304E8800974AAF /* ParserBase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -362,6 +381,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "RSS-Notifier/Info.plist";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -388,6 +408,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "RSS-Notifier/Info.plist";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;

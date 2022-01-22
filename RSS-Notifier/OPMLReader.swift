@@ -7,6 +7,8 @@
 
 import Foundation
 
+let subscriptions = "Subscriptions"
+let type = "xml"
 
 public struct Outline {
     var title = ""
@@ -31,7 +33,7 @@ class OPMLReader {
     func readOPML() -> [Outline]  {
         var outlines = [Outline]()
         
-        let xmlPath = Bundle.main.path(forResource: "Subscriptions", ofType: "xml")
+        let xmlPath = Bundle.main.path(forResource: subscriptions, ofType: type)
         if xmlPath == nil {
             NSLog("Failed to find Subscription file")
         }
@@ -41,16 +43,9 @@ class OPMLReader {
             let parser = XMLParser(data: data)
             let parserBase = ParserBase()
             parser.delegate = parserBase
-     
-     
-            
-            
-            
+
             parser.parse()
             outlines = parserBase.getOutlines()
-            
-            
-        
             
 
 //            for item in category.items {

@@ -112,19 +112,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.quitItem.keyEquivalent = "q"
         
         
-        
-
         // Creates a NSMenuItem to handle the RSS refresh
         self.refreshItem = NSMenuItem()
 //        self.refreshItem.title = "Refresh"
         self.refreshItem.attributedTitle = useCustomFont(title: "Refresh")
         self.refreshItem.action = #selector(refresh)
+        self.refreshItem.keyEquivalent = "r"
         self.refreshItem.target = self
     }
     
     func useCustomFont(title: String) -> NSMutableAttributedString {
         let font = NSFont(name: "OpenSans-Regular", size: fontsize)
-        return NSMutableAttributedString(string: title, attributes: [NSAttributedString.Key.font : font as Any])
+        return NSMutableAttributedString(string: title, attributes: [NSAttributedString.Key.font : font])
         
     }
     
@@ -174,10 +173,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         articleItem.representedObject = someObj
         articleItem.action = #selector(self.openBrowser(urlSender:))
         
+        for family in NSFontManager.shared.availableFontFamilies {
+            print(family)
+        }
+        
         var title = shortenText(item: article.title)
         title = title + " " + article.time
 //        articleItem.title = title
         articleItem.attributedTitle = useCustomFont(title: title)
+//        articleItem.attributedTitle = NSAttributedString(string: title, attributes: [NSAttributedString.Key.font : NSFont.init(name: "DecoType Naskh", size: 12)!])
         
         self.iconGroup.notify(queue: .main) {
 //            articleItem.image = self.icons[article.source]
@@ -210,7 +214,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //                    print("Visar notis för \(late.title)")
                     notifyUser(article: late)
                     self.usedTitle.append(late.title)
-                    sleep(1)
+                    sleep(2)
                 }
             }
             self.latestCopy = used
@@ -337,8 +341,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     
 
-     ///Opens the browser for the link that is sent.
-     ///Links the menu item with the action.
+    /// Opens the browser for the link that is sent.
+    /// Links the menu item with the action.
     ///  - Parameters:
     ///     urlSender - A NSMenuItem containing a link-
      

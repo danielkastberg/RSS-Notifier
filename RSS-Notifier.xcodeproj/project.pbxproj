@@ -17,7 +17,6 @@
 		65570AEB2778E46700DF91B2 /* FaviconFinder in Frameworks */ = {isa = PBXBuildFile; productRef = 65570AEA2778E46700DF91B2 /* FaviconFinder */; };
 		65621BBC2743070C00DE62C3 /* Subscriptions.xml in Resources */ = {isa = PBXBuildFile; fileRef = 65621BB92743070C00DE62C3 /* Subscriptions.xml */; };
 		65621BBE2743070C00DE62C3 /* OPMLReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65621BBB2743070C00DE62C3 /* OPMLReader.swift */; };
-		6572FAE32744639100DA9F99 /* Sub.xml in Resources */ = {isa = PBXBuildFile; fileRef = 6572FAE22744639100DA9F99 /* Sub.xml */; };
 		658103B827304E2F00974AAF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103B727304E2F00974AAF /* AppDelegate.swift */; };
 		658103BA27304E2F00974AAF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103B927304E2F00974AAF /* ViewController.swift */; };
 		658103BC27304E3100974AAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 658103BB27304E3100974AAF /* Assets.xcassets */; };
@@ -66,7 +65,6 @@
 		6534DDD82743C85900D500F2 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = "../../../../Downloads/Rss Logo-32-64-96-128-256-512px/icon.png"; sourceTree = "<group>"; };
 		65621BB92743070C00DE62C3 /* Subscriptions.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Subscriptions.xml; sourceTree = "<group>"; };
 		65621BBB2743070C00DE62C3 /* OPMLReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPMLReader.swift; sourceTree = "<group>"; };
-		6572FAE22744639100DA9F99 /* Sub.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Sub.xml; sourceTree = "<group>"; };
 		658103B727304E2F00974AAF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		658103B927304E2F00974AAF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		658103BB27304E3100974AAF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -125,7 +123,6 @@
 				658103C027304E3100974AAF /* RSS_Notifier.entitlements */,
 				65DD270027333B540057E47F /* RSSFeed.swift */,
 				65DD270127333B540057E47F /* RSSItem.swift */,
-				6572FAE22744639100DA9F99 /* Sub.xml */,
 				65621BB92743070C00DE62C3 /* Subscriptions.xml */,
 				651C8C59277A460900D491A0 /* TitleFormatting.swift */,
 				658103B927304E2F00974AAF /* ViewController.swift */,
@@ -212,7 +209,6 @@
 				658103BC27304E3100974AAF /* Assets.xcassets in Resources */,
 				652039F82789F3190027A7E3 /* OpenSans-Light.ttf in Resources */,
 				6534DDE12743C85900D500F2 /* icon.png in Resources */,
-				6572FAE32744639100DA9F99 /* Sub.xml in Resources */,
 				65621BBC2743070C00DE62C3 /* Subscriptions.xml in Resources */,
 				652039FA2789F4850027A7E3 /* OpenSans-Regular.ttf in Resources */,
 				658103F72730546900974AAF /* Main.storyboard in Resources */,

@@ -132,7 +132,7 @@ open class AlamofireRSSParser: NSObject, XMLParserDelegate {
             
             if (elementName == "title") {
                 let buff = self.currentString
-                let pattern = "^\\Wquot;|\\Wquot;|\\Wquot;$"
+                let pattern = "\\Wquot;|\\Wquot;|\\Wquot;|amp;"
                 let replacement = ""
                 let newSentence = buff!.replacingOccurrences(
                     of: pattern,

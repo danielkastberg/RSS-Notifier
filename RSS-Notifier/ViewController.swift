@@ -34,7 +34,14 @@ class ViewController: NSViewController {
         // Update the view, if already loaded.
         }
     }
-
-
+    
 }
+
+extension ViewController: NSTableViewDataSource {
+  
+  func numberOfRows(in tableView: NSTableView) -> Int {
+    return 6
+  }
+}
+
 

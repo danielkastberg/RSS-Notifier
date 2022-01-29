@@ -18,7 +18,6 @@ import FaviconFinder
  Maybe add read notification to be saved between instances
  Add some window for a quick read of the rss description
  Add a setting window, that the user can choose the time interval in which the news should be displayed.
- Change the font and size on the text displayed.
  
  */
 
@@ -27,7 +26,6 @@ import FaviconFinder
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem?
     private var statusBarMenu = NSMenu()
-    
     
     private var refreshItem = NSMenuItem()
     private var quitItem = NSMenuItem()
@@ -42,17 +40,36 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let fontsize: CGFloat = 12
 
     private var articlesCopy = [Article]()
-    
     var usedTitle = [String]()
     
+    @IBOutlet var settingsView: NSView!
+    
+    @IBOutlet weak var subTableView: NSTableView!
+    @IBOutlet weak var subTable: NSTableColumn!
+    
+    @IBOutlet weak var sources: NSTableColumn!
+    
     private var latest = [Article]()
+    
+
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        
+        
 
         let oplmR = OPMLReader()
         outlines = oplmR.readOPML()
+        
+        
+        
+        tableView(subTableView, viewFor: self.sources, row: 0)
+        
+        
+        
+        
+        
         
         loadIcons()
         
@@ -67,6 +84,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Removes the app from the dock
         NSApp.setActivationPolicy(.accessory)
     }
+
     
     func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
@@ -122,8 +140,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func useCustomFont(title: String) -> NSMutableAttributedString {
+    
+        
         let font = NSFont(name: "OpenSans-Regular", size: fontsize)
-        return NSMutableAttributedString(string: title, attributes: [NSAttributedString.Key.font : font])
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        paragraphStyle.firstLineHeadIndent = 5.0
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: font
+        ]
+//            print("URL of Favicon: \(favicon.url)")
+        
+//        return NSMutableAttributedString(string: title, attributes: [.font : font])
+        return NSMutableAttributedString(string: title, attributes: attributes)
+        
+        
+//
+//        do {
+//            try ObjC.catchException {
+//
+//               /* calls that might throw an NSException */
+//            }
+//        }
+//        catch {
+//            print("An error ocurred: \(error)")
+//        }
+
         
     }
     
@@ -181,7 +223,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         title = title + " " + article.time
 //        articleItem.title = title
         articleItem.attributedTitle = useCustomFont(title: title)
-//        articleItem.attributedTitle = NSAttributedString(string: title, attributes: [NSAttributedString.Key.font : NSFont.init(name: "DecoType Naskh", size: 12)!])
+
         
         self.iconGroup.notify(queue: .main) {
 //            articleItem.image = self.icons[article.source]
@@ -223,6 +265,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     ///Used to read the RSS. Is called when the user presses the "Refresh item"
     @objc func refresh() {
+        self.statusBarMenu.removeAllItems()
         createMenu()
         var articles = [Article]()
         var categories = [String]()
@@ -377,6 +420,54 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
         return true
     }
+}
+
+extension AppDelegate: NSTableViewDataSource {
+    func numberOfRows(in tableView: NSTableView) -> Int {
+        return self.outlines.count ?? 0
+    }
+}
+
+extension AppDelegate: NSTableViewDelegate {
+
+  fileprivate enum CellIdentifiers {
+    static let NameCell = "SourcesID"
+  }
+    
+    
+    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+
+        var image: NSImage?
+        var text: String = ""
+        var cellIdentifier = ""
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .long
+        
+        // 1
+        guard outlines[row] != nil else {
+          return nil
+        }
+        
+        // 2
+        if tableColumn == tableView.tableColumns[0] {
+            print("tom")
+            cellIdentifier = CellIdentifiers.NameCell
+        }
+        
+        // 3
+//        if let cell = tableView.make(withIdentifier: cellIdentifier, owner: nil) as? NSTableCellView {
+//          cell.textField?.stringValue = text
+//          return cell
+//        }
+
+        
+
+
+        return nil
+      }
+    
 }
 
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="OM9-l1-sTt">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -709,11 +709,11 @@
         <scene sceneID="nC3-W0-QlM">
             <objects>
                 <viewController id="OM9-l1-sTt" sceneMemberID="viewController">
-                    <view key="view" id="3Qa-a1-CPp">
+                    <view key="view" identifier="settingsView" id="3Qa-a1-CPp">
                         <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TlN-Nm-1p3">
+                            <scrollView identifier="SettingsTable" fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TlN-Nm-1p3">
                                 <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <clipView key="contentView" id="5CV-Tu-6QN">
@@ -724,7 +724,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="783" height="583"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Ip-UF-z81">
+                                                <scrollView identifier="Source" fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Ip-UF-z81">
                                                     <rect key="frame" x="159" y="73" width="465" height="173"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <clipView key="contentView" id="Drn-A2-3p0">
@@ -738,7 +738,7 @@
                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                                 <tableColumns>
-                                                                    <tableColumn width="212" minWidth="40" maxWidth="1000" id="SaR-XS-eLP">
+                                                                    <tableColumn identifier="SourcesID" width="212" minWidth="40" maxWidth="1000" id="SaR-XS-eLP">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Source">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -753,20 +753,6 @@
                                                                             <tableCellView id="y1I-9T-mT2">
                                                                                 <rect key="frame" x="8" y="0.0" width="210" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                                <subviews>
-                                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5EM-jO-12l">
-                                                                                        <rect key="frame" x="0.0" y="4" width="210" height="16"/>
-                                                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                                                        <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="u6S-oI-L1n">
-                                                                                            <font key="font" usesAppearanceFont="YES"/>
-                                                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                                        </textFieldCell>
-                                                                                    </textField>
-                                                                                </subviews>
-                                                                                <connections>
-                                                                                    <outlet property="textField" destination="5EM-jO-12l" id="0PR-0s-OfT"/>
-                                                                                </connections>
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
@@ -849,7 +835,14 @@
                                 </scroller>
                             </scrollView>
                         </subviews>
+                        <connections>
+                            <outlet property="SubTable" destination="pDT-Zl-Lze" id="xoH-xn-PWn"/>
+                            <outlet property="sources" destination="SaR-XS-eLP" id="Shy-Pt-qHr"/>
+                        </connections>
                     </view>
+                    <connections>
+                        <outlet property="settingsView" destination="3Qa-a1-CPp" id="h0Q-Xr-Hv0"/>
+                    </connections>
                 </viewController>
                 <customObject id="g0t-jM-0Gf" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>

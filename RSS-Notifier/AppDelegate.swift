@@ -42,12 +42,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var articlesCopy = [Article]()
     var usedTitle = [String]()
     
-    @IBOutlet var settingsView: NSView!
-    
-    @IBOutlet weak var subTableView: NSTableView!
-    @IBOutlet weak var subTable: NSTableColumn!
-    
-    @IBOutlet weak var sources: NSTableColumn!
+
+    @IBOutlet weak var sourceTableView: NSTableView!
     
     private var latest = [Article]()
     
@@ -63,14 +59,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         outlines = oplmR.readOPML()
         
         
-        
-        tableView(subTableView, viewFor: self.sources, row: 0)
-        
-        
-        
-        
-        
-        
+
         loadIcons()
         
         
@@ -153,20 +142,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
 //        return NSMutableAttributedString(string: title, attributes: [.font : font])
         return NSMutableAttributedString(string: title, attributes: attributes)
-        
-        
-//
-//        do {
-//            try ObjC.catchException {
-//
-//               /* calls that might throw an NSException */
-//            }
-//        }
-//        catch {
-//            print("An error ocurred: \(error)")
-//        }
-
-        
     }
     
     
@@ -215,9 +190,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         articleItem.representedObject = someObj
         articleItem.action = #selector(self.openBrowser(urlSender:))
         
-        for family in NSFontManager.shared.availableFontFamilies {
-            print(family)
-        }
         
         var title = shortenText(item: article.title)
         title = title + " " + article.time
@@ -285,9 +257,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 
             AF.request(url).responseRSS() { [weak self] (response) -> Void in
                 if (response.error != nil) {
+                    self?.statusBarMenu.removeAllItems()
                     notfiyOffline()
-                    self!.statusBarMenu.addItem(self!.quitItem)
-                    self!.statusBarMenu.addItem(self!.refreshItem)
+                    let offlineItem = NSMenuItem()
+                    offlineItem.attributedTitle = self?.useCustomFont(title: "No news found")
+                    self?.statusBarMenu.addItem(offlineItem)
+                    self?.statusBarMenu.addItem(self!.quitItem)
+                    self?.statusBarMenu.addItem(self!.refreshItem)
+                    self?.statusItem?.menu = self?.statusBarMenu
                     return
                 }
                 if let feed: RSSFeed = response.value {
@@ -422,53 +399,53 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
-extension AppDelegate: NSTableViewDataSource {
-    func numberOfRows(in tableView: NSTableView) -> Int {
-        return self.outlines.count ?? 0
-    }
-}
+//extension AppDelegate: NSTableViewDataSource {
+//    func numberOfRows(in tableView: NSTableView) -> Int {
+//        return self.outlines.count ?? 0
+//    }
+//}
 
-extension AppDelegate: NSTableViewDelegate {
-
-  fileprivate enum CellIdentifiers {
-    static let NameCell = "SourcesID"
-  }
-    
-    
-    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-
-        var image: NSImage?
-        var text: String = ""
-        var cellIdentifier = ""
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .long
-        
-        // 1
-        guard outlines[row] != nil else {
-          return nil
-        }
-        
-        // 2
-        if tableColumn == tableView.tableColumns[0] {
-            print("tom")
-            cellIdentifier = CellIdentifiers.NameCell
-        }
-        
-        // 3
-//        if let cell = tableView.make(withIdentifier: cellIdentifier, owner: nil) as? NSTableCellView {
-//          cell.textField?.stringValue = text
-//          return cell
+//extension AppDelegate: NSTableViewDelegate {
+//
+//  fileprivate enum CellIdentifiers {
+//    static let NameCell = "SourcesID"
+//  }
+//
+//
+//    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+//
+//        var image: NSImage?
+//        var text: String = ""
+//        var cellIdentifier = ""
+//
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateStyle = .long
+//        dateFormatter.timeStyle = .long
+//
+//        // 1
+//        guard outlines[row] != nil else {
+//          return nil
 //        }
-
-        
-
-
-        return nil
-      }
-    
-}
+//
+//        // 2
+//        if tableColumn == tableView.tableColumns[0] {
+//            print("tom")
+//            cellIdentifier = CellIdentifiers.NameCell
+//        }
+//
+//        // 3
+////        if let cell = tableView.make(withIdentifier: cellIdentifier, owner: nil) as? NSTableCellView {
+////          cell.textField?.stringValue = text
+////          return cell
+////        }
+//
+//
+//
+//
+//        return nil
+//      }
+//
+//}
 
 
 

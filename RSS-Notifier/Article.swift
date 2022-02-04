@@ -12,7 +12,6 @@ public struct Article {
     var title = ""
     var date = Date()
     var link = ""
-    var icon = ""
     var category = ""
     var desc = ""
     var timeSincePubInMin = 0
@@ -34,7 +33,6 @@ func createArticle(_ item: RSSItem, _ outline: Outline, _ time: Int) -> Article 
     var article = Article()
     article.title = item.title ?? ""
     article.link = item.link ?? ""
-    article.icon = outline.html
     article.date = item.pubDate ?? Date.now
     article.time = calculateTime(minutesSincePub: time)
     article.category = outline.category

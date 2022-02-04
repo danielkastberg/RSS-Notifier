@@ -29,6 +29,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private var refreshItem = NSMenuItem()
     private var quitItem = NSMenuItem()
+    private var settingItem = NSMenuItem()
+    
+    private var windowController : NSWindowController!
 
     
     private var outlines = [Outline]()
@@ -42,9 +45,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var articlesCopy = [Article]()
     var usedTitle = [String]()
     
-
-    @IBOutlet weak var sourceTableView: NSTableView!
-    
     private var latest = [Article]()
     
 
@@ -53,8 +53,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         super.awakeFromNib()
         
         
-        
-
         let oplmR = OPMLReader()
         outlines = oplmR.readOPML()
         
@@ -99,10 +97,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+   /// Quits the program
+   @objc func quit () {
+       exit(0)
+   }
+    
+    /// Opens the browser for the link that is sent.
+    /// Links the menu item with the action.
+    ///  - Parameters:
+    ///     urlSender - A NSMenuItem containing a link-
      
-    /// Quits the program
-    @objc func quit () {
-        exit(0)
+    @objc func openBrowser(urlSender: NSMenuItem) {
+        let urlString = urlSender.representedObject
+        guard let url = URL(string: urlString as! String) else {
+            return
+        }
+        NSWorkspace.shared.open(url)
+    }
+    
+    @objc func openSettings() {
+        if windowController != nil {
+            windowController.close()
+        }
+        let mainStoryBoard = NSStoryboard(name: "Main", bundle: nil)
+        windowController = mainStoryBoard.instantiateController(withIdentifier: "Settings") as? NSWindowController
+        // Move the window to the top of all windows
+        windowController.window?.orderFrontRegardless()
     }
     
 
@@ -117,6 +137,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.quitItem.attributedTitle = useCustomFont(title: "Quit")
         self.quitItem.action = #selector(quit)
         self.quitItem.keyEquivalent = "q"
+        self.quitItem.target = self
+        
+        
+        self.refreshItem = NSMenuItem()
+        self.settingItem.attributedTitle = useCustomFont(title: "Settings")
+        self.settingItem.keyEquivalent = "s"
+        self.settingItem.action = #selector(openSettings)
         
         
         // Creates a NSMenuItem to handle the RSS refresh
@@ -126,6 +153,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.refreshItem.action = #selector(refresh)
         self.refreshItem.keyEquivalent = "r"
         self.refreshItem.target = self
+    }
+    
+   private func addToMenu() {
+        self.statusBarMenu.addItem(self.settingItem)
+        self.statusBarMenu.addItem(self.quitItem)
+        self.statusBarMenu.addItem(self.refreshItem)
     }
     
     func useCustomFont(title: String) -> NSMutableAttributedString {
@@ -138,7 +171,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let attributes: [NSAttributedString.Key: Any] = [
             .font: font
         ]
-//            print("URL of Favicon: \(favicon.url)")
         
 //        return NSMutableAttributedString(string: title, attributes: [.font : font])
         return NSMutableAttributedString(string: title, attributes: attributes)
@@ -147,7 +179,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     
     /// Checks if there is an image to use as icon, If not loads a title instead
-    func loadAppIcon() {
+    private func loadAppIcon() {
         DispatchQueue.main.async {
             guard let image = NSImage(named: "AppIcon") else {
                 self.statusItem?.button?.title = "RSS Notifier"
@@ -262,8 +294,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     let offlineItem = NSMenuItem()
                     offlineItem.attributedTitle = self?.useCustomFont(title: "No news found")
                     self?.statusBarMenu.addItem(offlineItem)
-                    self?.statusBarMenu.addItem(self!.quitItem)
-                    self?.statusBarMenu.addItem(self!.refreshItem)
+                    self?.addToMenu()
                     self?.statusItem?.menu = self?.statusBarMenu
                     return
                 }
@@ -334,8 +365,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             lineItem.view = lineView
             self.statusBarMenu.addItem(lineItem)
    
-            self.statusBarMenu.addItem(self.quitItem)
-            self.statusBarMenu.addItem(self.refreshItem)
+            self.addToMenu()
         }
         
         
@@ -359,25 +389,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
 
-    
-
-    /// Opens the browser for the link that is sent.
-    /// Links the menu item with the action.
-    ///  - Parameters:
-    ///     urlSender - A NSMenuItem containing a link-
-     
-    @objc func openBrowser(urlSender: NSMenuItem) {
-        let urlString = urlSender.representedObject
-        guard let url = URL(string: urlString as! String) else {
-            return
-        }
-        NSWorkspace.shared.open(url)
-    }
-    
-
-    
-
-    
     private func convert(minutes: Int) -> (hours: Int, minutes: Int) {
         return ((minutes % 3600) / 60, (minutes % 3600) % 60)
     }
@@ -398,54 +409,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return true
     }
 }
-
-//extension AppDelegate: NSTableViewDataSource {
-//    func numberOfRows(in tableView: NSTableView) -> Int {
-//        return self.outlines.count ?? 0
-//    }
-//}
-
-//extension AppDelegate: NSTableViewDelegate {
-//
-//  fileprivate enum CellIdentifiers {
-//    static let NameCell = "SourcesID"
-//  }
-//
-//
-//    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-//
-//        var image: NSImage?
-//        var text: String = ""
-//        var cellIdentifier = ""
-//
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateStyle = .long
-//        dateFormatter.timeStyle = .long
-//
-//        // 1
-//        guard outlines[row] != nil else {
-//          return nil
-//        }
-//
-//        // 2
-//        if tableColumn == tableView.tableColumns[0] {
-//            print("tom")
-//            cellIdentifier = CellIdentifiers.NameCell
-//        }
-//
-//        // 3
-////        if let cell = tableView.make(withIdentifier: cellIdentifier, owner: nil) as? NSTableCellView {
-////          cell.textField?.stringValue = text
-////          return cell
-////        }
-//
-//
-//
-//
-//        return nil
-//      }
-//
-//}
 
 
 
@@ -489,11 +452,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
           print("user tapped the notification bar when the app is in background")
             application.setActivationPolicy(.accessory)
         }
-        
-        /* Change root view controller to a specific viewcontroller */
-        // let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        // let vc = storyboard.instantiateViewController(withIdentifier: "ViewControllerStoryboardID") as? ViewController
-        // self.window?.rootViewController = vc
+
         
         return completionHandler(.list)
     }

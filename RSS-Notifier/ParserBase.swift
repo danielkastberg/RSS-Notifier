@@ -24,8 +24,6 @@ class ParserBase : NSObject, XMLParserDelegate  {
 
 
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
-        
-        
         if elementName == "category" {
             categoryName = attributeDict["title"]! as String
         }

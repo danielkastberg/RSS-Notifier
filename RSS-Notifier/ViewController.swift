@@ -9,39 +9,53 @@ import Cocoa
 
 class ViewController: NSViewController {
     
-    var statusItem: NSStatusItem?
-
+    private var outlines = [Outline]()
+    
+    @IBOutlet var tableView: NSTableView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("Här får jag inte vara. Det finns barn här")
-
+        let oplmR = OPMLReader()
+        outlines = oplmR.readOPML()
         
-        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        statusItem?.button?.title = "RSS Notifier"
-        let statusBarMenu = NSMenu(title: "Cap Status Bar Menu")
-        let refreshItem = NSMenuItem()
-        refreshItem.title = "Refresh"
-        refreshItem.target = self
-        statusBarMenu.addItem(refreshItem)
-        statusItem?.menu = statusBarMenu
-
-        // Do any additional setup after loading the view.
-    }
-
-    override var representedObject: Any? {
-        didSet {
-        // Update the view, if already loaded.
-        }
+        // reload tableview
+        tableView.reloadData()
     }
     
 }
 
-extension ViewController: NSTableViewDataSource {
-  
-  func numberOfRows(in tableView: NSTableView) -> Int {
-    return 6
-  }
+extension ViewController: NSTableViewDataSource, NSTableViewDelegate {
+    
+    
+    func numberOfRows(in tableView: NSTableView) -> Int {
+        return (outlines.count)
+    }
+    
+    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+        let item = outlines[row]
+        var text = ""
+        var image: NSImage?
+        
+        //    guard let cell = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self) as? NSTableCellView else { return nil }
+        //    cell.textField?.stringValue = item[TableColumn!.identifier.rawValue]!
+        //      cell.textField?.stringValue = item.title
+        if tableColumn == tableView.tableColumns[0] {
+            text = item.title
+            image = loadImage(item.title)
+        }
+        if tableColumn == tableView.tableColumns[1] {
+            text = item.xmlUrl
+        }
+        
+        if let cell =  tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self) as? NSTableCellView {
+            cell.textField?.stringValue = text
+            cell.imageView?.image = image
+            return cell
+        }
+        
+        
+        return nil
+    }
 }
-
-

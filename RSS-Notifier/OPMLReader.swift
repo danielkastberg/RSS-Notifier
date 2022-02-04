@@ -37,9 +37,9 @@ class OPMLReader {
         if xmlPath == nil {
             NSLog("Failed to find Subscription file")
         }
-        let url1 = URL(fileURLWithPath: xmlPath!) 
+        let url = URL(fileURLWithPath: xmlPath!)
         do {
-            let data = try Data(contentsOf: url1)
+            let data = try Data(contentsOf: url)
             let parser = XMLParser(data: data)
             let parserBase = ParserBase()
             parser.delegate = parserBase
@@ -56,6 +56,11 @@ class OPMLReader {
             NSLog("Failed to parse opml file")
         }
         return outlines
+    }
+    
+    
+    func writeOPML() {
+        
     }
 }
 

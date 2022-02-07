@@ -6,10 +6,18 @@
 //
 
 import Cocoa
+//@objcMembers private class OutlineClass: NSObject {
+//    var title = ""
+//    var html = ""
+//    var xmlUrl = ""
+//    var icon = ""
+//    var category = ""
+//}
 
 class ViewController: NSViewController {
     
     private var outlines = [Outline]()
+//    private var outlineClass = [OutlineClass]()
     
     @IBOutlet var tableView: NSTableView!
     
@@ -19,12 +27,25 @@ class ViewController: NSViewController {
         
         let oplmR = OPMLReader()
         outlines = oplmR.readOPML()
+//        convertOutline(outlines: outlines)
+        
         
         // reload tableview
         tableView.reloadData()
     }
+//    private func convertOutline(outlines: [Outline]) {
+//        for outline in outlines {
+//            let outC = OutlineClass()
+//            outC.title = outline.title
+//            outC.xmlUrl = outline.xmlUrl
+//            outC.category = outline.category
+//            self.outlineClass.append(outC)
+//        }
+//    }
     
 }
+
+
 
 extension ViewController: NSTableViewDataSource, NSTableViewDelegate {
     
@@ -51,7 +72,7 @@ extension ViewController: NSTableViewDataSource, NSTableViewDelegate {
             text = item.xmlUrl
         }
         
-        if let cell =  tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self) as? NSTableCellView {
+        if let cell = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self) as? NSTableCellView {
             cell.textField?.stringValue = text
             cell.imageView?.image = image
             return cell
@@ -61,7 +82,12 @@ extension ViewController: NSTableViewDataSource, NSTableViewDelegate {
         return nil
     }
     
-    func filterList() {
-        outlines.sorted{$0.title > $1.title}
+    
+    // I think I have to change something here
+    func tableView(_ tableView: NSTableView, sortDescriptorsDidChange oldDescriptors: [NSSortDescriptor]) {
+        let personsAsMutableArray = NSMutableArray(array: outlines)
+        personsAsMutableArray.sort(using: tableView.sortDescriptors)
+        outlines = personsAsMutableArray as! [Outline]
+        tableView.reloadData()
     }
 }

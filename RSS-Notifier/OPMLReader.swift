@@ -10,7 +10,15 @@ import Foundation
 let subscriptions = "Subscriptions"
 let type = "xml"
 
-public struct Outline {
+//public struct Outline {
+//    var title = ""
+//    var html = ""
+//    var xmlUrl = ""
+//    var icon = ""
+//    var category = ""
+//}
+
+@objcMembers public class Outline: NSObject {
     var title = ""
     var html = ""
     var xmlUrl = ""

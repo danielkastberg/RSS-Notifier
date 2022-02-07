@@ -38,14 +38,16 @@ extension ViewController: NSTableViewDataSource, NSTableViewDelegate {
         var text = ""
         var image: NSImage?
         
-        //    guard let cell = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self) as? NSTableCellView else { return nil }
-        //    cell.textField?.stringValue = item[TableColumn!.identifier.rawValue]!
-        //      cell.textField?.stringValue = item.title
+        
         if tableColumn == tableView.tableColumns[0] {
             text = item.title
             image = loadImage(item.title)
         }
         if tableColumn == tableView.tableColumns[1] {
+            text = item.category
+        }
+        
+        if tableColumn == tableView.tableColumns[2] {
             text = item.xmlUrl
         }
         
@@ -57,5 +59,9 @@ extension ViewController: NSTableViewDataSource, NSTableViewDelegate {
         
         
         return nil
+    }
+    
+    func filterList() {
+        outlines.sorted{$0.title > $1.title}
     }
 }

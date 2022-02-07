@@ -8,6 +8,7 @@
 import AppKit
 
 private let directory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+private let fh = FileHandler()
 
 
 private func cleanName(_ fileName: String) -> String {
@@ -32,9 +33,10 @@ func imageExist(_ fileName: String) -> Bool {
 
 
 func saveImage(_ imageTitle: String, _ icon: NSImage) {
-    let cleanTitle = cleanName(imageTitle)
-    let url = directory.appendingPathComponent(cleanTitle+".png")
+//    let cleanTitle = cleanName(imageTitle)
+//    let url = directory.appendingPathComponent(cleanTitle+".png")
 
+    let url = fh.createFileName(imageTitle, "png", directory)
     // Convert to Data
     if let data = icon.tiffRepresentation {
         do {
@@ -47,10 +49,9 @@ func saveImage(_ imageTitle: String, _ icon: NSImage) {
 
 
 func loadImageURL(_ imageTitle: String) -> URL {
-    let cleanTitle = cleanName(imageTitle)
-    let imageURL = directory.appendingPathComponent(cleanTitle+".png")
-    
-    return imageURL
+//    let cleanTitle = cleanName(imageTitle)
+//    let imageURL = directory.appendingPathComponent(cleanTitle+".png")
+    return fh.createFileName(imageTitle, "png", directory)
 }
 
 func loadImage(_ imageTitle: String) -> NSImage? {

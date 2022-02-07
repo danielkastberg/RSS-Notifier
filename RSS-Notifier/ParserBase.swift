@@ -26,6 +26,17 @@ class ParserBase : NSObject, XMLParserDelegate  {
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
         if elementName == "category" {
             categoryName = attributeDict["title"]! as String
+//            listOfCategories[count].outlines = listOfOutlines
+//            var category = Category()
+//            category.title = categoryName
+            
+//            listOfCategories.append(category)
+//            count += 1
+            
+            var category = Category()
+            category.title = categoryName
+            category.outlines = listOfOutlines
+            listOfCategories.append(category)
         }
         
         if elementName == "outline" {
@@ -78,16 +89,26 @@ class ParserBase : NSObject, XMLParserDelegate  {
     }
     
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-//        if elementName == "category" {
+        if elementName == "category" {
+//            var category = Category()
+//            categoryName = elementName
+//            category.title = categoryName
+//            category.outlines = listOfOutlines
+//            listOfCategories.append(category)
 //            listOfCategories[count].outlines = listOfOutlines
 //            count += 1
 //            listOfOutlines = [Outline]()
-//        }
+            
+        }
         
     }
     
     func getOutlines() -> [Outline] {
         return listOfOutlines
+    }
+    
+    func getCategories() -> [Category] {
+        return listOfCategories
     }
 
 }

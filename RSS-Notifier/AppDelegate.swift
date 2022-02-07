@@ -56,6 +56,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let oplmR = OPMLReader()
         outlines = oplmR.readOPML()
         
+        oplmR.writeOPML()
+        
         
 
         loadIcons()

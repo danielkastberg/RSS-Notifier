@@ -20,7 +20,7 @@ import UserNotifications
  
  */
 @main
-class AppDelegate: NSObject, NSApplicationDelegate, ViewDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate {
     
     private var statusItem: NSStatusItem?
     private var statusBarMenu = NSMenu()

@@ -716,6 +716,9 @@
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="removeSource:" target="XfG-lQ-9wD" id="UaR-xz-Pbs"/>
+                                </connections>
                             </button>
                             <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="29" horizontalPageScroll="10" verticalLineScroll="29" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sr4-fO-vG0">
                                 <rect key="frame" x="168" y="146" width="656" height="240"/>
@@ -860,6 +863,7 @@
                         </subviews>
                     </view>
                     <connections>
+                        <outlet property="removeSource" destination="Wkk-82-IVA" id="trS-Rz-eiT"/>
                         <outlet property="tableView" destination="9y4-0z-X8s" id="g2L-Vi-a19"/>
                     </connections>
                 </viewController>

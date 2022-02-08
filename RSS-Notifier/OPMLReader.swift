@@ -29,7 +29,6 @@ let type = "xml"
 
 public struct Category {
     var title = ""
-    var numberOf: Int = 0
     var outlines = [Outline]()
   
 }
@@ -38,7 +37,7 @@ public struct Category {
 
 
 class OPMLReader {
-    private let directory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+    private let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     private var listOfCategories = [Category]()
     func readOPML() -> [Outline]  {
         var outlines = [Outline]()
@@ -70,7 +69,7 @@ class OPMLReader {
     }
     
     
-    func writeOPML() {
+    func writeOPML(_ outlines: [Outline]) {
 //        let xmlPath = Bundle.main.path(forResource: subscriptions, ofType: type)
 //        var url = URL(fileURLWithPath: xmlPath!)
 //    do {
@@ -81,10 +80,6 @@ class OPMLReader {
 //    catch {
 //        print("hel")
 //    }
-    
-        
-        
-        let outlines = readOPML()
         let root = XMLElement(name: "opml")
         let unicode = XMLNode.attribute(withName: "version", stringValue: "1.0") as! XMLNode
         root.addAttribute(unicode)
@@ -93,32 +88,34 @@ class OPMLReader {
         let body = XMLElement(name: "body")
         root.addChild(XMLElement(name: "head", stringValue:"RSS Notifier Subscriptions"))
         root.addChild(body)
+
         for category in listOfCategories {
             let cat = XMLNode.attribute(withName: "title", stringValue: category.title) as! XMLNode
             let catElm = XMLElement(name: "category")
+            print(catElm)
             catElm.addAttribute(cat)
             body.addChild(catElm)
+            
             for outline in outlines {
+                // Categorize and create outlines
                 if outline.category == category.title {
-                    let outElm = XMLElement(name: "outline")
-                    let title = XMLNode.attribute(withName: "title", stringValue: outline.title) as! XMLNode
-                    let htmlUrl = XMLNode.attribute(withName: "htmlUrl", stringValue: outline.html) as! XMLNode
-                    let xmlUrl = XMLNode.attribute(withName: "xmlUrl", stringValue: outline.xmlUrl) as! XMLNode
-                    outElm.addAttribute(title)
-                    outElm.addAttribute(htmlUrl)
-                    outElm.addAttribute(xmlUrl)
-        
-//                    outElm.attributes?.append(XMLElement(name: "htmlUrl", stringValue: outline.html))
+                    let outElm = outlineElm(outline)
                     catElm.addChild(outElm)
                 }
             }
+            
+            // Remove a category element if it is empty
+            if catElm.childCount == 0 && cat.stringValue! == listOfCategories[catElm.index].title {
+                listOfCategories.remove(at: catElm.index)
+                body.removeChild(at: catElm.index)
+            }
         }
+     
         // Convert to Data
         let opt = XMLNode.Options.nodePrettyPrint
         let data = xml.xmlData(options: opt)
         print(xml.xmlString(options: opt))
         let filePath = directory.appendingPathComponent("Subb"+".xml")
-        print(filePath)
         
         do {
             try data.write(to: filePath)
@@ -127,20 +124,35 @@ class OPMLReader {
         catch let error as NSError {
             print("Error writing values \(error)")
         }
-        
-        
-//        for category in listOfCategories {
-//            print(category)
-//        }
-//
-//        for outline in outlines {
-//            print(outline.category)
-//
-//        }
-        
-        
-        
     }
+    
+
+    /// Creates an XMLElement with all the attributes for an outline
+    ///  - Parameters:
+    ///     outline - The outline with attributes
+    ///
+    ///   - Returns:XMLElement
+    private func outlineElm(_ outline: Outline) -> XMLElement {
+        let outElm = XMLElement(name: "outline")
+        let title = XMLNode.attribute(withName: "title", stringValue: outline.title) as! XMLNode
+        let htmlUrl = XMLNode.attribute(withName: "htmlUrl", stringValue: outline.html) as! XMLNode
+        let xmlUrl = XMLNode.attribute(withName: "xmlUrl", stringValue: outline.xmlUrl) as! XMLNode
+        outElm.addAttribute(title)
+        outElm.addAttribute(htmlUrl)
+        outElm.addAttribute(xmlUrl)
+        return outElm
+    }
+    
+    
+    //    private func convertOutline(outlines: [Outline]) -> [OutlineClass] {
+    //        for outline in outlines {
+    //            let outC = OutlineClass()
+    //            outC.title = outline.title
+    //            outC.xmlUrl = outline.xmlUrl
+    //            outC.category = outline.category
+    //            self.outlineClass.append(outC)
+    //        }
+    //    }
 }
 
 

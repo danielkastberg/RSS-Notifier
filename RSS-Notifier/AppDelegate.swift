@@ -52,24 +52,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        
         let oplmR = OPMLReader()
         outlines = oplmR.readOPML()
         
-        oplmR.writeOPML()
-        
-        
-
         loadIcons()
-        
         
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         
-
         refresh()
         loadAppIcon()
   
-        
         // Removes the app from the dock
         NSApp.setActivationPolicy(.accessory)
     }

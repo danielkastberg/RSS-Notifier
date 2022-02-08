@@ -6,48 +6,57 @@
 //
 
 import Cocoa
-//@objcMembers private class OutlineClass: NSObject {
-//    var title = ""
-//    var html = ""
-//    var xmlUrl = ""
-//    var icon = ""
-//    var category = ""
-//}
 
 class ViewController: NSViewController {
     
     private var outlines = [Outline]()
 //    private var outlineClass = [OutlineClass]()
     
+    private let oplmR = OPMLReader()
     @IBOutlet var tableView: NSTableView!
+    @IBAction func removeSource(_ sender: Any) {
+        let selectedItem = tableView.selectedRow
+        print(selectedItem)
+        if selectedItem < 0 {
+            return
+        }
+        let title = outlines[selectedItem].title
+        let category = outlines[selectedItem].category
+        let link = outlines[selectedItem].xmlUrl
+        
+        for outline in outlines {
+            if title == outline.title && category == outline.category {
+                outlines.remove(at: selectedItem)
+            }
+        }
+        
+        
+        tableView.reloadData()
+        
+
+        oplmR.writeOPML(outlines)
+    }
+    
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let oplmR = OPMLReader()
+     
         outlines = oplmR.readOPML()
-//        convertOutline(outlines: outlines)
-        
+//        outlineClass = opmlR.convertOutline(outlines: outlines)
         
         // reload tableview
         tableView.reloadData()
     }
-//    private func convertOutline(outlines: [Outline]) {
-//        for outline in outlines {
-//            let outC = OutlineClass()
-//            outC.title = outline.title
-//            outC.xmlUrl = outline.xmlUrl
-//            outC.category = outline.category
-//            self.outlineClass.append(outC)
-//        }
-//    }
     
 }
 
 
 
 extension ViewController: NSTableViewDataSource, NSTableViewDelegate {
+    
+    
     
     
     func numberOfRows(in tableView: NSTableView) -> Int {
@@ -83,7 +92,6 @@ extension ViewController: NSTableViewDataSource, NSTableViewDelegate {
     }
     
     
-    // I think I have to change something here
     func tableView(_ tableView: NSTableView, sortDescriptorsDidChange oldDescriptors: [NSSortDescriptor]) {
         let personsAsMutableArray = NSMutableArray(array: outlines)
         personsAsMutableArray.sort(using: tableView.sortDescriptors)

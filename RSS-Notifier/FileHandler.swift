@@ -21,14 +21,14 @@ class FileHandler {
         return shorterName
     }
 
-    func createFileName(_ filename: String, _ fileFormat: String, _ dir: URL) -> URL {
+    func createFileName(filename: String, fileFormat: String, dir: URL) -> URL {
         let cleanTitle = cleanName(filename)
         let url = dir.appendingPathComponent(cleanTitle + "." + fileFormat)
         return url
     }
 
     func fileExists(filename: String, fileFormat: String, dir: URL) -> Bool {
-        let file = createFileName(filename, filename, dir)
+        let file = createFileName(filename: filename, fileFormat: fileFormat, dir: dir)
         return FileManager.default.fileExists(atPath: file.path)
     }
 }

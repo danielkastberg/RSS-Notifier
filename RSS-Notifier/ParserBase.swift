@@ -26,17 +26,6 @@ class ParserBase : NSObject, XMLParserDelegate  {
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
         if elementName == "category" {
             categoryName = attributeDict["title"]! as String
-//            listOfCategories[count].outlines = listOfOutlines
-//            var category = Category()
-//            category.title = categoryName
-            
-//            listOfCategories.append(category)
-//            count += 1
-            
-            var category = Category()
-            category.title = categoryName
-            category.outlines = listOfOutlines
-            listOfCategories.append(category)
         }
         
         if elementName == "outline" {
@@ -58,10 +47,10 @@ class ParserBase : NSObject, XMLParserDelegate  {
             }
             
             if attributeDict["xmlUrl"] == nil {
-                outline.xmlUrl = ""
+                outline.rss = ""
             }
             else {
-                outline.xmlUrl = attributeDict["xmlUrl"]! as String
+                outline.rss = attributeDict["xmlUrl"]! as String
                 if outline.html.last == "/" {
                     outline.icon = outline.html+"favicon.ico"
                 }

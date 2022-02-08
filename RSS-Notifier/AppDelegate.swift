@@ -8,7 +8,6 @@
 import Cocoa
 import Alamofire
 import UserNotifications
-import FaviconFinder
 
 
 
@@ -31,7 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var quitItem = NSMenuItem()
     private var settingItem = NSMenuItem()
     
-    private var windowController : NSWindowController!
+    private var windowController: NSWindowController!
 
     
     private var outlines = [Outline]()
@@ -52,15 +51,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        let oplmR = OPMLReader()
+        let oplmR = OPMLHandler()
         outlines = oplmR.readOPML()
         
         loadIcons()
         
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         
-        refresh()
+        if !outlines.isEmpty {
+            refresh()
+        }
+        else {
+            createMenu()
+            emptyMenu(message: "No news source found")
+        }
+        
+
         loadAppIcon()
+        
   
         // Removes the app from the dock
         NSApp.setActivationPolicy(.accessory)
@@ -78,7 +86,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 iconGroup.enter()
                 do {
                     if !imageExist(out.title) {
-                        let icon = try await self.getFavicon(html: out.html)
+                        let icon = try await getFavicon(html: out.html)
 //                      icons[out.title] = icon
                         saveImage(out.title, icon)
                     }
@@ -114,7 +122,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             windowController.close()
         }
         let mainStoryBoard = NSStoryboard(name: "Main", bundle: nil)
-        windowController = mainStoryBoard.instantiateController(withIdentifier: "Settings") as? NSWindowController
+        windowController = mainStoryBoard.instantiateController(withIdentifier: "settings") as? NSWindowController
         // Move the window to the top of all windows
         windowController.window?.orderFrontRegardless()
     }
@@ -155,6 +163,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.statusBarMenu.addItem(self.refreshItem)
     }
     
+    private func emptyMenu(message: String) {
+        let offlineItem = NSMenuItem()
+        offlineItem.attributedTitle = useCustomFont(title: message)
+        statusBarMenu.addItem(offlineItem)
+        addToMenu()
+        statusItem?.menu = statusBarMenu
+    }
+    
     func useCustomFont(title: String) -> NSMutableAttributedString {
     
         
@@ -191,18 +207,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     ///  - Parameters:
     ///     html - The link of the website
     ///
-    ///   - Returns:Icon from the website
-    func getFavicon(html: String) async throws -> NSImage {
-        let iconUrl = URL(string: (html))!
-        do {
-            let favicon = try await FaviconFinder(url: iconUrl).downloadFavicon()
-//            print("URL of Favicon: \(favicon.url)")
-            return favicon.image
-        } catch {
-            throw FaviconError.failedToFindFavicon
-        }
-    
-    }
+    ///  - Returns: icon from the website
+//    func getFavicon(html: String) async throws -> NSImage {
+//        guard let iconUrl = URL(string: (html)) else {
+//            let image = NSImage(named: "AppIcon")!
+//            return image
+//        }
+//        do {
+//            let favicon = try await FaviconFinder(url: iconUrl).downloadFavicon()
+////            print("URL of Favicon: \(favicon.url)")
+//            return favicon.image
+//        } catch {
+//            throw FaviconError.failedToFindFavicon
+//        }
+//    }
     
     
     /// Creates a NSMenuItem and asignes it a title with a
@@ -226,7 +244,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.iconGroup.notify(queue: .main) {
 //            articleItem.image = self.icons[article.source]
 //            articleItem.image?.size = CGSize(width: 15, height: 15)
-            guard let image = loadImage(article.source) else {
+            guard let image = openImage(article.source) else {
                 return
             }
             articleItem.image = image
@@ -268,15 +286,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         var articles = [Article]()
         var categories = [String]()
         let group = DispatchGroup()
+        
 
+        if outlines.isEmpty {
+            emptyMenu(message: "No news source found")
+            return
+        }
         
         var used = [String]()
-        
 
         for out in outlines {
             group.enter()
                 
-            let url = URL(string: out.xmlUrl)!
+            let url = URL(string: out.rss)!
             
             let category = out.category
             categories.append(category)
@@ -285,11 +307,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 if (response.error != nil) {
                     self?.statusBarMenu.removeAllItems()
                     notfiyOffline()
-                    let offlineItem = NSMenuItem()
-                    offlineItem.attributedTitle = self?.useCustomFont(title: "No news found")
-                    self?.statusBarMenu.addItem(offlineItem)
-                    self?.addToMenu()
-                    self?.statusItem?.menu = self?.statusBarMenu
+                    self?.emptyMenu(message: "No news found")
                     return
                 }
                 if let feed: RSSFeed = response.value {

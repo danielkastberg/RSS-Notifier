@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import FaviconFinder
 
 private let directory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
 private let fh = FileHandler()
@@ -31,12 +32,17 @@ func imageExist(_ fileName: String) -> Bool {
 }
 
 
-
+/// Saves the favicon as a image locally in the cache folder
+///  - Parameters:
+///     imageTitle - The name of the image file
+///     icon - The image to be saved
+///
+///  - Returns: icon from the website
 func saveImage(_ imageTitle: String, _ icon: NSImage) {
 //    let cleanTitle = cleanName(imageTitle)
 //    let url = directory.appendingPathComponent(cleanTitle+".png")
 
-    let url = fh.createFileName(imageTitle, "png", directory)
+    let url = fh.createFileName(filename: imageTitle, fileFormat: "png", dir: directory)
     // Convert to Data
     if let data = icon.tiffRepresentation {
         do {
@@ -51,10 +57,10 @@ func saveImage(_ imageTitle: String, _ icon: NSImage) {
 func loadImageURL(_ imageTitle: String) -> URL {
 //    let cleanTitle = cleanName(imageTitle)
 //    let imageURL = directory.appendingPathComponent(cleanTitle+".png")
-    return fh.createFileName(imageTitle, "png", directory)
+    return fh.createFileName(filename: imageTitle, fileFormat: "png", dir: directory)
 }
 
-func loadImage(_ imageTitle: String) -> NSImage? {
+func openImage(_ imageTitle: String) -> NSImage? {
     let fileURL = loadImageURL(imageTitle)
     do {
         let imageData = try Data(contentsOf: fileURL)
@@ -63,6 +69,30 @@ func loadImage(_ imageTitle: String) -> NSImage? {
         print("Error loading image : \(error)")
     }
     return nil
+}
+
+/// Parses the html and finds the favicon using FaviconFinder
+///
+///  - Parameters:
+///     html - The link of the website
+///
+///  - Returns: icon from the website
+func getFavicon(html: String) async throws -> NSImage {
+    print(html)
+    
+    guard let iconUrl = URL(string: (html)) else {
+        let image = NSImage(named: "AppIcon")!
+        return image
+    }
+    do {
+        print(iconUrl)
+        let favicon = try await FaviconFinder(url: iconUrl).downloadFavicon()
+//            print("URL of Favicon: \(favicon.url)")
+        return favicon.image
+    } catch {
+        print("\(html)")
+        throw FaviconError.failedToFindFavicon
+    }
 }
 
 

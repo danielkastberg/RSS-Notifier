@@ -27,8 +27,14 @@ class FileHandler {
         return url
     }
 
-    func fileExists(filename: String, fileFormat: String, dir: URL) -> Bool {
+    func fileExistsShort(filename: String, fileFormat: String, dir: URL) -> Bool {
         let file = createFileName(filename: filename, fileFormat: fileFormat, dir: dir)
         return FileManager.default.fileExists(atPath: file.path)
     }
+    
+    func fileExists(filename: String, fileFormat: String, dir: URL) -> Bool {
+        let file = dir.appendingPathComponent(filename + "." + fileFormat)
+        return FileManager.default.fileExists(atPath: file.path)
+    }
 }
+

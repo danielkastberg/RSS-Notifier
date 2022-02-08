@@ -51,13 +51,10 @@ class ViewController: NSViewController {
         // reload tableview
         tableView.reloadData()
     }
-    
-//    override func viewWillAppear() {
+    //    override func viewWillAppear() {
 //        outlines = oplmR.readOPML()
 //        tableView.reloadData()
 //    }
-
-    
 }
 
 extension ViewController: NSTableViewDataSource, NSTableViewDelegate, SourceVCDelegate {
@@ -164,7 +161,9 @@ class addSourceVC: NSViewController, NSTextFieldDelegate {
             else if out.html.hasSuffix(".rss") {
                 out.html.removeLast(4)
             }
-            print(out.html)
+            if !out.html.starts(with: "https") {
+                out.html = "https:\(out.html)"
+            }
             out.rss = rss ?? ""
             out.category = self?.categoryField.stringValue ?? ""
             
@@ -172,15 +171,13 @@ class addSourceVC: NSViewController, NSTextFieldDelegate {
             if let delegate = self?.delegate {
                 delegate.doSomethingWith(data: (self?.outlines!)!)
             }
-            let alert = NSAlert.init()
+         
             if out.title != "" {
-                alert.messageText = "Successfully added \(out.title)"
+                self?.showAlert(message: "Successfully added \(out.title)")
             }
             else {
-                alert.messageText = "Successfully added \(out.rss)"
+                self?.showAlert(message: "Successfully added \(out.rss)")
             }
-        
-            alert.runModal()
         }
     }
     override func viewDidLoad() {
@@ -196,9 +193,12 @@ class addSourceVC: NSViewController, NSTextFieldDelegate {
         let rssUrl = rssField.stringValue
         let category = categoryField.stringValue
         let numberOfCharatersInTextfield: Int = rssField.accessibilityNumberOfCharacters()
-        print(rssUrl)
-        print(category)
-        print("numberOfCharatersInTextfield = \(numberOfCharatersInTextfield)")
+    }
+    
+    func showAlert(message: String) {
+        let alert = NSAlert.init()
+        alert.messageText = message
+        alert.runModal()
     }
 
 }

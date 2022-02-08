@@ -19,10 +19,9 @@ import UserNotifications
  Add a setting window, that the user can choose the time interval in which the news should be displayed.
  
  */
-
-
 @main
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, ViewDelegate {
+    
     private var statusItem: NSStatusItem?
     private var statusBarMenu = NSMenu()
     
@@ -122,10 +121,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             windowController.close()
         }
         let mainStoryBoard = NSStoryboard(name: "Main", bundle: nil)
+        
         windowController = mainStoryBoard.instantiateController(withIdentifier: "settings") as? NSWindowController
         // Move the window to the top of all windows
         windowController.window?.orderFrontRegardless()
     }
+
     
 
     
@@ -201,26 +202,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.refreshItem.title = "Refresh"
         }
     }
-    
-    /// Parses the html and finds the favicon using FaviconFinder
-    ///
-    ///  - Parameters:
-    ///     html - The link of the website
-    ///
-    ///  - Returns: icon from the website
-//    func getFavicon(html: String) async throws -> NSImage {
-//        guard let iconUrl = URL(string: (html)) else {
-//            let image = NSImage(named: "AppIcon")!
-//            return image
-//        }
-//        do {
-//            let favicon = try await FaviconFinder(url: iconUrl).downloadFavicon()
-////            print("URL of Favicon: \(favicon.url)")
-//            return favicon.image
-//        } catch {
-//            throw FaviconError.failedToFindFavicon
-//        }
-//    }
     
     
     /// Creates a NSMenuItem and asignes it a title with a

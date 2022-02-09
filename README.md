@@ -23,7 +23,8 @@ The OPML file can be found in
 
 
 ## Installation
-Clone project and import into Xcode to compile your own executable file
+ - Clone project and import into Xcode to compile your own executable file
+ - Download pre-compiled version
 
 
 ## License

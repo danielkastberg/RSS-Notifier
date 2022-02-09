@@ -14,6 +14,13 @@ Picture of the program in action:
 
 ![alt text](https://github.com/danielkastberg/RSS-Notifier/blob/d9fd06d40ad33345e2612e68f428d7bd095ba975/RSS-Notifier/Resources/usage.png)
 
+Some features in the settings menu are still under development
+
+
+
+The OPML file can be found in
+ ~/Library/Containers/daniel.kastberg.RSS-Notifier/Data/Documents
+
 
 ## Installation
 Clone project and import into Xcode to compile your own executable file

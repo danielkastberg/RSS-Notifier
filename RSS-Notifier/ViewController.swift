@@ -16,7 +16,6 @@ protocol SourceVCDelegate : NSObjectProtocol{
 class ViewController: NSViewController {
     
     private var outlines = [Outline]()
-//    private var outlineClass = [OutlineClass]()
     
     private let oplmR = OPMLHandler()
     @IBOutlet var tableView: NSTableView!
@@ -29,7 +28,6 @@ class ViewController: NSViewController {
         }
         let title = outlines[selectedItem].title
         let category = outlines[selectedItem].category
-        let link = outlines[selectedItem].rss
         
         for outline in outlines {
             if title == outline.title && category == outline.category {
@@ -46,15 +44,10 @@ class ViewController: NSViewController {
         super.viewDidLoad()
         
         outlines = oplmR.readOPML()
-//        outlineClass = opmlR.convertOutline(outlines: outlines)
         
         // reload tableview
         tableView.reloadData()
     }
-    //    override func viewWillAppear() {
-//        outlines = oplmR.readOPML()
-//        tableView.reloadData()
-//    }
 }
 
 extension ViewController: NSTableViewDataSource, NSTableViewDelegate, SourceVCDelegate {
@@ -128,22 +121,23 @@ class addSourceVC: NSViewController, NSTextFieldDelegate {
     @IBOutlet weak var rssField: NSTextFieldCell!
     
     
+
+    /// Adds a source from user input URL and adds to the loaded list of outlines
+    /// Sends the list back to first ViewController
     @IBAction func addSource(_ sender: Any) {
         let rss = rssField?.stringValue
+        let category = categoryField?.stringValue
+        
         let urlR = URL(string: rss ?? "")
         if urlR == nil {
-            let alert = NSAlert.init()
-            alert.messageText = "Error!\n Invlid URL"
-            alert.runModal()
+            self.showAlert(message: "Error!\n Invlid URL")
             return
         }
         let url = URLRequest(url: urlR  ?? URL(string: "")!)
         
         AF.request(url).responseRSS() { [weak self] (response) -> Void in
             if (response.error != nil) {
-                let alert = NSAlert.init()
-                alert.messageText = "Error!\n Invlid URL"
-                alert.runModal()
+                self?.showAlert(message: "Error!\n Invlid URL")
                 return
             }
             let title = response.value?.title
@@ -151,21 +145,9 @@ class addSourceVC: NSViewController, NSTextFieldDelegate {
             
             let out = Outline()
             out.title = title ?? ""
-            out.html = html ?? ""
-            if out.html == "" {
-                out.html = (self?.rssField.stringValue)!
-            }
-            if out.html.hasSuffix("rss") {
-                out.html.removeLast(3)
-            }
-            else if out.html.hasSuffix(".rss") {
-                out.html.removeLast(4)
-            }
-            if !out.html.starts(with: "https") {
-                out.html = "https:\(out.html)"
-            }
+            out.html = self?.createHTMLattr(html: html ?? "", rss: rss ?? "") ?? ""
             out.rss = rss ?? ""
-            out.category = self?.categoryField.stringValue ?? ""
+            out.category = category ?? ""
             
             self?.outlines?.append(out)
             if let delegate = self?.delegate {
@@ -182,23 +164,29 @@ class addSourceVC: NSViewController, NSTextFieldDelegate {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-
-        NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: NSTextField.textDidChangeNotification, object: nil)   
-    }
-    
-    
-    @objc func textDidChange(_ notification: Notification) {
-        guard (notification.object as? NSTextField) != nil else { return }
-        let rssUrl = rssField.stringValue
-        let category = categoryField.stringValue
-        let numberOfCharatersInTextfield: Int = rssField.accessibilityNumberOfCharacters()
     }
     
     func showAlert(message: String) {
         let alert = NSAlert.init()
         alert.messageText = message
         alert.runModal()
+    }
+    
+    private func createHTMLattr(html: String, rss: String) -> String {
+        var outHtml = html
+        if outHtml == "" {
+            outHtml = rss
+        }
+        if outHtml.hasSuffix("rss") {
+            outHtml.removeLast(3)
+        }
+        else if outHtml.hasSuffix(".rss") {
+            outHtml.removeLast(4)
+        }
+        if !outHtml.starts(with: "https") {
+            outHtml = "https:\(outHtml)"
+        }
+        return outHtml
     }
 
 }

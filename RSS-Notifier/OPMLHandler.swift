@@ -10,14 +10,6 @@ import Foundation
 let subscriptions = "Subscriptions"
 let fileFormat = "xml"
 
-//public struct Outline {
-//    var title = ""
-//    var html = ""
-//    var xmlUrl = ""
-//    var icon = ""
-//    var category = ""
-//}
-
 @objcMembers public class Outline: NSObject {
     var title = ""
     var html = ""
@@ -32,9 +24,6 @@ public struct Category {
     var outlines = [Outline]()
   
 }
-
-
-
 
 class OPMLHandler {
     private let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -61,8 +50,6 @@ class OPMLHandler {
             }
         }
         
-//        let xmlPath = Bundle.main.path(forResource: subscriptions, ofType: type)
-//        let url = URL(fileURLWithPath: xmlPath)
         do {
             let data = try Data(contentsOf: filePath)
             let parser = XMLParser(data: data)
@@ -71,12 +58,6 @@ class OPMLHandler {
 
             parser.parse()
             outlines = parserBase.getOutlines()
-            
-            
-
-//            for item in category.items {
-//                print("item = \(item.title) \(item.xmlUrl) \(item.html)")
-//            }
         }
         catch {
             NSLog("Failed to parse opml file")
@@ -153,17 +134,6 @@ class OPMLHandler {
         outElm.addAttribute(xmlUrl)
         return outElm
     }
-    
-    
-    //    private func convertOutline(outlines: [Outline]) -> [OutlineClass] {
-    //        for outline in outlines {
-    //            let outC = OutlineClass()
-    //            outC.title = outline.title
-    //            outC.xmlUrl = outline.xmlUrl
-    //            outC.category = outline.category
-    //            self.outlineClass.append(outC)
-    //        }
-    //    }
 }
 
 

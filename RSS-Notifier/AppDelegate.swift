@@ -279,7 +279,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         for out in outlines {
             group.enter()
                 
-            let url = URL(string: out.rss)!
+            guard let url = URL(string: out.rss) else {
+                emptyMenu(message: "Error found in OPML file. Check sources")
+                return
+            }
             
             let category = out.category
             categories.append(category)

@@ -13,3 +13,13 @@ Shows a notification for each category if a new news article has been discovered
 Picture of the program in action:
 
 ![alt text](https://github.com/danielkastberg/RSS-Notifier/blob/d9fd06d40ad33345e2612e68f428d7bd095ba975/RSS-Notifier/Resources/usage.png)
+
+
+## License
+This project uses files from:
+
+[Alamofire](https://github.com/Alamofire/Alamofire/)
+
+[AlamofireRSSParser](https://github.com/AdeptusAstartes/AlamofireRSSParser/)
+
+[FaviconFinder](https://github.com/will-lumley/FaviconFinder/)

@@ -15,6 +15,10 @@ Picture of the program in action:
 ![alt text](https://github.com/danielkastberg/RSS-Notifier/blob/d9fd06d40ad33345e2612e68f428d7bd095ba975/RSS-Notifier/Resources/usage.png)
 
 
+## Installation
+Clone project and import into Xcode to compile your own executable file
+
+
 ## License
 This project uses files from:
 

@@ -56,7 +56,7 @@ func notifyUser(article: Article) {
                     print("Error loading image : \(error)")
                 }
                 
-                let open = UNNotificationAction(identifier: "Open", title: "Open", options: [.destructive])
+                let open = UNNotificationAction(identifier: "Open", title: "Open", options: [.foreground])
 
          
                 let category = UNNotificationCategory(identifier: content.categoryIdentifier, actions: [open], intentIdentifiers: [], options: [])

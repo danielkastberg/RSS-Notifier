@@ -67,10 +67,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
 
         loadAppIcon()
-        
-  
-        // Removes the app from the dock
-        NSApp.setActivationPolicy(.accessory)
     }
 
     
@@ -349,17 +345,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.usedTitle = Array(titleCopy.prefix(upTo: 5))
             }
             
-         
-            
-            let frame = CGRect(origin: .zero, size: CGSize(width: 100, height: 20))
-            let lineView = NSView(frame: CGRect(x: 0, y: 100, width: 240, height: 1.0))
-            let viewHint = NSView(frame: frame)
-            viewHint.drawPageBorder(with: CGSize(width: 100, height: 20))
-            viewHint.layer?.borderColor = CGColor.black
-
-            let lineItem = NSMenuItem()
-            lineItem.view = lineView
-            self.statusBarMenu.addItem(lineItem)
+            self.statusBarMenu.addItem(self.blankWidth())
+            self.statusBarMenu.addItem(NSMenuItem.separator())
    
             self.addToMenu()
         }
@@ -367,6 +354,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         articlesCopy = articles
        
+    }
+    
+    private func blankWidth() -> NSMenuItem {
+        let frame = CGRect(origin: .zero, size: CGSize(width: 100, height: 20))
+        let lineView = NSView(frame: CGRect(x: 0, y: 100, width: 160, height: 1.0))
+        let viewHint = NSView(frame: frame)
+        viewHint.drawPageBorder(with: CGSize(width: 100, height: 20))
+        viewHint.layer?.borderColor = CGColor.black
+
+        let lineItem = NSMenuItem()
+        lineItem.view = lineView
+        return lineItem
+        
     }
     
     /// Removes duplicate items from a set
@@ -417,7 +417,7 @@ extension Sequence where Element: Hashable {
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
     
-    /// Dirty solution on opening a link from the selected notification.
+    /// Opening a link from the selected notification.
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         for article in latest {
             if article.category == response.notification.request.content.title {
@@ -437,19 +437,16 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let application = NSApplication.shared
         
-        if(application.isActive){
-          print("user tapped the notification bar when the app is in foreground")
-            application.setActivationPolicy(.accessory)
-          
-        }
-        
-        if(!application.isActive)
-        {
-          print("user tapped the notification bar when the app is in background")
-            application.setActivationPolicy(.accessory)
+        for article in latest {
+            if article.category == notification.request.content.title {
+                print(notification.request.identifier)
+                guard let url = URL(string: article.link as! String) else {
+                    return
+                }
+                NSWorkspace.shared.open(url)
+            }
         }
 
-        
         return completionHandler(.list)
     }
 }

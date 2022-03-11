@@ -11,6 +11,7 @@
 		651C8C5A277A460900D491A0 /* TitleFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651C8C59277A460900D491A0 /* TitleFormatting.swift */; };
 		652039EF2789EAFD0027A7E3 /* ActionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652039EE2789EAFD0027A7E3 /* ActionHandler.swift */; };
 		652039FA2789F4850027A7E3 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 652039F92789F4850027A7E3 /* OpenSans-Regular.ttf */; };
+		65238A0227DBA5C9007320EC /* FontHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65238A0127DBA5C9007320EC /* FontHandler.swift */; };
 		65570AEB2778E46700DF91B2 /* FaviconFinder in Frameworks */ = {isa = PBXBuildFile; productRef = 65570AEA2778E46700DF91B2 /* FaviconFinder */; };
 		65621BBE2743070C00DE62C3 /* OPMLHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65621BBB2743070C00DE62C3 /* OPMLHandler.swift */; };
 		658103B827304E2F00974AAF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103B727304E2F00974AAF /* AppDelegate.swift */; };
@@ -57,6 +58,7 @@
 		652039EE2789EAFD0027A7E3 /* ActionHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionHandler.swift; sourceTree = "<group>"; };
 		652039F42789EDB70027A7E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		652039F92789F4850027A7E3 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		65238A0127DBA5C9007320EC /* FontHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontHandler.swift; sourceTree = "<group>"; };
 		65621BBB2743070C00DE62C3 /* OPMLHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPMLHandler.swift; sourceTree = "<group>"; };
 		658103B727304E2F00974AAF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		658103B927304E2F00974AAF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				65FE3B82273B56FA00F8FF74 /* AlamofireRSSParser.h */,
 				65FE3B81273B56FA00F8FF74 /* AlamofireRSSParser.swift */,
 				658103B727304E2F00974AAF /* AppDelegate.swift */,
+				65238A0127DBA5C9007320EC /* FontHandler.swift */,
 				652039EE2789EAFD0027A7E3 /* ActionHandler.swift */,
 				659E4E46278121EB002BBC6F /* Article.swift */,
 				658103BB27304E3100974AAF /* Assets.xcassets */,
@@ -223,6 +226,7 @@
 				658103B827304E2F00974AAF /* AppDelegate.swift in Sources */,
 				652039EF2789EAFD0027A7E3 /* ActionHandler.swift in Sources */,
 				658103CA27304E8800974AAF /* ParserBase.swift in Sources */,
+				65238A0227DBA5C9007320EC /* FontHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

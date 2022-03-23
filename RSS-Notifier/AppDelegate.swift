@@ -24,7 +24,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private var statusItem: NSStatusItem?
     private var statusBarMenu = NSMenu()
-    private var rightMenu = NSMenu()
     
     private var windowController: NSWindowController!
 
@@ -160,19 +159,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// Adds the options to the menu. Will be added independent if there is any news sources found
     private func createMenu() -> NSMenu {
         let statusBarMenu = NSMenu()
-        self.statusBarMenu.addItem(createQuitItem())
         self.statusBarMenu.addItem(createSettingsItem())
+        self.statusBarMenu.addItem(createQuitItem())
         self.statusBarMenu.addItem(createRefreshItem())
         return statusBarMenu
     }
     
     /// Creates an empty menu. Used if the user is offline.
     private func emptyMenu(message: String) {
+        self.statusBarMenu = NSMenu()
         let offlineItem = NSMenuItem()
         offlineItem.attributedTitle = useCustomFont(title: message)
-        statusBarMenu.addItem(offlineItem)
-        statusBarMenu = createMenu()
-        statusItem?.menu = statusBarMenu
+        self.statusBarMenu.addItem(offlineItem)
+        createStaticItems()
+        statusItem?.menu = self.statusBarMenu
     }
     
     
@@ -258,11 +258,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             self.latestCopy = used
         }
-    }
-    
-    func createRightMenu() {
-        self.rightMenu = createMenu()
-        
     }
     
     ///Used to read the RSS. Is called when the user presses the "Refresh item"

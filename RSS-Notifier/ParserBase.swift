@@ -29,7 +29,7 @@ class ParserBase : NSObject, XMLParserDelegate  {
         }
         
         if elementName == "outline" {
-            var outline = Outline()
+            let outline = Outline()
             outline.category = categoryName
             
             if attributeDict["title"] == nil {

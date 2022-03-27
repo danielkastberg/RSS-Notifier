@@ -37,6 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private var latest = [Article]()
     
+    var offlineIcon = false
 
     
     override func awakeFromNib() {
@@ -58,11 +59,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
 
         loadAppIcon(offline: false)
-    }
-
-    
-    func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
-        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
     }
     
     /// Gets the icon for each source and stores it in a list.
@@ -183,6 +179,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if offline {
                 guard let image = NSImage(named: "Error") else {
                     self.statusItem?.button?.title = "RSS Notifier"
+                    self.offlineIcon = true
                     return
                 }
                 image.isTemplate = true
@@ -354,6 +351,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.statusBarMenu = self.createMenu()
         }
         
+        if offlineIcon {
+            loadAppIcon(offline: false)
+        }
         
         articlesCopy = articles
        

@@ -37,7 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private var latest = [Article]()
     
-    var offlineIcon = false
+    private var offlineIcon = false
 
     
     override func awakeFromNib() {
@@ -179,12 +179,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if offline {
                 guard let image = NSImage(named: "Error") else {
                     self.statusItem?.button?.title = "RSS Notifier"
-                    self.offlineIcon = true
                     return
                 }
                 image.isTemplate = true
                 image.size = CGSize(width: 19, height: 19)
                 self.statusItem?.button?.image = image
+                self.offlineIcon = true
 //                self.refreshItem.title = "Refresh"
             }
             else {
@@ -351,7 +351,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.statusBarMenu = self.createMenu()
         }
         
-        if offlineIcon {
+        if self.offlineIcon == true {
             loadAppIcon(offline: false)
         }
         

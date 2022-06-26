@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		65099F0D2868EEBB0004F6C9 /* TimeCalc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65099F0C2868EEBB0004F6C9 /* TimeCalc.swift */; };
 		651C8C58277A3EC200D491A0 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651C8C57277A3EC200D491A0 /* Notifications.swift */; };
 		651C8C5A277A460900D491A0 /* TitleFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651C8C59277A460900D491A0 /* TitleFormatting.swift */; };
 		652039EF2789EAFD0027A7E3 /* ActionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652039EE2789EAFD0027A7E3 /* ActionHandler.swift */; };
@@ -52,6 +53,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		65099F0C2868EEBB0004F6C9 /* TimeCalc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeCalc.swift; sourceTree = "<group>"; };
 		651C8C57277A3EC200D491A0 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		651C8C59277A460900D491A0 /* TitleFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleFormatting.swift; sourceTree = "<group>"; };
 		652039ED2789EAA00027A7E3 /* RSS-Notifier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RSS-Notifier.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -119,6 +121,7 @@
 				65DD270027333B540057E47F /* RSSFeed.swift */,
 				65DD270127333B540057E47F /* RSSItem.swift */,
 				651C8C59277A460900D491A0 /* TitleFormatting.swift */,
+				65099F0C2868EEBB0004F6C9 /* TimeCalc.swift */,
 				658103B927304E2F00974AAF /* ViewController.swift */,
 			);
 			path = "RSS-Notifier";
@@ -227,6 +230,7 @@
 				652039EF2789EAFD0027A7E3 /* ActionHandler.swift in Sources */,
 				658103CA27304E8800974AAF /* ParserBase.swift in Sources */,
 				65238A0227DBA5C9007320EC /* FontHandler.swift in Sources */,
+				65099F0D2868EEBB0004F6C9 /* TimeCalc.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

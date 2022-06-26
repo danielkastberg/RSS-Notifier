@@ -35,9 +35,45 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var articlesCopy = [Article]()
     private var usedTitle = [String]()
     
+    /// Array with the latest article from each category
     private var latest = [Article]()
     
+    private var articles = [Article]()
+    private var uniqueCategories = [String]()
+    
     private var offlineIcon = false
+    
+    @objc func statusBarButtonClicked(sender: NSMenuItem) {
+        let menu = NSMenu()
+        
+//        for article in articles {
+//            var art = Article()
+//            let time: String = formatDate(date: article.date)
+//            let title = article.title + " " + time
+//            art = article
+//            art.title = title
+//            let articleItem = createArticleItem(article)
+//            menu.addItem(articleItem)
+//
+//        }
+//        statusItem?.button?.menu = menu
+        
+        updateArticleTime()
+        
+        let event = NSApp.currentEvent!
+        
+        if event.type == NSEvent.EventType.rightMouseUp {
+            
+            print("right")
+        } else { // Left click
+            print("left")
+            if let button = self.statusItem?.button { // << pop up menu programmatically
+                button.menu?.popUp(positioning: nil, at: CGPoint(x: -1, y: button.bounds.maxY + 5), in: button)
+            }
+            
+        }
+    }
+
 
     
     override func awakeFromNib() {
@@ -49,6 +85,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         loadIcons()
         
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        self.statusItem?.button?.action = #selector(self.statusBarButtonClicked(sender:))
+        self.statusItem?.button?.sendAction(on: [NSEvent.EventTypeMask.leftMouseUp, NSEvent.EventTypeMask.rightMouseUp])
         
         if !outlines.isEmpty {
             refresh()
@@ -59,6 +97,37 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
 
         loadAppIcon(offline: false)
+    }
+    
+    private func updateArticleTime() {
+        statusBarMenu.removeAllItems()
+        var used = [String]()
+        for uC in uniqueCategories {
+            let categoryItem = NSMenuItem()
+            var sub = NSMenu()
+            categoryItem.attributedTitle = useCustomFont(title: uC)
+            for article in self.articles {
+                var art = article
+                art.time = formatDate(date: article.date)
+                if art.category.elementsEqual(categoryItem.title) {
+                    if !used.contains(art.category) {
+                        used.append(art.category)
+                        self.latest.append(art)
+                    }
+                    let articleItem = self.createArticleItem(art)
+                    
+                    sub.addItem(articleItem)
+                }
+            }
+            categoryItem.submenu = sub
+            categoryItem.target = self
+            self.statusBarMenu.addItem(categoryItem)
+            self.statusItem?.button?.menu = self.statusBarMenu
+        }
+        self.statusBarMenu.addItem(self.blankWidth())
+        self.statusBarMenu.addItem(NSMenuItem.separator())
+
+        self.statusBarMenu = self.createMenu()
     }
     
     /// Gets the icon for each source and stores it in a list.
@@ -247,7 +316,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         DispatchQueue.global().async {
             for late in latest {
                 if !self.usedTitle.contains(late.title) {
-//                    print("Visar notis för \(late.title)")
                     notifyUser(article: late)
                     self.usedTitle.append(late.title)
                     sleep(2)
@@ -259,8 +327,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     ///Used to read the RSS. Is called when the user presses the "Refresh item"
     @objc func refresh() {
+        self.articles = [Article]()
         self.statusBarMenu.removeAllItems()
-        var articles = [Article]()
         var categories = [String]()
         let group = DispatchGroup()
         
@@ -297,7 +365,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
                         if time != 0 {
                             let article = createArticle(item, out, time)
-                            articles.append(article)
+                            self?.articles.append(article)
                         }
                     }
                 }
@@ -309,14 +377,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         group.notify(queue: .main) {
             self.latest = [Article]()
 
-            let uniqueCategories = self.uniqueSet(source: categories)
-            articles = articles.sorted(by: {$0.date.compare($1.date) == .orderedDescending})
+            if self.uniqueCategories.isEmpty {
+                self.uniqueCategories = self.uniqueSet(source: categories)
+            }
 
-            for uC in uniqueCategories {
+            self.articles = self.articles.sorted(by: {$0.date.compare($1.date) == .orderedDescending})
+
+            for uC in self.uniqueCategories {
                 let categoryItem = NSMenuItem()
                 var sub = NSMenu()
                 categoryItem.attributedTitle = useCustomFont(title: uC)
-                for article in articles {
+                for article in self.articles {
                     if article.category.elementsEqual(categoryItem.title) {
                         if !used.contains(article.category) {
                             used.append(article.category)
@@ -327,18 +398,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         sub.addItem(articleItem)
                     }
                 }
+                /// Adds an empty item if there were not any articles found for a category
                 sub = self.addEmptyItem(sub)
                 
                 categoryItem.submenu = sub
                 categoryItem.target = self
                 self.statusBarMenu.addItem(categoryItem)
-                self.statusItem?.menu = self.statusBarMenu
+                self.statusItem?.button?.menu = self.statusBarMenu // << store menu in button, not item
+//                self.statusItem?.menu = self.statusBarMenu
                 
           
 //                notifyUser(categoryTitle: articles[i].category, articleTitle: articles[i].title, source: articles[i].source)
                 
             }
             self.showNotifications(latest: self.latest, used: used)
+            /// Empties the array of titles used for notifications when the array reaches a size larger than 100 notifications.
             if self.usedTitle.count > 100 {
                 let titleCopy = self.usedTitle
                 self.usedTitle = [String]()
@@ -385,11 +459,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
         return buffer
-    }
-    
-
-    private func convert(minutes: Int) -> (hours: Int, minutes: Int) {
-        return ((minutes % 3600) / 60, (minutes % 3600) % 60)
     }
 
     

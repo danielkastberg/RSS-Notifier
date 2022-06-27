@@ -43,30 +43,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private var offlineIcon = false
     
-    @objc func statusBarButtonClicked(sender: NSMenuItem) {
-        let event = NSApp.currentEvent!
-        /* Fix night mode not appearing after this change */
-        if event.type == NSEvent.EventType.rightMouseUp {
-            
-            print("right")
-            refresh()
-            
-        } else { // Left click
-            print("left")
-            updateArticleTime()
-            if let button = self.statusItem?.button { // << pop up menu programmatically
-                let item = statusItem?.menu?.item(at: 0)
-                let menuBarHeight =  NSStatusBar.system.thickness
-                print(menuBarHeight)
-                print(button.bounds.maxY)
-                button.menu?.popUp(positioning: item, at: CGPoint(x: -5, y: menuBarHeight + 6), in: button)
-                
-            }
-            
-        }
-    }
-
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -76,8 +52,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         loadIcons()
         
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        self.statusItem?.button?.action = #selector(self.statusBarButtonClicked(sender:))
-        self.statusItem?.button?.sendAction(on: [NSEvent.EventTypeMask.leftMouseUp, NSEvent.EventTypeMask.rightMouseUp])
         
         if !outlines.isEmpty {
             refresh()
@@ -114,7 +88,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             categoryItem.submenu = sub
             categoryItem.target = self
             self.statusBarMenu.addItem(categoryItem)
-            self.statusItem?.button?.menu = self.statusBarMenu
+//            self.statusItem?.button?.menu = self.statusBarMenu
+            self.statusItem?.menu = self.statusBarMenu
         }
         self.statusBarMenu.addItem(self.blankWidth())
         self.statusBarMenu.addItem(NSMenuItem.separator())
@@ -397,6 +372,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 categoryItem.target = self
                 self.statusBarMenu.addItem(categoryItem)
 //                self.statusItem?.button?.menu = self.statusBarMenu // << store menu in button, not item
+                self.statusItem?.menu = self.statusBarMenu
 
                 
                 
@@ -466,6 +442,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
         return true
+    }
+}
+
+extension NSStatusBarButton {
+    open override func mouseDown(with event: NSEvent) {
+        print("twtf")
+        
+        let delegate = NSApplication.shared.delegate as! AppDelegate
+        let deviceToken = delegate.updateArticleTime()
+        self.rightMouseDown(with: event)
+        
+     
     }
 }
 

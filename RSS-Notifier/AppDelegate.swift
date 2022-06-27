@@ -23,7 +23,7 @@ import UserNotifications
 class AppDelegate: NSObject, NSApplicationDelegate {
     
     private var statusItem: NSStatusItem?
-    private var statusBarMenu = NSMenu()
+    public var statusBarMenu = NSMenu()
     
     private var windowController: NSWindowController!
 
@@ -44,36 +44,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var offlineIcon = false
     
     @objc func statusBarButtonClicked(sender: NSMenuItem) {
-        let menu = NSMenu()
-        
-//        for article in articles {
-//            var art = Article()
-//            let time: String = formatDate(date: article.date)
-//            let title = article.title + " " + time
-//            art = article
-//            art.title = title
-//            let articleItem = createArticleItem(article)
-//            menu.addItem(articleItem)
-//
-//        }
-//        statusItem?.button?.menu = menu
-        
-        updateArticleTime()
-        
         let event = NSApp.currentEvent!
-        
+        /* Fix night mode not appearing after this change */
         if event.type == NSEvent.EventType.rightMouseUp {
             
             print("right")
+            refresh()
+            
         } else { // Left click
             print("left")
+            updateArticleTime()
             if let button = self.statusItem?.button { // << pop up menu programmatically
-                button.menu?.popUp(positioning: nil, at: CGPoint(x: -1, y: button.bounds.maxY + 5), in: button)
+                let item = statusItem?.menu?.item(at: 0)
+                let menuBarHeight =  NSStatusBar.system.thickness
+                print(menuBarHeight)
+                print(button.bounds.maxY)
+                button.menu?.popUp(positioning: item, at: CGPoint(x: -5, y: menuBarHeight + 6), in: button)
+                
             }
             
         }
     }
-
 
     
     override func awakeFromNib() {
@@ -99,7 +90,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         loadAppIcon(offline: false)
     }
     
-    private func updateArticleTime() {
+    public func updateArticleTime() {
+        print("running quick update")
         statusBarMenu.removeAllItems()
         var used = [String]()
         for uC in uniqueCategories {
@@ -404,8 +396,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 categoryItem.submenu = sub
                 categoryItem.target = self
                 self.statusBarMenu.addItem(categoryItem)
-                self.statusItem?.button?.menu = self.statusBarMenu // << store menu in button, not item
-//                self.statusItem?.menu = self.statusBarMenu
+//                self.statusItem?.button?.menu = self.statusBarMenu // << store menu in button, not item
+
+                
+                
                 
           
 //                notifyUser(categoryTitle: articles[i].category, articleTitle: articles[i].title, source: articles[i].source)
@@ -430,7 +424,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         articlesCopy = articles
-       
     }
     
     private func blankWidth() -> NSMenuItem {
@@ -475,7 +468,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return true
     }
 }
-
 
 
 extension Sequence where Element: Hashable {

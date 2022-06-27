@@ -447,13 +447,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 extension NSStatusBarButton {
     open override func mouseDown(with event: NSEvent) {
-        print("twtf")
-        
         let delegate = NSApplication.shared.delegate as! AppDelegate
         let deviceToken = delegate.updateArticleTime()
         self.rightMouseDown(with: event)
-        
-     
     }
 }
 

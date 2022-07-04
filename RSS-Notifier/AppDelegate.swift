@@ -64,13 +64,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         loadAppIcon(offline: false)
     }
     
+    /// Updates the time for every article without fetching new articles
     public func updateArticleTime() {
-        print("running quick update")
         statusBarMenu.removeAllItems()
         var used = [String]()
         for uC in uniqueCategories {
             let categoryItem = NSMenuItem()
-            var sub = NSMenu()
+            let sub = NSMenu()
             categoryItem.attributedTitle = useCustomFont(title: uC)
             for article in self.articles {
                 var art = article
@@ -85,6 +85,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     sub.addItem(articleItem)
                 }
             }
+            addEmptyItem(sub)
             categoryItem.submenu = sub
             categoryItem.target = self
             self.statusBarMenu.addItem(categoryItem)

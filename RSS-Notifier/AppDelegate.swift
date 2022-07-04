@@ -70,7 +70,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         var used = [String]()
         for uC in uniqueCategories {
             let categoryItem = NSMenuItem()
-            let sub = NSMenu()
+            var sub = NSMenu()
             categoryItem.attributedTitle = useCustomFont(title: uC)
             for article in self.articles {
                 var art = article
@@ -85,7 +85,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     sub.addItem(articleItem)
                 }
             }
-            addEmptyItem(sub)
+            sub = addEmptyItem(sub)
             categoryItem.submenu = sub
             categoryItem.target = self
             self.statusBarMenu.addItem(categoryItem)

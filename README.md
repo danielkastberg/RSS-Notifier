@@ -19,7 +19,7 @@ Some features in the settings menu are still under development
 
 
 The OPML file can be found in
- ~/Library/Containers/daniel.kastberg.RSS-Notifier/Data/Documents
+ ~/Library/Containers/"Username".RSS-Notifier/Data/Documents
 
 
 ## Installation

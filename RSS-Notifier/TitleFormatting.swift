@@ -10,27 +10,6 @@ import Foundation
 /// Sets a limit on how old the news are allowerd to be. In minutes
 let timeIntervalNews = 1440
 
-
-/*
- Formats the time and calculates how long ago the article was published from the current time.
- Also filters away too old news
- */
-func formatDate(date: Date) -> String {
-    let dateFormatter: DateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "MM/dd, HH:mm"
-    let timeSincePub = Date().timeIntervalSince(date)
-    let timeSincePubInMin = Int(timeSincePub) / 60
-    
-    if timeSincePubInMin < timeIntervalNews {
-        let time: String = calculateTime(minutesSincePub: timeSincePubInMin)
-//            let title = item.title! + "\t" + String(time)
-        return time
-    }
-    else {
-        return ""
-    }
-}
-
 /// Filters away news that are older than the variable "timeIntervalNews"
 func filterTime(date: Date) -> Int {
     let timeSincePub = Date().timeIntervalSince(date)
@@ -45,8 +24,6 @@ func filterTime(date: Date) -> Int {
         return 0
     }
 }
-
-
 
 /*
  Calculates the time and puts it into a string to be used next to the title

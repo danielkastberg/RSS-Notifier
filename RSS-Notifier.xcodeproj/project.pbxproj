@@ -12,7 +12,6 @@
 		652039EF2789EAFD0027A7E3 /* ActionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652039EE2789EAFD0027A7E3 /* ActionHandler.swift */; };
 		652039FA2789F4850027A7E3 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 652039F92789F4850027A7E3 /* OpenSans-Regular.ttf */; };
 		65238A0227DBA5C9007320EC /* FontHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65238A0127DBA5C9007320EC /* FontHandler.swift */; };
-		65570AEB2778E46700DF91B2 /* FaviconFinder in Frameworks */ = {isa = PBXBuildFile; productRef = 65570AEA2778E46700DF91B2 /* FaviconFinder */; };
 		65621BBE2743070C00DE62C3 /* OPMLHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65621BBB2743070C00DE62C3 /* OPMLHandler.swift */; };
 		658103B827304E2F00974AAF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103B727304E2F00974AAF /* AppDelegate.swift */; };
 		658103BA27304E2F00974AAF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103B927304E2F00974AAF /* ViewController.swift */; };
@@ -22,10 +21,11 @@
 		659E4E4527810EED002BBC6F /* ImageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659E4E4427810EED002BBC6F /* ImageHandler.swift */; };
 		659E4E47278121EB002BBC6F /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659E4E46278121EB002BBC6F /* Article.swift */; };
 		65B36E5E27B16771004EDD5A /* FileHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B36E5D27B16771004EDD5A /* FileHandler.swift */; };
-		65B705422775325B00F27DEE /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 65B705412775325B00F27DEE /* Alamofire */; };
 		65DD272327333DD10057E47F /* RSSFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DD270027333B540057E47F /* RSSFeed.swift */; };
 		65DD272527333DD10057E47F /* RSSItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DD270127333B540057E47F /* RSSItem.swift */; };
 		65FE3B83273B56FA00F8FF74 /* AlamofireRSSParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FE3B81273B56FA00F8FF74 /* AlamofireRSSParser.swift */; };
+		DA461FE62921439200E53008 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = DA461FE52921439200E53008 /* Alamofire */; };
+		DA461FE9292143EE00E53008 /* FaviconFinder in Frameworks */ = {isa = PBXBuildFile; productRef = DA461FE8292143EE00E53008 /* FaviconFinder */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -80,8 +80,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				65B705422775325B00F27DEE /* Alamofire in Frameworks */,
-				65570AEB2778E46700DF91B2 /* FaviconFinder in Frameworks */,
+				DA461FE62921439200E53008 /* Alamofire in Frameworks */,
+				DA461FE9292143EE00E53008 /* FaviconFinder in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,8 +150,8 @@
 			);
 			name = "RSS-Notifier";
 			packageProductDependencies = (
-				65B705412775325B00F27DEE /* Alamofire */,
-				65570AEA2778E46700DF91B2 /* FaviconFinder */,
+				DA461FE52921439200E53008 /* Alamofire */,
+				DA461FE8292143EE00E53008 /* FaviconFinder */,
 			);
 			productName = "RSS-Notifier";
 			productReference = 652039ED2789EAA00027A7E3 /* RSS-Notifier.app */;
@@ -183,8 +183,8 @@
 			);
 			mainGroup = 658103AB27304E2F00974AAF;
 			packageReferences = (
-				65B705402775325B00F27DEE /* XCRemoteSwiftPackageReference "Alamofire" */,
-				65570AE92778E46700DF91B2 /* XCRemoteSwiftPackageReference "FaviconFinder" */,
+				DA461FE42921439200E53008 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				DA461FE7292143EE00E53008 /* XCRemoteSwiftPackageReference "FaviconFinder" */,
 			);
 			productRefGroup = 658103AB27304E2F00974AAF;
 			projectDirPath = "";
@@ -367,10 +367,11 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "RSS-Notifier/RSS_Notifier.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CJW77VU9YB;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "RSS-Notifier/Info.plist";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -398,10 +399,11 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "RSS-Notifier/RSS_Notifier.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CJW77VU9YB;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "RSS-Notifier/Info.plist";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -444,34 +446,34 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		65570AE92778E46700DF91B2 /* XCRemoteSwiftPackageReference "FaviconFinder" */ = {
+		DA461FE42921439200E53008 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/will-lumley/FaviconFinder";
-			requirement = {
-				kind = revision;
-				revision = b327d60fd49d0f30bcc4b89473c6087ae07e03cb;
-			};
-		};
-		65B705402775325B00F27DEE /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			repositoryURL = "https://github.com/Alamofire/Alamofire/";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 5.0.0;
 			};
 		};
+		DA461FE7292143EE00E53008 /* XCRemoteSwiftPackageReference "FaviconFinder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/will-lumley/FaviconFinder";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		65570AEA2778E46700DF91B2 /* FaviconFinder */ = {
+		DA461FE52921439200E53008 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 65570AE92778E46700DF91B2 /* XCRemoteSwiftPackageReference "FaviconFinder" */;
-			productName = FaviconFinder;
-		};
-		65B705412775325B00F27DEE /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 65B705402775325B00F27DEE /* XCRemoteSwiftPackageReference "Alamofire" */;
+			package = DA461FE42921439200E53008 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		DA461FE8292143EE00E53008 /* FaviconFinder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA461FE7292143EE00E53008 /* XCRemoteSwiftPackageReference "FaviconFinder" */;
+			productName = FaviconFinder;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

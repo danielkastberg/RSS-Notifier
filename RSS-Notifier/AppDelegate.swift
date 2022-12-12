@@ -17,6 +17,7 @@ import UserNotifications
  Maybe add read notification to be saved between instances
  Add some window for a quick read of the rss description
  Add a setting window, that the user can choose the time interval in which the news should be displayed.
+ Fix bug when one news source fail. If one news source fail, no sotring of time is made 
  
  */
 @main
@@ -263,7 +264,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         var articles = [Article]()
         var categories = [String]()
         let group = DispatchGroup()
-        
+//        let eventTracking: RunLoop.Mode
 
         if outlines.isEmpty {
             emptyMenu(message: "No news source found")
@@ -295,7 +296,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     for item in feed.items {
                         let time: Int = filterTime(date: item.pubDate ?? Date.now)
             
-                        if time != 0 {
+                        if time > 0 {
                             let article = createArticle(item, out, time)
                             articles.append(article)
                         }

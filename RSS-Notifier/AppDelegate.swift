@@ -23,7 +23,7 @@ import UserNotifications
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
     
-    private var statusItem: NSStatusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+    private var statusItem: NSStatusItem?
     private var statusBarMenu = NSMenu()
     
     private var windowController: NSWindowController!
@@ -40,17 +40,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private var offlineIcon = false
 
-    private var articles = [Article]()
-    private var categories = [String]()
-    private let group = DispatchGroup()
-
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        outlines = OPMLHandler().readOPML()
+        let oplmR = OPMLHandler()
+        outlines = oplmR.readOPML()
         
         loadIcons()
+        
+        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         
         if !outlines.isEmpty {
             refresh()
@@ -58,6 +57,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         else {
             emptyMenu(message: "No news source found")
         }
+        
 
         loadAppIcon(offline: false)
     }
@@ -169,7 +169,36 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         offlineItem.attributedTitle = useCustomFont(title: message)
         self.statusBarMenu.addItem(offlineItem)
         createStaticItems()
-        statusItem.menu = self.statusBarMenu
+        statusItem?.menu = self.statusBarMenu
+    }
+    
+    
+    
+    /// Checks if there is an image to use as icon, If not loads a title instead
+    private func loadAppIcon(offline: Bool) {
+        DispatchQueue.main.async {
+            if offline {
+                guard let image = NSImage(named: "Error") else {
+                    self.statusItem?.button?.title = "RSS Notifier"
+                    return
+                }
+                image.isTemplate = true
+                image.size = CGSize(width: 19, height: 19)
+                self.statusItem?.button?.image = image
+                self.offlineIcon = true
+//                self.refreshItem.title = "Refresh"
+            }
+            else {
+                guard let image = NSImage(named: "AppIcon") else {
+                    self.statusItem?.button?.title = "RSS Notifier"
+                    return
+                }
+                image.isTemplate = true
+                image.size = CGSize(width: 19, height: 19)
+                self.statusItem?.button?.image = image
+//                self.refreshItem.title = "Refresh"
+            }
+        }
     }
     
     
@@ -187,10 +216,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         var title = shortenText(item: article.title)
         title = title + " " + article.time
+//        articleItem.title = title
         articleItem.attributedTitle = useCustomFont(title: title)
 
         
         self.iconGroup.notify(queue: .main) {
+//            articleItem.image = self.icons[article.source]
+//            articleItem.image?.size = CGSize(width: 15, height: 15)
             guard let image = openImage(article.source) else {
                 return
             }
@@ -225,65 +257,33 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.latestCopy = used
         }
     }
-
-    /// Checks if there is an image to use as icon, If not loads a title instead
-    private func loadAppIcon(offline: Bool) {
-        DispatchQueue.main.async {
-            if offline {
-                guard let image = NSImage(named: "Error") else {
-                    self.statusItem.button?.title = "RSS Notifier"
-                    return
-                }
-                image.isTemplate = true
-                image.size = CGSize(width: 19, height: 19)
-                self.statusItem.button?.image = image
-                self.offlineIcon = true
-            }
-            else {
-                guard let image = NSImage(named: "AppIcon") else {
-                    self.statusItem.button?.title = "RSS Notifier"
-                    return
-                }
-                image.isTemplate = true
-                image.size = CGSize(width: 19, height: 19)
-                self.statusItem.button?.image = image
-            }
-        }
-    }
     
     ///Used to read the RSS. Is called when the user presses the "Refresh item"
     @objc func refresh() {
         self.statusBarMenu.removeAllItems()
+        var articles = [Article]()
+        var categories = [String]()
+        let group = DispatchGroup()
 //        let eventTracking: RunLoop.Mode
 
         if outlines.isEmpty {
             emptyMenu(message: "No news source found")
             return
         }
-
-        fetchRSS()
-        insertRSS()
-
         
-        if self.offlineIcon == true {
-            loadAppIcon(offline: false)
-        }
-        
-        articlesCopy = articles
-    }
+        var used = [String]()
 
-    private func fetchRSS() {
         for out in outlines {
             group.enter()
-
+                
             guard let url = URL(string: out.rss) else {
                 emptyMenu(message: "Error found in OPML file. Check sources")
                 return
             }
-
+            
             let category = out.category
             categories.append(category)
-
+                
             AF.request(url).responseRSS() { [weak self] (response) -> Void in
                 if (response.error != nil) {
                     self?.statusBarMenu.removeAllItems()
@@ -295,52 +295,49 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 if let feed: RSSFeed = response.value {
                     for item in feed.items {
                         let time: Int = filterTime(date: item.pubDate ?? Date.now)
-
+            
                         if time > 0 {
                             let article = createArticle(item, out, time)
-                            self?.articles.append(article)
+                            articles.append(article)
                         }
                     }
                 }
-                self?.group.leave()
+                group.leave()
             }
         }
-    }
-
-    private func insertRSS() {
-        var used = [String]()
+        
 
         group.notify(queue: .main) {
             self.latest = [Article]()
 
-            let uniqueCategories = self.uniqueSet(source: self.categories)
-            self.articles = self.articles.sorted(by: {$0.date.compare($1.date) == .orderedDescending})
+            let uniqueCategories = self.uniqueSet(source: categories)
+            articles = articles.sorted(by: {$0.date.compare($1.date) == .orderedDescending})
 
             for uC in uniqueCategories {
                 let categoryItem = NSMenuItem()
                 var sub = NSMenu()
                 categoryItem.attributedTitle = useCustomFont(title: uC)
-                for article in self.articles {
+                for article in articles {
                     if article.category.elementsEqual(categoryItem.title) {
                         if !used.contains(article.category) {
                             used.append(article.category)
                             self.latest.append(article)
                         }
                         let articleItem = self.createArticleItem(article)
-
+                        
                         sub.addItem(articleItem)
                     }
                 }
                 sub = self.addEmptyItem(sub)
-
+                
                 categoryItem.submenu = sub
                 categoryItem.target = self
                 self.statusBarMenu.addItem(categoryItem)
-                self.statusItem.menu = self.statusBarMenu
-
-
+                self.statusItem?.menu = self.statusBarMenu
+                
+          
 //                notifyUser(categoryTitle: articles[i].category, articleTitle: articles[i].title, source: articles[i].source)
-
+                
             }
             self.showNotifications(latest: self.latest, used: used)
             if self.usedTitle.count > 100 {
@@ -348,12 +345,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.usedTitle = [String]()
                 self.usedTitle = Array(titleCopy.prefix(upTo: 5))
             }
-
+            
             self.statusBarMenu.addItem(self.blankWidth())
             self.statusBarMenu.addItem(NSMenuItem.separator())
-
+   
             self.statusBarMenu = self.createMenu()
         }
+        
+        if self.offlineIcon == true {
+            loadAppIcon(offline: false)
+        }
+        
+        articlesCopy = articles
+       
     }
     
     private func blankWidth() -> NSMenuItem {
@@ -383,6 +387,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         return buffer
     }
+    
+
+    private func convert(minutes: Int) -> (hours: Int, minutes: Int) {
+        return ((minutes % 3600) / 60, (minutes % 3600) % 60)
+    }
+
     
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {

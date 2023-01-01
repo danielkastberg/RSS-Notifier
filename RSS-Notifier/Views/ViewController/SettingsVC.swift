@@ -10,10 +10,10 @@ import Alamofire
 
 
 protocol SourceVCDelegate : NSObjectProtocol{
-    func doSomethingWith(data: [Outline])
+    func SaveOPMLReloadView(data: [Outline])
 }
 
-class ViewController: NSViewController {
+class SettingsVC: NSViewController {
     
     private var outlines = [Outline]()
     
@@ -50,8 +50,8 @@ class ViewController: NSViewController {
     }
 }
 
-extension ViewController: NSTableViewDataSource, NSTableViewDelegate, SourceVCDelegate {
-    func doSomethingWith(data: [Outline]) {
+extension SettingsVC: NSTableViewDataSource, NSTableViewDelegate, SourceVCDelegate {
+    func SaveOPMLReloadView(data: [Outline]) {
         outlines = data
         oplmR.writeOPML(data)
         tableView.reloadData()
@@ -151,7 +151,7 @@ class addSourceVC: NSViewController, NSTextFieldDelegate {
             
             self?.outlines?.append(out)
             if let delegate = self?.delegate {
-                delegate.doSomethingWith(data: (self?.outlines!)!)
+                delegate.SaveOPMLReloadView(data: (self?.outlines!)!)
             }
          
             if out.title != "" {

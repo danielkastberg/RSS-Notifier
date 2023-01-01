@@ -14,7 +14,7 @@
 		65238A0227DBA5C9007320EC /* FontHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65238A0127DBA5C9007320EC /* FontHandler.swift */; };
 		65621BBE2743070C00DE62C3 /* OPMLHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65621BBB2743070C00DE62C3 /* OPMLHandler.swift */; };
 		658103B827304E2F00974AAF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103B727304E2F00974AAF /* AppDelegate.swift */; };
-		658103BA27304E2F00974AAF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103B927304E2F00974AAF /* ViewController.swift */; };
+		658103BA27304E2F00974AAF /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103B927304E2F00974AAF /* SettingsVC.swift */; };
 		658103BC27304E3100974AAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 658103BB27304E3100974AAF /* Assets.xcassets */; };
 		658103CA27304E8800974AAF /* ParserBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658103C627304E8700974AAF /* ParserBase.swift */; };
 		658103F72730546900974AAF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 658103F52730546900974AAF /* Main.storyboard */; };
@@ -26,6 +26,7 @@
 		65FE3B83273B56FA00F8FF74 /* AlamofireRSSParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FE3B81273B56FA00F8FF74 /* AlamofireRSSParser.swift */; };
 		DA461FE62921439200E53008 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = DA461FE52921439200E53008 /* Alamofire */; };
 		DA461FE9292143EE00E53008 /* FaviconFinder in Frameworks */ = {isa = PBXBuildFile; productRef = DA461FE8292143EE00E53008 /* FaviconFinder */; };
+		DAF3A6172961C72E00D11F18 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF3A6162961C72E00D11F18 /* MenuView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -61,7 +62,7 @@
 		65238A0127DBA5C9007320EC /* FontHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontHandler.swift; sourceTree = "<group>"; };
 		65621BBB2743070C00DE62C3 /* OPMLHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPMLHandler.swift; sourceTree = "<group>"; };
 		658103B727304E2F00974AAF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		658103B927304E2F00974AAF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		658103B927304E2F00974AAF /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		658103BB27304E3100974AAF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		658103C027304E3100974AAF /* RSS_Notifier.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RSS_Notifier.entitlements; sourceTree = "<group>"; };
 		658103C627304E8700974AAF /* ParserBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserBase.swift; sourceTree = "<group>"; };
@@ -73,6 +74,7 @@
 		65DD270127333B540057E47F /* RSSItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSItem.swift; sourceTree = "<group>"; };
 		65FE3B81273B56FA00F8FF74 /* AlamofireRSSParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireRSSParser.swift; sourceTree = "<group>"; };
 		65FE3B82273B56FA00F8FF74 /* AlamofireRSSParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlamofireRSSParser.h; sourceTree = "<group>"; };
+		DAF3A6162961C72E00D11F18 /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,26 +102,16 @@
 		658103B627304E2F00974AAF /* RSS-Notifier */ = {
 			isa = PBXGroup;
 			children = (
+				DAF3A6122961C6D600D11F18 /* Views */,
+				DAF3A60D2961C58F00D11F18 /* Models */,
 				652039F42789EDB70027A7E3 /* Info.plist */,
-				65FE3B82273B56FA00F8FF74 /* AlamofireRSSParser.h */,
-				65FE3B81273B56FA00F8FF74 /* AlamofireRSSParser.swift */,
 				658103B727304E2F00974AAF /* AppDelegate.swift */,
-				65238A0127DBA5C9007320EC /* FontHandler.swift */,
 				652039EE2789EAFD0027A7E3 /* ActionHandler.swift */,
-				659E4E46278121EB002BBC6F /* Article.swift */,
 				658103BB27304E3100974AAF /* Assets.xcassets */,
-				65B36E5D27B16771004EDD5A /* FileHandler.swift */,
-				659E4E4427810EED002BBC6F /* ImageHandler.swift */,
 				652039F92789F4850027A7E3 /* OpenSans-Regular.ttf */,
 				658103F52730546900974AAF /* Main.storyboard */,
 				651C8C57277A3EC200D491A0 /* Notifications.swift */,
-				65621BBB2743070C00DE62C3 /* OPMLHandler.swift */,
-				658103C627304E8700974AAF /* ParserBase.swift */,
 				658103C027304E3100974AAF /* RSS_Notifier.entitlements */,
-				65DD270027333B540057E47F /* RSSFeed.swift */,
-				65DD270127333B540057E47F /* RSSItem.swift */,
-				651C8C59277A460900D491A0 /* TitleFormatting.swift */,
-				658103B927304E2F00974AAF /* ViewController.swift */,
 			);
 			path = "RSS-Notifier";
 			sourceTree = "<group>";
@@ -129,6 +121,73 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DAF3A60D2961C58F00D11F18 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DAF3A6102961C60400D11F18 /* InputOutput */,
+				DAF3A60F2961C5EE00D11F18 /* Articles */,
+				DAF3A60E2961C5B600D11F18 /* Parsing */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		DAF3A60E2961C5B600D11F18 /* Parsing */ = {
+			isa = PBXGroup;
+			children = (
+				65FE3B82273B56FA00F8FF74 /* AlamofireRSSParser.h */,
+				65FE3B81273B56FA00F8FF74 /* AlamofireRSSParser.swift */,
+				65621BBB2743070C00DE62C3 /* OPMLHandler.swift */,
+				658103C627304E8700974AAF /* ParserBase.swift */,
+				65DD270027333B540057E47F /* RSSFeed.swift */,
+				65DD270127333B540057E47F /* RSSItem.swift */,
+			);
+			path = Parsing;
+			sourceTree = "<group>";
+		};
+		DAF3A60F2961C5EE00D11F18 /* Articles */ = {
+			isa = PBXGroup;
+			children = (
+				659E4E46278121EB002BBC6F /* Article.swift */,
+				65238A0127DBA5C9007320EC /* FontHandler.swift */,
+				651C8C59277A460900D491A0 /* TitleFormatting.swift */,
+			);
+			path = Articles;
+			sourceTree = "<group>";
+		};
+		DAF3A6102961C60400D11F18 /* InputOutput */ = {
+			isa = PBXGroup;
+			children = (
+				65B36E5D27B16771004EDD5A /* FileHandler.swift */,
+				659E4E4427810EED002BBC6F /* ImageHandler.swift */,
+			);
+			path = InputOutput;
+			sourceTree = "<group>";
+		};
+		DAF3A6112961C62600D11F18 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				658103B927304E2F00974AAF /* SettingsVC.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		DAF3A6122961C6D600D11F18 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				DAF3A6132961C6E200D11F18 /* MenuBar */,
+				DAF3A6112961C62600D11F18 /* ViewController */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		DAF3A6132961C6E200D11F18 /* MenuBar */ = {
+			isa = PBXGroup;
+			children = (
+				DAF3A6162961C72E00D11F18 /* MenuView.swift */,
+			);
+			path = MenuBar;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -218,9 +277,10 @@
 				651C8C58277A3EC200D491A0 /* Notifications.swift in Sources */,
 				65DD272527333DD10057E47F /* RSSItem.swift in Sources */,
 				65FE3B83273B56FA00F8FF74 /* AlamofireRSSParser.swift in Sources */,
-				658103BA27304E2F00974AAF /* ViewController.swift in Sources */,
+				658103BA27304E2F00974AAF /* SettingsVC.swift in Sources */,
 				651C8C5A277A460900D491A0 /* TitleFormatting.swift in Sources */,
 				65621BBE2743070C00DE62C3 /* OPMLHandler.swift in Sources */,
+				DAF3A6172961C72E00D11F18 /* MenuView.swift in Sources */,
 				65B36E5E27B16771004EDD5A /* FileHandler.swift in Sources */,
 				65DD272327333DD10057E47F /* RSSFeed.swift in Sources */,
 				658103B827304E2F00974AAF /* AppDelegate.swift in Sources */,

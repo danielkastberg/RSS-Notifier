@@ -24,4 +24,22 @@ class ActionHandler {
         }
         NSWorkspace.shared.open(url)
     }
+
+    /// Quits the program
+    @objc func quit () {
+        exit(0)
+    }
+
+     /// Opens the browser for the link that is sent.
+     /// Links the menu item with the action.
+     ///  - Parameters:
+     ///     urlSender - A NSMenuItem containing a link-
+
+     @objc func openBrowser(urlSender: NSMenuItem) {
+         let urlString = urlSender.representedObject
+         guard let url = URL(string: urlString as! String) else {
+             return
+         }
+         NSWorkspace.shared.open(url)
+     }
 }

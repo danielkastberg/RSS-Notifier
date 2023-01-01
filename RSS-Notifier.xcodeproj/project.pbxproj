@@ -26,6 +26,7 @@
 		65FE3B83273B56FA00F8FF74 /* AlamofireRSSParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FE3B81273B56FA00F8FF74 /* AlamofireRSSParser.swift */; };
 		DA461FE62921439200E53008 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = DA461FE52921439200E53008 /* Alamofire */; };
 		DA461FE9292143EE00E53008 /* FaviconFinder in Frameworks */ = {isa = PBXBuildFile; productRef = DA461FE8292143EE00E53008 /* FaviconFinder */; };
+		DAF3A6232961F52400D11F18 /* HelperFunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF3A6222961F52400D11F18 /* HelperFunc.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -73,6 +74,7 @@
 		65DD270127333B540057E47F /* RSSItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSItem.swift; sourceTree = "<group>"; };
 		65FE3B81273B56FA00F8FF74 /* AlamofireRSSParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireRSSParser.swift; sourceTree = "<group>"; };
 		65FE3B82273B56FA00F8FF74 /* AlamofireRSSParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlamofireRSSParser.h; sourceTree = "<group>"; };
+		DAF3A6222961F52400D11F18 /* HelperFunc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperFunc.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,26 +102,17 @@
 		658103B627304E2F00974AAF /* RSS-Notifier */ = {
 			isa = PBXGroup;
 			children = (
+				DAF3A61E2961F1E200D11F18 /* Models */,
 				652039F42789EDB70027A7E3 /* Info.plist */,
-				65FE3B82273B56FA00F8FF74 /* AlamofireRSSParser.h */,
-				65FE3B81273B56FA00F8FF74 /* AlamofireRSSParser.swift */,
 				658103B727304E2F00974AAF /* AppDelegate.swift */,
-				65238A0127DBA5C9007320EC /* FontHandler.swift */,
 				652039EE2789EAFD0027A7E3 /* ActionHandler.swift */,
-				659E4E46278121EB002BBC6F /* Article.swift */,
 				658103BB27304E3100974AAF /* Assets.xcassets */,
-				65B36E5D27B16771004EDD5A /* FileHandler.swift */,
-				659E4E4427810EED002BBC6F /* ImageHandler.swift */,
 				652039F92789F4850027A7E3 /* OpenSans-Regular.ttf */,
 				658103F52730546900974AAF /* Main.storyboard */,
 				651C8C57277A3EC200D491A0 /* Notifications.swift */,
-				65621BBB2743070C00DE62C3 /* OPMLHandler.swift */,
-				658103C627304E8700974AAF /* ParserBase.swift */,
 				658103C027304E3100974AAF /* RSS_Notifier.entitlements */,
-				65DD270027333B540057E47F /* RSSFeed.swift */,
-				65DD270127333B540057E47F /* RSSItem.swift */,
-				651C8C59277A460900D491A0 /* TitleFormatting.swift */,
 				658103B927304E2F00974AAF /* ViewController.swift */,
+				DAF3A6222961F52400D11F18 /* HelperFunc.swift */,
 			);
 			path = "RSS-Notifier";
 			sourceTree = "<group>";
@@ -129,6 +122,48 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DAF3A61E2961F1E200D11F18 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DAF3A6212961F22C00D11F18 /* InputOutput */,
+				DAF3A6202961F20C00D11F18 /* Parsing */,
+				DAF3A61F2961F1E700D11F18 /* Articles */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		DAF3A61F2961F1E700D11F18 /* Articles */ = {
+			isa = PBXGroup;
+			children = (
+				659E4E46278121EB002BBC6F /* Article.swift */,
+				65238A0127DBA5C9007320EC /* FontHandler.swift */,
+				651C8C59277A460900D491A0 /* TitleFormatting.swift */,
+			);
+			path = Articles;
+			sourceTree = "<group>";
+		};
+		DAF3A6202961F20C00D11F18 /* Parsing */ = {
+			isa = PBXGroup;
+			children = (
+				65FE3B82273B56FA00F8FF74 /* AlamofireRSSParser.h */,
+				65FE3B81273B56FA00F8FF74 /* AlamofireRSSParser.swift */,
+				65621BBB2743070C00DE62C3 /* OPMLHandler.swift */,
+				658103C627304E8700974AAF /* ParserBase.swift */,
+				65DD270027333B540057E47F /* RSSFeed.swift */,
+				65DD270127333B540057E47F /* RSSItem.swift */,
+			);
+			path = Parsing;
+			sourceTree = "<group>";
+		};
+		DAF3A6212961F22C00D11F18 /* InputOutput */ = {
+			isa = PBXGroup;
+			children = (
+				65B36E5D27B16771004EDD5A /* FileHandler.swift */,
+				659E4E4427810EED002BBC6F /* ImageHandler.swift */,
+			);
+			path = InputOutput;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -214,6 +249,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				659E4E47278121EB002BBC6F /* Article.swift in Sources */,
+				DAF3A6232961F52400D11F18 /* HelperFunc.swift in Sources */,
 				659E4E4527810EED002BBC6F /* ImageHandler.swift in Sources */,
 				651C8C58277A3EC200D491A0 /* Notifications.swift in Sources */,
 				65DD272527333DD10057E47F /* RSSItem.swift in Sources */,

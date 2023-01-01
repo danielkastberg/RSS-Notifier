@@ -35,8 +35,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var latestCopy = [String]()
     private var articlesCopy = [Article]()
     private var usedTitle = [String]()
+    private let fontHandler = FontHandler()
     
     private var latest = [Article]()
+
+    private var articles = [Article]()
+    private var categories = [String]()
+    private let group = DispatchGroup()
     
     private var offlineIcon = false
 
@@ -63,7 +68,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     /// Gets the icon for each source and stores it in a list.
-    fileprivate func loadIcons() {
+    private func loadIcons() {
         for out in outlines {
             Task {
                 iconGroup.enter()
@@ -80,24 +85,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 iconGroup.leave()
             }
         }
-    }
-    
-   /// Quits the program
-   @objc func quit () {
-       exit(0)
-   }
-    
-    /// Opens the browser for the link that is sent.
-    /// Links the menu item with the action.
-    ///  - Parameters:
-    ///     urlSender - A NSMenuItem containing a link-
-     
-    @objc func openBrowser(urlSender: NSMenuItem) {
-        let urlString = urlSender.representedObject
-        guard let url = URL(string: urlString as! String) else {
-            return
-        }
-        NSWorkspace.shared.open(url)
     }
     
     @objc func openSettings() {
@@ -117,10 +104,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     ///  - Returns The menu item for quitting the program
     private func createQuitItem() -> NSMenuItem {
         let quitItem = NSMenuItem()
-        quitItem.attributedTitle = useCustomFont(title: "Quit")
-        quitItem.action = #selector(quit)
+        quitItem.attributedTitle = fontHandler.useCustomFont(title: "Quit")
+        quitItem.action = #selector(ActionHandler.sharedActionHandler.quit)
         quitItem.keyEquivalent = "q"
-        quitItem.target = self
+        quitItem.target = ActionHandler.sharedActionHandler
         return quitItem
     }
     
@@ -128,7 +115,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     ///  - Returns The menu item for the settings
     private func createSettingsItem() -> NSMenuItem {
         let settingItem = NSMenuItem()
-        settingItem.attributedTitle = useCustomFont(title: "Settings")
+        settingItem.attributedTitle = fontHandler.useCustomFont(title: "Settings")
         settingItem.keyEquivalent = "s"
         settingItem.action = #selector(openSettings)
         settingItem.target = self
@@ -137,9 +124,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     /// Creates a NSMenuItem to handle the RSS refresh
     /// ///  - Returns The menu item for refreshing the program
-    fileprivate func createRefreshItem() -> NSMenuItem {
+    private func createRefreshItem() -> NSMenuItem {
         let refreshItem = NSMenuItem()
-        refreshItem.attributedTitle = useCustomFont(title: "Refresh")
+        refreshItem.attributedTitle = fontHandler.useCustomFont(title: "Refresh")
         refreshItem.action = #selector(refresh)
         refreshItem.keyEquivalent = "r"
         refreshItem.target = self
@@ -166,7 +153,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func emptyMenu(message: String) {
         self.statusBarMenu = NSMenu()
         let offlineItem = NSMenuItem()
-        offlineItem.attributedTitle = useCustomFont(title: message)
+        offlineItem.attributedTitle = fontHandler.useCustomFont(title: message)
         self.statusBarMenu.addItem(offlineItem)
         createStaticItems()
         statusItem?.menu = self.statusBarMenu
@@ -186,7 +173,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 image.size = CGSize(width: 19, height: 19)
                 self.statusItem?.button?.image = image
                 self.offlineIcon = true
-//                self.refreshItem.title = "Refresh"
             }
             else {
                 guard let image = NSImage(named: "AppIcon") else {
@@ -196,7 +182,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 image.isTemplate = true
                 image.size = CGSize(width: 19, height: 19)
                 self.statusItem?.button?.image = image
-//                self.refreshItem.title = "Refresh"
             }
         }
     }
@@ -206,23 +191,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     ///  - Parameters:
     ///     article - Article from one RSS source
     ///  - Returns: Menu item containing the article with link
-    fileprivate func createArticleItem(_ article: Article) -> NSMenuItem {
+    private func createArticleItem(_ article: Article) -> NSMenuItem {
         let articleItem = NSMenuItem()
+        let titleFormat = TitleFormatting()
         
         let someObj: NSString = article.link as NSString
         articleItem.representedObject = someObj
-        articleItem.action = #selector(self.openBrowser(urlSender:))
+        articleItem.action = #selector(ActionHandler.sharedActionHandler.openBrowser(urlSender:))
+        articleItem.target = ActionHandler.sharedActionHandler
         
         
-        var title = shortenText(item: article.title)
+        var title = titleFormat.shortenText(item: article.title)
         title = title + " " + article.time
-//        articleItem.title = title
-        articleItem.attributedTitle = useCustomFont(title: title)
+        articleItem.attributedTitle = fontHandler.useCustomFont(title: title)
 
         
         self.iconGroup.notify(queue: .main) {
-//            articleItem.image = self.icons[article.source]
-//            articleItem.image?.size = CGSize(width: 15, height: 15)
             guard let image = openImage(article.source) else {
                 return
             }
@@ -234,7 +218,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     /// Adds an empty item to indicate that the news are too old
-    fileprivate func addEmptyItem(_ sub: NSMenu) -> NSMenu {
+    /// - Returns: Menu with one empty item
+    private func addEmptyItem(_ sub: NSMenu) -> NSMenu {
         if sub.items.isEmpty {
             let empty = NSMenuItem()
             empty.title = "No new news found"
@@ -243,47 +228,42 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return sub
     }
     
-    /// Displays the latest news in a notification from each category
-    fileprivate func showNotifications(latest: [Article], used: [String]) {
-        DispatchQueue.global().async {
-            for late in latest {
-                if !self.usedTitle.contains(late.title) {
-//                    print("Visar notis för \(late.title)")
-                    notifyUser(article: late)
-                    self.usedTitle.append(late.title)
-                    sleep(2)
-                }
-            }
-            self.latestCopy = used
-        }
-    }
-    
     ///Used to read the RSS. Is called when the user presses the "Refresh item"
     @objc func refresh() {
         self.statusBarMenu.removeAllItems()
-        var articles = [Article]()
-        var categories = [String]()
-        let group = DispatchGroup()
+        articles = [Article]()
 //        let eventTracking: RunLoop.Mode
 
         if outlines.isEmpty {
             emptyMenu(message: "No news source found")
             return
         }
-        
-        var used = [String]()
 
+        fetchRSS()
+        insertRSS()
+
+
+        
+        if self.offlineIcon == true {
+            loadAppIcon(offline: false)
+        }
+        
+        articlesCopy = articles
+    }
+
+    private func fetchRSS() {
+        let titleFormat = TitleFormatting()
         for out in outlines {
             group.enter()
-                
+
             guard let url = URL(string: out.rss) else {
                 emptyMenu(message: "Error found in OPML file. Check sources")
                 return
             }
-            
+
             let category = out.category
             categories.append(category)
-                
+
             AF.request(url).responseRSS() { [weak self] (response) -> Void in
                 if (response.error != nil) {
                     self?.statusBarMenu.removeAllItems()
@@ -294,50 +274,52 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
                 if let feed: RSSFeed = response.value {
                     for item in feed.items {
-                        let time: Int = filterTime(date: item.pubDate ?? Date.now)
-            
+                        let time: Int = titleFormat.filterTime(date: item.pubDate ?? Date.now)
+
                         if time > 0 {
-                            let article = createArticle(item, out, time)
-                            articles.append(article)
+                            let article = Article().createArticle(item, out, time)
+                            self?.articles.append(article)
                         }
                     }
                 }
-                group.leave()
+                self?.group.leave()
             }
         }
-        
+    }
 
+    private func insertRSS() {
         group.notify(queue: .main) {
             self.latest = [Article]()
+            var used = [String]()
 
-            let uniqueCategories = self.uniqueSet(source: categories)
-            articles = articles.sorted(by: {$0.date.compare($1.date) == .orderedDescending})
+            let uniqueCategories = HelperFunc.shared.uniqueSet(source: self.categories)
+            self.articles = self.articles.sorted(by: {$0.date.compare($1.date) == .orderedDescending})
 
             for uC in uniqueCategories {
                 let categoryItem = NSMenuItem()
                 var sub = NSMenu()
-                categoryItem.attributedTitle = useCustomFont(title: uC)
-                for article in articles {
+                categoryItem.attributedTitle = self.fontHandler.useCustomFont(title: uC)
+                for article in self.articles {
                     if article.category.elementsEqual(categoryItem.title) {
                         if !used.contains(article.category) {
                             used.append(article.category)
                             self.latest.append(article)
                         }
                         let articleItem = self.createArticleItem(article)
-                        
+
                         sub.addItem(articleItem)
                     }
                 }
                 sub = self.addEmptyItem(sub)
-                
+
                 categoryItem.submenu = sub
                 categoryItem.target = self
                 self.statusBarMenu.addItem(categoryItem)
                 self.statusItem?.menu = self.statusBarMenu
-                
-          
+
+
 //                notifyUser(categoryTitle: articles[i].category, articleTitle: articles[i].title, source: articles[i].source)
-                
+
             }
             self.showNotifications(latest: self.latest, used: used)
             if self.usedTitle.count > 100 {
@@ -345,19 +327,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.usedTitle = [String]()
                 self.usedTitle = Array(titleCopy.prefix(upTo: 5))
             }
-            
+
             self.statusBarMenu.addItem(self.blankWidth())
             self.statusBarMenu.addItem(NSMenuItem.separator())
-   
+
             self.statusBarMenu = self.createMenu()
         }
-        
-        if self.offlineIcon == true {
-            loadAppIcon(offline: false)
-        }
-        
-        articlesCopy = articles
-       
     }
     
     private func blankWidth() -> NSMenuItem {
@@ -372,28 +347,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return lineItem
         
     }
-    
-    /// Removes duplicate items from a set
-    ///  - Parameters:
-    ///     source - The set containing duplicates
-    func uniqueSet<S : Sequence, T : Hashable>(source: S) -> [T] where S.Iterator.Element == T {
-        var buffer = [T]()
-        var added = Set<T>()
-        for elem in source {
-            if !added.contains(elem) {
-                buffer.append(elem)
-                added.insert(elem)
-            }
-        }
-        return buffer
-    }
-    
-
-    private func convert(minutes: Int) -> (hours: Int, minutes: Int) {
-        return ((minutes % 3600) / 60, (minutes % 3600) % 60)
-    }
-
-    
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         un.delegate = self
@@ -409,15 +362,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 }
 
 
-
-extension Sequence where Element: Hashable {
-    func uniqued() -> [Element] {
-        var set = Set<Element>()
-        return filter { set.insert($0).inserted }
-    }
-}
-
 extension AppDelegate: UNUserNotificationCenterDelegate {
+
+    /// Displays the latest news in a notification from each category
+    fileprivate func showNotifications(latest: [Article], used: [String]) {
+        DispatchQueue.global().async {
+            for late in latest {
+                if !self.usedTitle.contains(late.title) {
+//                    print("Visar notis för \(late.title)")
+                    notifyUser(article: late)
+                    self.usedTitle.append(late.title)
+                    sleep(2)
+                }
+            }
+            self.latestCopy = used
+        }
+    }
     
     /// Opening a link from the selected notification.
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
